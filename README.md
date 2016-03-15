@@ -37,20 +37,24 @@ If you would like to make a change to the site:
  1. Fork the [github mirror](https://github.com/apache/incubator-quarks-website)
  2. Create a new branch from `master`
  3. Add commit(s) to your branch
- 4. Test your changes locally 
+ 4. Test your changes locally (see Developing)
  5. Open a pull request on the github mirror
  6. A committer will merge your changes if all is good 
 
 If you are a committer, do the following:
   
-  1. Update the master branch with your (or a Pull Request's) change.
-  2. Push updated master to the asf remote master (https://git-wip-us.apache.org/repos/asf/incubator-quarks-site.git)
-  3. Run `build.sh` from the master branch directory (requires jekyll). This will:
+ 1. Update the master branch with your (or a Pull Request's) change.
+ 2. Push updated master to the asf remote master (https://git-wip-us.apache.org/repos/asf/incubator-quarks-site.git)
+ 3. Run `build.sh` from the master branch directory (requires jekyll). This will:
      - checks out and updates the `asf-site` branch with a new commit of the build from the current branch
  
  4. At this point, you should be on the `asf-site` branch. Simply push this branch to the asf remote and the site will automatically be updated within seconds.
 
-
-
+Developing
+-----------
+ 1. Make your changes under site
+ 2. cd site
+ 3. jekyll serve -d ../content_tmp
+ 4. point your browser to http://localhost:4000/
 
 
