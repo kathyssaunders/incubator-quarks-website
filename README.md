@@ -45,10 +45,11 @@ If you are a committer, do the following:
   
  1. Update the master branch with your (or a Pull Request's) change.
  2. Push updated master to the asf remote master (https://git-wip-us.apache.org/repos/asf/incubator-quarks-site.git)
- 3. Run `build.sh` from the master branch directory (requires jekyll). This will:
-     - checks out and updates the `asf-site` branch with a new commit of the build from the current branch
+ 3. Run `build.sh` from the master branch directory (requires jekyll). This checks out and updates the `asf-site` branch with a new commit of the build from the current branch
  
- 4. At this point, you should be on the `asf-site` branch. Simply push this branch to the asf remote and the site will automatically be updated within seconds.
+ 4. At this point, you should be on the `asf-site` branch. Simply push this branch to the asf remote with  `git push origin asf-site` and the site will automatically be updated within seconds.
+
+Note: If you want to try out the website locally on the asf-site branch before you push, you can do so with `jekyll serve -d content --skip-initial-build` and point your browser to http://localhost:4000
 
 Developing
 -----------
