@@ -1,0 +1,56 @@
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to you under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Quarks Project configurations
+#
+name: Apache Quarks
+short_name: Quarks
+unix_name: quarks
+incubator_name: incubator-quarks
+incubator_slash_name: incubator/quarks
+description: Quarks is a community for accelerating analytics in edge devices. 
+
+download: https://github.com/apache/incubator-quarks
+
+dev_list: dev@quarks.incubator.apache.org
+dev_list_subscribe: dev-subscribe@quarks.incubator.apache.org
+dev_list_unsubscribe: dev-unsubscribe@quarks.incubator.apache.org
+dev_list_archive: http://mail-archives.apache.org/mod_mbox/systemml-dev/
+dev_list_archive_mailarchive: https://www.mail-archive.com/dev@quarks.incubator.apache.org/
+dev_list_archive_markmail:
+
+user_list:
+user_list_subscribe:
+user_list_unsubscribe:
+user_list_archive:
+user_list_archive_mailarchive:
+user_list_archive_markmail:
+
+commits_list: commits@quarks.incubator.apache.org
+commits_list_subscribe: commits-subscribe@quarks.incubator.apache.org
+commits_list_unsubscribe: commits-unsubscribe@quarks.incubator.apache.org
+commits_list_archive: http://mail-archives.apache.org/mod_mbox/systemml-commits/
+commits_list_archive_mailarchive: https://www.mail-archive.com/commits@quarks.incubator.apache.org/
+commits_list_archive_markmail:
+
+jira: QUARKS
+
+source_repository: git://git.apache.org/incubator-quarks.git
+source_repository_mirror: https://github.com/apache/incubator-quarks
+
+website_repository: git://git.apache.org/incubator-quarks-website.git
+website_repository_mirror: https://github.com/apache/incubator-quarks-website
+
+podling: true
