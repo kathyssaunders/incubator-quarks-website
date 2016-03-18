@@ -1,10 +1,37 @@
 ---
-title: Get Involved
+title: Get Involved with Quarks
 ---
 
-# Get Involved with Quarks
-
 Welcome to the Quarks community!  We would love to have you participate as a user of Quarks, a contributor or both.
+
+You can: 
+
+*   Use our project and give us feedback.
+*   Report bugs and submit patches.
+*   Contribute code, documenation, javadocs, and use-case ideas.
+
+## Mailing Lists
+
+You can ask for help and get involved with Quarks through our mailing lists:
+
+*   dev@quarks.incubator.apache.org is for people who want to contribute code to Quarks
+*   commits@quarks.incubator.apache.org is for commit messages and patches to Quarks
+
+To subscribe, send e-mails to dev-subscribe@quarks.incubator.apache.org and commits-subscribe@quarks.incubator.apache.org. 
+
+## Issue Tracking
+
+We use Jira here: [https://issues.apache.org/jira/browse/QUARKS](https://issues.apache.org/jira/browse/QUARKS)
+
+## GitHub Mirrors
+
+ Quarks source code: [https://github.com/apache/incubator-quarks](https://github.com/apache/incubator-quarks)
+ 
+ Website source: [https://github.com/apache/incubator-quarks-website](https://github.com/apache/incubator-quarks-website)
+ 
+## Developer Guidelines
+
+Check out our developer guidelines here: https://github.com/apache/incubator-quarks/blob/master/DEVELOPMENT.md
 
 ## Contribute Code
 

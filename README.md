@@ -55,7 +55,7 @@ Developing
 -----------
  1. Make your changes under site
  2. cd site
- 3. jekyll serve -d ../content_tmp
+ 3. jekyll serve .
  4. point your browser to http://localhost:4000/
 
 
