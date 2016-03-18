@@ -1,0 +1,124 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+ 
+
+
+
+ 
+/docs/quarks_index:
+  title: "Introduction"
+  url: "../docs/quarks_index.html"
+  link: "<a href='../docs/quarks_index.html'>Introduction</a>"
+
+
+ 
+/docs/faq:
+  title: "FAQ"
+  url: "../docs/faq.html"
+  link: "<a href='../docs/faq.html'>FAQ</a>"
+
+
+
+
+ 
+/docs/quarks-getting-started:
+  title: "1. Getting Started Guide"
+  url: "../docs/quarks-getting-started.html"
+  link: "<a href='../docs/quarks-getting-started.html'>1. Getting Started Guide</a>"
+
+
+ 
+/docs/common-quarks-operations:
+  title: "2. Common Operations"
+  url: "../docs/common-quarks-operations.html"
+  link: "<a href='../docs/common-quarks-operations.html'>2. Common Operations</a>"
+
+
+
+
+ 
+/docs/samples:
+  title: "1. Samples"
+  url: "../docs/samples.html"
+  link: "<a href='../docs/samples.html'>1. Samples</a>"
+
+
+ 
+/docs/quickstart:
+  title: "2. Quickstart IBM Watson IoT Platform"
+  url: "../docs/quickstart.html"
+  link: "<a href='../docs/quickstart.html'>2. Quickstart IBM Watson IoT Platform</a>"
+
+
+
+
+ 
+/docs/console:
+  title: "1. Using The Console"
+  url: "../docs/console.html"
+  link: "<a href='../docs/console.html'>1. Using The Console</a>"
+
+
+
+
+ 
+/docs/getinvolved:
+  title: "How to participate"
+  url: "../docs/getinvolved.html"
+  link: "<a href='../docs/getinvolved.html'>How to participate</a>"
+
+
+ 
+/docs/committers:
+  title: "Committers"
+  url: "../docs/committers.html"
+  link: "<a href='../docs/committers.html'>Committers</a>"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+samples:
+  title: "Samples"
+  url: "..samples"
+  link: "<a href='..samples'>Samples</a>"
+
+
+
+faq:
+  title: "FAQ"
+  url: "..faq"
+  link: "<a href='..faq'>FAQ</a>"
+
+
+
+
+
