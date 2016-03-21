@@ -43,7 +43,7 @@ Quarks is a tool for edge analytics that allows you to be more productive. Quark
 
 ## Where can I download Quarks to try it out?
 
-Quarks is migrating from github quarks-edge to Apache. You can download the source from Apache and build it yourself [here][https://github.com/apache/incubator-quarks].  You can also  find pre-Apache releases of Quarks for download [here](https://github.com/quarks-edge/quarks/releases/latest). These releases are not associated with Apache.
+Quarks is migrating from github quarks-edge to Apache. You can download the source from Apache and build it yourself [here](https://github.com/apache/incubator-quarks).  You can also  find already built pre-Apache releases of Quarks for download [here](https://github.com/quarks-edge/quarks/releases/latest). These releases are not associated with Apache.
 
 ## How do I get started?
 
@@ -55,7 +55,7 @@ Getting started is simple. Once you have downloaded Quarks, everything you need 
 
 ## How can I contribute code?
 
-Just submit a [pull request](https://github.com/apache/incubator-quarks) and wait for a committer to review.  For more information, visit our [committer page](committers).
+Just submit a [pull request](https://github.com/apache/incubator-quarks) and wait for a committer to review.  For more information, visit our [committer page](committers) and read [DEVELOPMENT.md] (https://github.com/apache/incubator-quarks/blob/master/DEVELOPMENT.md) at the top of the code tree.
 
 ## Can I become a committer?
 
@@ -84,4 +84,4 @@ Use [site.data.project.user_list](mailto:{{ site.data.project.user_list }}) to s
 
 ## Why is Quarks Open Source?
 
-With the growth of the Internet of Things there is a need to execute analytics at the edge. Quarks was developed to address requirements for analytics at the edge for IoT use cases that were not addressed by central analytic solutions.  We believe that these capabilities will be useful to many organizations and that the diverse nature of edge devices and use cases is best addressed by an open community.  Our goal is to develop a vibrant community of developers and users to expand the capabilities and real-world use of Quarks by companies and individuals to enable edge analytics and further innovation for the IoT space.
+With the growth of the Internet of Things there is a need to execute analytics at the edge. Quarks was developed to address requirements for analytics at the edge for IoT use cases that were not addressed by central analytic solutions.  These capabilities will be useful to many organizations and that the diverse nature of edge devices and use cases is best addressed by an open community.  Our goal is to develop a vibrant community of developers and users to expand the capabilities and real-world use of Quarks by companies and individuals to enable edge analytics and further innovation for the IoT space.

@@ -34,7 +34,7 @@ You can:
 * Report bugs and submit patches.
 * Contribute code, javadocs, documentation.
 
-Visit the [Contributing](http://www.apache.org/foundation/getinvolved.html) page for more information.
+Visit the [Contributing](http://www.apache.org/foundation/getinvolved.html) page and read [DEVELOPMENT.md] (https://github.com/apache/incubator-quarks/blob/master/DEVELOPMENT.md) at the top of the code tree for more information.
 
 ### Mailing list
 
