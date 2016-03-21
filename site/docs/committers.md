@@ -5,7 +5,7 @@ description: Commit Activity and How to Become a Committer
 
 # Commit Activity
 
-To see commit activity for Quarks, click [here](https://github.com/quarks-edge/quarks/pulse).
+To see commit activity for Quarks, click [here](https://github.com/apache/incubator-quarks/pulse).
 
 # How to Become a Committer
 
