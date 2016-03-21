@@ -17,6 +17,30 @@
                 <!-- entries without drop-downs appear here -->
                 <!-- conditional logic to control which topnav appears for the audience defined in the configuration file.-->
                 {% include custom/conditions.html %}
+                <li class="dropdown">
+                    {% for entry in githubrepos_dropdowns %}
+                    {% for subcategory in entry.subcategories %}
+                    {% if subcategory.audience contains audience and subcategory.product contains product and subcategory.platform contains platform and subcategory.version contains version and subcategory.output contains "web" %}
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ subcategory.title }}<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        {% for subitem in subcategory.items %}
+                        {% if subitem.audience contains audience and subitem.product contains product and subitem.platform contains platform and subcategory.version contains version and subitem.output contains "web" %}
+                        {% if subitem.external_url %}
+                        <li><a href="{{subitem.external_url}}" target="_blank">{{subitem.title}}</a></li>
+                        {% elsif page.url contains subitem.url %}
+                        <li class="dropdownActive"><a href="{{subitem.url}}">{{subitem.title}}</a></li>
+                        {% else %}
+                        <li><a href="{{subitem.url | replace: "/",""}}">{{subitem.title}}</a></li>
+                        {% endif %}
+                        {% endif %}
+                        {% endfor %}
+                        {% endif %}
+
+                    </ul>
+                </li>
+                {% endfor %}
+                {% endfor %}
+
 
                 {% for entry in topnav %}
                 {% for subcategory in entry.subcategories %}
