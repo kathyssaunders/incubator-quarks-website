@@ -74,6 +74,29 @@ entries:
       version: all
       output: web, pdf
 
+  - title: Quarks Cookbook
+    audience: writers, designers
+    platform: all
+    product: all
+    version: all
+    output: web, pdf
+    items:
+    - title: Recipe 1. Hello Quarks!
+      url: /recipes/recipe_hello_quarks.html
+      audience: writers, designers
+      platform: all
+      product: all
+      version: all
+      output: web, pdf
+
+    - title: Recipe 2. Writing a Source Function
+      url: /recipes/recipe_source_function.html
+      audience: writers, designers
+      platform: all
+      product: all
+      version: all
+      output: web, pdf
+
   - title: Sample Programs
     audience: writers, designers
     platform: all

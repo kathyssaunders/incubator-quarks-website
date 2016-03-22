@@ -34,7 +34,7 @@ You can:
 * Report bugs and submit patches.
 * Contribute code, javadocs, documentation.
 
-Visit the [Contributing](http://www.apache.org/foundation/getinvolved.html) page for more information.
+Visit the [Contributing](http://www.apache.org/foundation/getinvolved.html) page and read [DEVELOPMENT.md] (https://github.com/apache/incubator-quarks/blob/master/DEVELOPMENT.md) at the top of the code tree for more information.
 
 ### Mailing list
 
@@ -59,7 +59,7 @@ Before submitting an issue, please:
 
 * Verify that the bug does in fact exist.
 * Search the issue tracker to verify there is no existing issue reporting the bug you've found.
-* Consider tracking down the bug yourself in the Wink's source and submitting a patch along with your bug report. This is a great time saver for the Wink developers and helps ensure the bug will be fixed quickly.
+* Consider tracking down the bug yourself in the {{ site.data.project.short_name }} source and submitting apull request  along with your bug report. This is a great time saver for the  {{ site.data.project.short_name }} developers and helps ensure the bug will be fixed quickly.
 
 
 

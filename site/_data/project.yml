@@ -47,10 +47,10 @@ commits_list_archive_markmail:
 
 jira: QUARKS
 
-source_repository: git://git.apache.org/incubator-quarks.git
+source_repository: https://git-wip-us.apache.org/repos/asf/incubator-quarks.git
 source_repository_mirror: https://github.com/apache/incubator-quarks
 
-website_repository: git://git.apache.org/incubator-quarks-website.git
+website_repository: https://git-wip-us.apache.org/repos/asf/incubator-quarks-website.git
 website_repository_mirror: https://github.com/apache/incubator-quarks-website
 
 podling: true

@@ -19,10 +19,14 @@ limitations under the License.
 
 # Quarks web site
 
+## Location
+
+http://quarks.incubator.apache.org/
+
+## How it works
+
 This procedure was borrowed in part from the apex site. (https://git-wip-us.apache.org/repos/asf?p=incubator-apex-site.git) except we use jekyll.
 
-  How it works
-  ------------
  The master branch of this repo contains the source files that are used to generate the HTML that ultimately gets pushed to the incubator site.
 The `asf-site` branch is where the actual generated files are stored. Note that this branch must contain exactly one folder called `content`,
  and so has been checked out as an orphan branch with its own commit history apart from the master branch. See the *Contributing* section below.
