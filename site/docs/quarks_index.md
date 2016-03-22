@@ -1,10 +1,10 @@
 ---
-title:  Quarks Documentation
+title:  Apache Quarks Documentation
 audience: field engineers, clients
 ---
 
 ## New Documentation
-Quarks is evolving, and so is the documentation. If the existing documentation hasn't answered your questions, you can request new or updated documentation by opening an issue.
+Apache Quarks is evolving, and so is the documentation. If the existing documentation hasn't answered your questions, you can request new or updated documentation by opening an issue.
 
 Click on "New Documentation" to open an issue:
 
