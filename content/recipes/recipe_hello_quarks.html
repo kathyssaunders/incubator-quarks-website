@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="keywords" content=" ">
-<title>Common Quarks Operations  | Quarks Documentation</title>
+<title>Recipe 1. Hello Quarks!  | Quarks Documentation</title>
 <link rel="stylesheet" type="text/css" href="../css/syntax.css">
 <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">
 <!--<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">-->
@@ -157,7 +157,7 @@
 <script>
 function SendLinkByMail(href) {
 var subject= "Quarks Documentation feedback";
-var body = "I have some feedback about the Common Quarks Operations page: ";
+var body = "I have some feedback about the Recipe 1. Hello Quarks! page: ";
 body += window.location.href;
 body += "";
 var uri = "mailto:?subject=";
@@ -184,7 +184,7 @@ window.location.href = uri;
                             searchInput: document.getElementById('search-input'),
                             resultsContainer: document.getElementById('results-container'),
                             dataSource: '../search.json',
-                            searchResultTemplate: '<li><a href="{url}" title="Common Quarks Operations">{title}</a></li>',
+                            searchResultTemplate: '<li><a href="{url}" title="Recipe 1. Hello Quarks!">{title}</a></li>',
                         noResultsText: 'No results found.',
                                 limit: 10,
                                 fuzzy: true,
@@ -453,7 +453,7 @@ $('#toc').on('click', 'a', function() {
             <div class="col-md-9">
                 
                 <div class="post-header">
-   <h1 class="post-title-main">Common Quarks Operations</h1>
+   <h1 class="post-title-main">Recipe 1. Hello Quarks!</h1>
 </div>
 
 <div class="post-content">
@@ -485,63 +485,51 @@ $('#toc').on('click', 'a', function() {
 
     
 
-    <a target="_blank" href="https://github.com/apache/incubator-quarks-website/blob/master/site/docs/common-quarks-operations.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
+    <a target="_blank" href="https://github.com/apache/incubator-quarks-website/blob/master/site/recipes/recipe_hello_quarks.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
     
-  <h1 id="common-quarks-operations">Common Quarks Operations</h1>
-
-<p>In the first <a href="quarks-getting-started">getting started guide</a>, we covered a &quot;hello world&quot; Quarks application where we read from a device&#39;s simulated temperature sensor. Yet Quarks supports more operations than simple filtering. Data analysis and streaming require a suite of functionality, the most important components of which will be outlined below.</p>
-
-<h2 id="tstream-map">TStream.map()</h2>
-
-<p>TStream.map() is arguably the most used method in the Quarks API. Its two main purposes are to perform stateful or stateless operations on a stream&#39;s tuples, and to produce a TStream with tuples of a different type from that of the calling stream.</p>
-
-<p><br></p>
-
-<h4 id="changing-a-tstream-39-s-tuple-type">Changing a TStream&#39;s Tuple Type</h4>
-
-<p>In addition to filtering tuples, TStreams support operations that <em>transform</em> tuples from one Java type to another by invoking the TStream.map() method.</p>
-
-<p><img src="images/Map_Type_Change.jpg" style="width:750px;height:150px;"></p>
-
-<p>This is useful in cases such as calculating the floating point average of a list of Integers, or tokenizing a Java String into a list of Strings. To demonstrate this, let&#39;s say we have a TStream which contains a few lines, each of which contains multiple words:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">lines</span> <span class="o">=</span> <span class="n">topology</span><span class="o">.</span><span class="na">strings</span><span class="o">(</span>
-            <span class="s">"this is a line"</span><span class="o">,</span>
-            <span class="s">"this is another line"</span><span class="o">,</span>
-            <span class="s">"there are three lines now"</span><span class="o">,</span>
-            <span class="s">"and now four"</span>
-        <span class="o">);</span>
+  <p>Quarks&#39; pure Java implementation is a powerful feature which allows it to be run on the majority of JVM-compatible systems. It also has the added benefit of enabling the developer to develop applications entirely within the Eclipse and Intellij ecosystems. For the purposes of this (and future) recipes, it will be assumed that the developer is using Eclipse. To begin the Hello World recipe, create a new project and import the necessary libraries as outlined in the <a href="quarks-getting-started">getting started guide</a>. Next, write the following template application:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">DirectProvider</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DirectProvider</span><span class="o">();</span>
+        <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="na">newTopology</span><span class="o">();</span>
+    <span class="o">}</span>
 </code></pre></div>
-<p>We then want to print the third word in each line. The best way to do this is to convert each line to a list of Strings by tokenizing them. We can do this in one line of code with the TStream.map() method:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">wordsInLine</span> <span class="o">=</span> <span class="n">lines</span><span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="n">tuple</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">" "</span><span class="o">)));</span>
+<p>The <em>DirectProvider</em> is an object which allows the user to submit and run the final application. It also creates the <em>Topology</em> object, which gives the developer the ability to define a stream of strings.</p>
+
+<h2 id="using-topology-strings">Using Topology.strings</h2>
+
+<p>The primary abstraction in Quarks is the <code>TStream</code>. A <em>TStream</em> represents the flow of data in a Quarks application; for example, the periodic floating point readings from a temperature sensor. The data items which are sent through a <code>TStream</code> are Java objects -- in the &quot;Hello Quarks!&quot; example, we are sending a single java.lang.String. There are a number of ways to create a <code>TStream</code>, and <code>Topology.strings</code> is the simplest. The user specifies a number of strings which will be used as the stream&#39;s data items.</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">DirectProvider</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DirectProvider</span><span class="o">();</span>
+        <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="na">newTopology</span><span class="o">();</span>
+        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">helloStream</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">strings</span><span class="o">(</span><span class="s">"Hello Quarks!"</span><span class="o">);</span>
+    <span class="o">}</span>
 </code></pre></div>
-<p>Since each tuple is now a list of strings, the <em>wordsInLine</em> stream is of type List<String>. As you can see, the map() method has the ability to change the type of the TStream. Finally, we can use the <em>wordsInLine</em> stream to print the third word in each line.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="n">wordsInLine</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">list</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">list</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">2</span><span class="o">)));</span>
+<p>The <code>helloStream</code> stream is created, and the &quot;Hello Quarks!&quot; string will be sent as its single data item.</p>
+
+<h2 id="printing-to-output">Printing to Output</h2>
+
+<p><code>TStream.print</code> can be used to print the data items of a stream to standard output by invoking the <code>toString</code> method of each data item. In this case the data items are already strings, but in principle <code>TStream.print</code> can be called on any stream, regardless of the datatype carried by the stream.</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">DirectProvider</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DirectProvider</span><span class="o">();</span>
+        <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="na">newTopology</span><span class="o">();</span>
+        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">helloStream</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">strings</span><span class="o">(</span><span class="s">"Hello Quarks!"</span><span class="o">);</span>
+        <span class="n">helloStream</span><span class="o">.</span><span class="na">print</span><span class="o">();</span>
+    <span class="o">}</span>
 </code></pre></div>
-<p>As mentioned in the <a href="quarks-getting-started">getting started guide</a>, a TStream can be parameterized to any serializable Java type, including ones created by the user.</p>
+<h2 id="submitting-the-application">Submitting the Application</h2>
 
-<p><br></p>
-
-<h4 id="performing-stateful-operations">Performing Stateful Operations</h4>
-
-<p>In all previous examples, the operations performed on a TStream have been stateless; keeping track of information over multiple invocations of the same operation has not been necessary. What if we want to keep track of the number of Strings sent over a stream? To do this, we need our TStream.map() method to contain a counter as state.</p>
-
-<p><img src="images/Map_Stateful.jpg" style="width:750px;height:150px;"></p>
-
-<p>This can be achieved by creating an anonymous Function class, and giving it the required fields.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">streamOfStrings</span> <span class="o">=</span> <span class="o">...;</span>
-    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">streamOfStrings</span><span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="k">new</span> <span class="n">Function</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;(){</span>
-            <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-            <span class="nd">@Override</span>
-            <span class="kd">public</span> <span class="n">Integer</span> <span class="n">apply</span><span class="o">(</span><span class="n">String</span> <span class="n">arg0</span><span class="o">)</span> <span class="o">{</span>
-                <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
-                <span class="k">return</span> <span class="n">count</span><span class="o">;</span>
-            <span class="o">}</span>
-        <span class="o">});</span>
+<p>The only remaining step is to submit the application, which is performed by the <code>DirectProvider</code>. Submitting a Quarks application initializes the threads which execute the <code>Topology</code>, and begins processing its data sources.</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">DirectProvider</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DirectProvider</span><span class="o">();</span>
+        <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="na">newTopology</span><span class="o">();</span>
+        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">helloStream</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">strings</span><span class="o">(</span><span class="s">"Hello Quarks!"</span><span class="o">);</span>
+        <span class="n">helloStream</span><span class="o">.</span><span class="na">print</span><span class="o">();</span>
+        <span class="n">dp</span><span class="o">.</span><span class="na">submit</span><span class="o">(</span><span class="n">top</span><span class="o">);</span>
+    <span class="o">}</span>
 </code></pre></div>
-<p>The <em>count</em> field will now contain the number of Strings which were sent over streamOfStrings. Although this is a simple example, the anonymous Function passed to TStream.map() can contain any kind of state! This could be a HashMap<K, T>, a running list of tuples, or any serializable Java type. The state will be maintained throughout the entire runtime of your application.</p>
-
-<p><br></p>
-
+<p>After running the application, the output is &quot;Hello Quarks!&quot;:</p>
+<div class="highlight"><pre><code class="language-" data-lang="">Hello Quarks!
+</code></pre></div>
 
 <div class="tags">
     

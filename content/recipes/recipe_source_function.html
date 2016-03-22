@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="keywords" content=" ">
-<title>Common Quarks Operations  | Quarks Documentation</title>
+<title>Recipe 2. Writing a Source Function  | Quarks Documentation</title>
 <link rel="stylesheet" type="text/css" href="../css/syntax.css">
 <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">
 <!--<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">-->
@@ -157,7 +157,7 @@
 <script>
 function SendLinkByMail(href) {
 var subject= "Quarks Documentation feedback";
-var body = "I have some feedback about the Common Quarks Operations page: ";
+var body = "I have some feedback about the Recipe 2. Writing a Source Function page: ";
 body += window.location.href;
 body += "";
 var uri = "mailto:?subject=";
@@ -184,7 +184,7 @@ window.location.href = uri;
                             searchInput: document.getElementById('search-input'),
                             resultsContainer: document.getElementById('results-container'),
                             dataSource: '../search.json',
-                            searchResultTemplate: '<li><a href="{url}" title="Common Quarks Operations">{title}</a></li>',
+                            searchResultTemplate: '<li><a href="{url}" title="Recipe 2. Writing a Source Function">{title}</a></li>',
                         noResultsText: 'No results found.',
                                 limit: 10,
                                 fuzzy: true,
@@ -453,7 +453,7 @@ $('#toc').on('click', 'a', function() {
             <div class="col-md-9">
                 
                 <div class="post-header">
-   <h1 class="post-title-main">Common Quarks Operations</h1>
+   <h1 class="post-title-main">Recipe 2. Writing a Source Function</h1>
 </div>
 
 <div class="post-content">
@@ -485,62 +485,78 @@ $('#toc').on('click', 'a', function() {
 
     
 
-    <a target="_blank" href="https://github.com/apache/incubator-quarks-website/blob/master/site/docs/common-quarks-operations.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
+    <a target="_blank" href="https://github.com/apache/incubator-quarks-website/blob/master/site/recipes/recipe_source_function.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
     
-  <h1 id="common-quarks-operations">Common Quarks Operations</h1>
+  <p>In the previous <a href="recipe_hello_quarks">Hello Quarks!</a> example, we create a data source which only generates a single Java String and prints it to output. Yet Quarks sources support the ability generate any data type as a source, not just Java types such as Strings and Doubles. Moreover, because the user supplies the code which generates the data, the user has complete flexibility for <em>how</em> the data is generated. This recipe demonstrates how a user could write such a custom data source.</p>
 
-<p>In the first <a href="quarks-getting-started">getting started guide</a>, we covered a &quot;hello world&quot; Quarks application where we read from a device&#39;s simulated temperature sensor. Yet Quarks supports more operations than simple filtering. Data analysis and streaming require a suite of functionality, the most important components of which will be outlined below.</p>
+<h2 id="custom-source-reading-the-lines-of-a-web-page">Custom Source: Reading the Lines of a Web Page</h2>
 
-<h2 id="tstream-map">TStream.map()</h2>
+<div class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note: </b> Quarks' API provides convenience methods for performing HTTP requests. For the sake of example we are writing a HTTP data source manually, but in principle there are easier methods. </div>
 
-<p>TStream.map() is arguably the most used method in the Quarks API. Its two main purposes are to perform stateful or stateless operations on a stream&#39;s tuples, and to produce a TStream with tuples of a different type from that of the calling stream.</p>
+<p>One example of a custom data source could be retrieving the contents of a web page and printing each line to output. For example, the user could be querying the Yahoo Finance website for the most recent stock price data of Bank of America, Cabot Oil &amp; Gas, and Freeport-McMoRan Inc:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">DirectProvider</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DirectProvider</span><span class="o">();</span>
+        <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="na">newTopology</span><span class="o">();</span>
 
-<p><br></p>
-
-<h4 id="changing-a-tstream-39-s-tuple-type">Changing a TStream&#39;s Tuple Type</h4>
-
-<p>In addition to filtering tuples, TStreams support operations that <em>transform</em> tuples from one Java type to another by invoking the TStream.map() method.</p>
-
-<p><img src="images/Map_Type_Change.jpg" style="width:750px;height:150px;"></p>
-
-<p>This is useful in cases such as calculating the floating point average of a list of Integers, or tokenizing a Java String into a list of Strings. To demonstrate this, let&#39;s say we have a TStream which contains a few lines, each of which contains multiple words:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">lines</span> <span class="o">=</span> <span class="n">topology</span><span class="o">.</span><span class="na">strings</span><span class="o">(</span>
-            <span class="s">"this is a line"</span><span class="o">,</span>
-            <span class="s">"this is another line"</span><span class="o">,</span>
-            <span class="s">"there are three lines now"</span><span class="o">,</span>
-            <span class="s">"and now four"</span>
-        <span class="o">);</span>
+        <span class="kd">final</span> <span class="n">URL</span> <span class="n">url</span> <span class="o">=</span> <span class="k">new</span> <span class="n">URL</span><span class="o">(</span><span class="s">"http://finance.yahoo.com/d/quotes.csv?s=BAC+COG+FCX&amp;f=snabl"</span><span class="o">);</span>
+    <span class="o">}</span>
 </code></pre></div>
-<p>We then want to print the third word in each line. The best way to do this is to convert each line to a list of Strings by tokenizing them. We can do this in one line of code with the TStream.map() method:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">wordsInLine</span> <span class="o">=</span> <span class="n">lines</span><span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="n">tuple</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">" "</span><span class="o">)));</span>
-</code></pre></div>
-<p>Since each tuple is now a list of strings, the <em>wordsInLine</em> stream is of type List<String>. As you can see, the map() method has the ability to change the type of the TStream. Finally, we can use the <em>wordsInLine</em> stream to print the third word in each line.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="n">wordsInLine</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">list</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">list</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">2</span><span class="o">)));</span>
-</code></pre></div>
-<p>As mentioned in the <a href="quarks-getting-started">getting started guide</a>, a TStream can be parameterized to any serializable Java type, including ones created by the user.</p>
+<p>Given the correctly formatted URL to request the data, we can use the <em>Topology.source</em> method to generate each line of the page as a data item on the stream. <code>Topology.source</code> takes a Java Supplier that returns an Iterable. The supplier is invoked once, and the items returned from the Iterable are used as the stream&#39;s data items. For example, the following <code>queryWebsite</code> method returns a supplier which queries  a URL and returns an Iterable of its contents:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">private</span> <span class="kd">static</span> <span class="n">Supplier</span><span class="o">&lt;</span><span class="n">Iterable</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">queryWebsite</span><span class="o">(</span><span class="n">URL</span> <span class="n">url</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span><span class="o">{</span>
+        <span class="k">return</span> <span class="o">()</span> <span class="o">-&gt;</span> <span class="o">{</span>
+            <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">lines</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedList</span><span class="o">&lt;&gt;();</span>
+            <span class="k">try</span> <span class="o">{</span>
+                <span class="n">InputStream</span> <span class="n">is</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="na">openStream</span><span class="o">();</span>
+                <span class="n">BufferedReader</span> <span class="n">br</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BufferedReader</span><span class="o">(</span>
+                        <span class="k">new</span> <span class="n">InputStreamReader</span><span class="o">(</span><span class="n">is</span><span class="o">));</span>
 
-<p><br></p>
+                <span class="k">for</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span> <span class="o">=</span> <span class="n">br</span><span class="o">.</span><span class="na">readLine</span><span class="o">();</span> <span class="n">s</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">;</span> <span class="n">s</span> <span class="o">=</span> <span class="n">br</span><span class="o">.</span><span class="na">readLine</span><span class="o">())</span>
+                    <span class="n">lines</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">s</span><span class="o">);</span>
 
-<h4 id="performing-stateful-operations">Performing Stateful Operations</h4>
-
-<p>In all previous examples, the operations performed on a TStream have been stateless; keeping track of information over multiple invocations of the same operation has not been necessary. What if we want to keep track of the number of Strings sent over a stream? To do this, we need our TStream.map() method to contain a counter as state.</p>
-
-<p><img src="images/Map_Stateful.jpg" style="width:750px;height:150px;"></p>
-
-<p>This can be achieved by creating an anonymous Function class, and giving it the required fields.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">streamOfStrings</span> <span class="o">=</span> <span class="o">...;</span>
-    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">streamOfStrings</span><span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="k">new</span> <span class="n">Function</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;(){</span>
-            <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-            <span class="nd">@Override</span>
-            <span class="kd">public</span> <span class="n">Integer</span> <span class="n">apply</span><span class="o">(</span><span class="n">String</span> <span class="n">arg0</span><span class="o">)</span> <span class="o">{</span>
-                <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
-                <span class="k">return</span> <span class="n">count</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
             <span class="o">}</span>
-        <span class="o">});</span>
+            <span class="k">return</span> <span class="n">lines</span><span class="o">;</span>
+        <span class="o">};</span>
+    <span class="o">}</span>
 </code></pre></div>
-<p>The <em>count</em> field will now contain the number of Strings which were sent over streamOfStrings. Although this is a simple example, the anonymous Function passed to TStream.map() can contain any kind of state! This could be a HashMap<K, T>, a running list of tuples, or any serializable Java type. The state will be maintained throughout the entire runtime of your application.</p>
+<p>When invoking <code>Topology.source</code>, we can use <code>queryWebsite</code> to return the required supplier, passing in the URL.</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java">     <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">DirectProvider</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DirectProvider</span><span class="o">();</span>
+        <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="na">newTopology</span><span class="o">();</span>
 
-<p><br></p>
+        <span class="kd">final</span> <span class="n">URL</span> <span class="n">url</span> <span class="o">=</span> <span class="k">new</span> <span class="n">URL</span><span class="o">(</span><span class="s">"http://finance.yahoo.com/d/quotes.csv?s=BAC+COG+FCX&amp;f=snabl"</span><span class="o">);</span>
+
+        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">linesOfWebsite</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">source</span><span class="o">(</span><span class="n">queryWebsite</span><span class="o">(</span><span class="n">url</span><span class="o">));</span>
+    <span class="o">}</span>
+</code></pre></div>
+<p>Source methods such as <code>Topology.source</code> and <code>Topology.strings</code> return a <code>TStream</code>. If we print the <code>linesOfWebsite</code> stream to standard output and run the application, we can see that it correctly generates the data and feeds it into the Quarks runtime:</p>
+
+<p>Output:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="s">"BAC"</span><span class="o">,</span><span class="s">"Bank of America Corporation Com"</span><span class="o">,</span><span class="mf">13.150</span><span class="o">,</span><span class="mf">13.140</span><span class="o">,</span><span class="s">"12:00pm - &lt;b&gt;13.145&lt;/b&gt;"</span>
+<span class="s">"COG"</span><span class="o">,</span><span class="s">"Cabot Oil &amp; Gas Corporation Com"</span><span class="o">,</span><span class="mf">21.6800</span><span class="o">,</span><span class="mf">21.6700</span><span class="o">,</span><span class="s">"12:00pm - &lt;b&gt;21.6775&lt;/b&gt;"</span>
+<span class="s">"FCX"</span><span class="o">,</span><span class="s">"Freeport-McMoRan, Inc. Common S"</span><span class="o">,</span><span class="mf">8.8200</span><span class="o">,</span><span class="mf">8.8100</span><span class="o">,</span><span class="s">"12:00pm - &lt;b&gt;8.8035&lt;/b&gt;"</span>
+</code></pre></div>
+<h2 id="polling-source-reading-data-periodically">Polling source: reading data periodically</h2>
+
+<p>A much more common scenario for a developer is the periodic generation of data from a source operator -- a data source may need to be polled every 5 seconds, 3 hours, or any time frame. To this end, <code>Topology</code> exposes the <code>poll</code> method which can be used to call a function at the frequency of the user&#39;s choosing. For example, a user might want to query Yahoo Finance every two seconds to retrieve the most up to date ticker price for a stock:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">DirectProvider</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DirectProvider</span><span class="o">();</span>
+        <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="na">newTopology</span><span class="o">();</span>
+
+        <span class="kd">final</span> <span class="n">URL</span> <span class="n">url</span> <span class="o">=</span> <span class="k">new</span> <span class="n">URL</span><span class="o">(</span><span class="s">"http://finance.yahoo.com/d/quotes.csv?s=BAC+COG+FCX&amp;f=snabl"</span><span class="o">);</span>
+
+        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Iterable</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="n">source</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">poll</span><span class="o">(</span><span class="n">queryWebsite</span><span class="o">(</span><span class="n">url</span><span class="o">),</span> <span class="mi">2</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">);</span>
+        <span class="n">source</span><span class="o">.</span><span class="na">print</span><span class="o">();</span>
+
+        <span class="n">dp</span><span class="o">.</span><span class="na">submit</span><span class="o">(</span><span class="n">top</span><span class="o">);</span>
+    <span class="o">}</span>
+</code></pre></div>
+<p><strong>Output:</strong>
+<br>
+<img src="images/pollingSource.gif"></p>
+
+<p>It&#39;s important to note that calls to <code>DirectProvider.submit</code> are non-blocking; the main thread will exit, and the threads executing the topology will continue to run. (Also, to see changing stock prices, the above example needs to be run during open trading hours. Otherwise, it will simply return the same results every time the website is polled).</p>
 
 
 <div class="tags">

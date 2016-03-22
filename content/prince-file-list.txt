@@ -55,6 +55,20 @@
               
                       
                          
+                            http://quarks.incubator.apache.org/recipes/recipe_hello_quarks.html
+                                  
+                        
+                     
+                         
+                            http://quarks.incubator.apache.org/recipes/recipe_source_function.html
+                                  
+                        
+                     
+              
+          
+              
+                      
+                         
                             http://quarks.incubator.apache.org/docs/samples.html
                                   
                         

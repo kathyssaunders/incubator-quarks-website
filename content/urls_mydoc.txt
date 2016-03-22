@@ -50,6 +50,22 @@
 
 
  
+/recipes/recipe_hello_quarks:
+  title: "Recipe 1. Hello Quarks!"
+  url: "../recipes/recipe_hello_quarks.html"
+  link: "<a href='../recipes/recipe_hello_quarks.html'>Recipe 1. Hello Quarks!</a>"
+
+
+ 
+/recipes/recipe_source_function:
+  title: "Recipe 2. Writing a Source Function"
+  url: "../recipes/recipe_source_function.html"
+  link: "<a href='../recipes/recipe_source_function.html'>Recipe 2. Writing a Source Function</a>"
+
+
+
+
+ 
 /docs/samples:
   title: "1. Samples"
   url: "../docs/samples.html"

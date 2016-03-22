@@ -132,6 +132,28 @@
 
 
 {
+"title": "Recipe 1. Hello Quarks!",
+"tags": "",
+"keywords": "",
+"url": "../recipes/recipe_hello_quarks",
+"summary": ""
+},
+
+
+
+
+{
+"title": "Recipe 2. Writing a Source Function",
+"tags": "",
+"keywords": "",
+"url": "../recipes/recipe_source_function",
+"summary": ""
+},
+
+
+
+
+{
 "title": "Sample Programs",
 "tags": "",
 "keywords": "",
