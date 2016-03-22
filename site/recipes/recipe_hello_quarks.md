@@ -14,7 +14,7 @@ Quarks' pure Java implementation is a powerful feature which allows it to be run
 The *DirectProvider* is an object which allows the user to submit and run the final application. It also creates the *Topology* object, which gives the developer the ability to define a stream of strings.
 
 ## Using Topology.strings
-The primary abstraction in Quarks is the *TStream*. A *TStream* represents the flow of data in a Quarks application; for example, the periodic floating point readings from a temperature sensor. The data items which are sent through a *TStream* are Java objects -- in the "Hello Quarks!" example, we are sending a single java.lang.String. There are a number of ways to create a *TStream*, and *Topology.strings* is the simplest. The user specifies a number of strings which will be used as the stream's data items.
+The primary abstraction in Quarks is the `TStream`. A *TStream* represents the flow of data in a Quarks application; for example, the periodic floating point readings from a temperature sensor. The data items which are sent through a `TStream` are Java objects -- in the "Hello Quarks!" example, we are sending a single java.lang.String. There are a number of ways to create a `TStream`, and `Topology.strings` is the simplest. The user specifies a number of strings which will be used as the stream's data items.
 
 
 ``` java
@@ -25,9 +25,9 @@ The primary abstraction in Quarks is the *TStream*. A *TStream* represents the f
     }
 ```
 
-The *helloStream* stream is created, and the "Hello Quarks!" string will be sent as its single data item.
+The `helloStream` stream is created, and the "Hello Quarks!" string will be sent as its single data item.
 ## Printing to Output
-*TStream.print* can be used to print the data items of a stream to standard output by invoking the *toString* method of each data item. In this case the data items are already strings, but in principle *TStream.print* can be called on any stream, regardless of the datatype carried by the stream.
+`TStream.print` can be used to print the data items of a stream to standard output by invoking the `toString` method of each data item. In this case the data items are already strings, but in principle `TStream.print` can be called on any stream, regardless of the datatype carried by the stream.
 
 ``` java
     public static void main(String[] args) {
@@ -39,7 +39,7 @@ The *helloStream* stream is created, and the "Hello Quarks!" string will be sent
 ```
 
 ## Submitting the Application
-The only remaining step is to submit the application, which is performed my the *DirectProvider*. Submitting a Quarks application initializes the threads which execute the *Topology*, and begins processing its data sources.
+The only remaining step is to submit the application, which is performed by the `DirectProvider`. Submitting a Quarks application initializes the threads which execute the `Topology`, and begins processing its data sources.
 
 ``` java
     public static void main(String[] args) {

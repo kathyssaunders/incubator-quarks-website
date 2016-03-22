@@ -1,7 +1,7 @@
 ---
 title: Recipe 2. Writing a Source Function
 ---
-In the previous [Hello Quarks!](recipe_hello_quarks) example, we create a data source which only generates a single Java String and prints it to output. Yet Quarks sources support the ability generate any data type as a source, not just primitive Java types such as Strings. Moreover, because the user supplies the code which generates the data, the user has complete flexibility for *how* the data is generated. This recipe demonstrates how a user could write such a custom data source.
+In the previous [Hello Quarks!](recipe_hello_quarks) example, we create a data source which only generates a single Java String and prints it to output. Yet Quarks sources support the ability generate any data type as a source, not just Java types such as Strings and Doubles. Moreover, because the user supplies the code which generates the data, the user has complete flexibility for *how* the data is generated. This recipe demonstrates how a user could write such a custom data source.
 
 ## Custom Source: Reading the Lines of a Web Page
 {{site.data.alerts.note}} Quarks' API provides convenience methods for performing HTTP requests. For the sake of example we are writing a HTTP data source manually, but in principle there are easier methods. {{site.data.alerts.end}}
@@ -17,7 +17,7 @@ One example of a custom data source could be retrieving the contents of a web pa
 	}
 ```
 
-Given the correctly formatted URL to request the data, we can use the *Topology.source* method to generate each line of the page as a data item on the stream. *Topology.source* takes a Java Supplier that returns an Iterable. The supplier is invoked once, and the items returned from the Iterable are used as the stream's data items. For example, the following *queryWebsite* method returns a supplier which queries  a URL and returns an Iterable of its contents:
+Given the correctly formatted URL to request the data, we can use the *Topology.source* method to generate each line of the page as a data item on the stream. `Topology.source` takes a Java Supplier that returns an Iterable. The supplier is invoked once, and the items returned from the Iterable are used as the stream's data items. For example, the following `queryWebsite` method returns a supplier which queries  a URL and returns an Iterable of its contents:
 
 ``` java
     private static Supplier<Iterable<String> > queryWebsite(URL url) throws Exception{
@@ -39,7 +39,7 @@ Given the correctly formatted URL to request the data, we can use the *Topology.
     }
 ```
 
- When invoking *Topology.source*, we can use *queryWebsite* to return the required supplier, passing in the URL.
+ When invoking `Topology.source`, we can use `queryWebsite` to return the required supplier, passing in the URL.
  
  ``` java
      public static void main(String[] args) throws Exception {
@@ -49,10 +49,10 @@ Given the correctly formatted URL to request the data, we can use the *Topology.
         final URL url = new URL("http://finance.yahoo.com/d/quotes.csv?s=BAC+COG+FCX&f=snabl");
         
         TStream<String> linesOfWebsite = top.source(queryWebsite(url));
-}
+    }
  ```
  
- Source methods such as *Topology.source* and *Topology.strings* return a *TStream*. If we print the *linesOfWebsite* stream to standard output and run the application, we can see that it correctly generates the data and feeds it into the Quarks runtime:
+ Source methods such as `Topology.source` and `Topology.strings` return a `TStream`. If we print the `linesOfWebsite` stream to standard output and run the application, we can see that it correctly generates the data and feeds it into the Quarks runtime:
 
 Output:
 
@@ -63,7 +63,7 @@ Output:
 ```
 
 ## Polling source: reading data periodically
-A much more common scenario for a developer is the periodic generation of data from a source operator -- a data source may need to be polled every 5 seconds, 3 hours, or any time frame. To this end, *Topology* exposes the *poll* method which can be used to call a function at the frequency of the user's choosing. For example, a user might want to query Yahoo Finance every two seconds to retrieve the most up to date ticker price for a stock:
+A much more common scenario for a developer is the periodic generation of data from a source operator -- a data source may need to be polled every 5 seconds, 3 hours, or any time frame. To this end, `Topology` exposes the `poll` method which can be used to call a function at the frequency of the user's choosing. For example, a user might want to query Yahoo Finance every two seconds to retrieve the most up to date ticker price for a stock:
 
 ```java
     public static void main(String[] args) throws Exception {
@@ -83,4 +83,4 @@ A much more common scenario for a developer is the periodic generation of data f
 <br>
 <img src="images/pollingSource.gif">
 
-It's important to note that calls to *DirectProvider.submit* are non-blocking; the main thread will exit, and the threads executing the topology will continue to run. (Also, to see changing stock prices, the above example needs to be run during open trading hours. Otherwise, it will simple return the same results every time the website is polled).
+It's important to note that calls to `DirectProvider.submit` are non-blocking; the main thread will exit, and the threads executing the topology will continue to run. (Also, to see changing stock prices, the above example needs to be run during open trading hours. Otherwise, it will simply return the same results every time the website is polled).
