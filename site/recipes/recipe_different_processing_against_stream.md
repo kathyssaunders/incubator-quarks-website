@@ -2,22 +2,36 @@
 title: Recipe 4. Applying Different Processing Against a Single Stream
 ---
 
-In the previous [example](recipe_value_out_of_range), we learned how to filter a stream to obtain the interesting sensor readings and ignore the mundane data. Typically, a user scenario is more involved, where data is processed by executing multiple stream operations sequentially. Consider the following scenario, for example.
+In the previous [recipe](recipe_value_out_of_range), we learned how to filter a stream to obtain the interesting sensor readings and ignore the mundane data. Typically, a user scenario is more involved, where data is processed using different stream operations. Consider the following scenario, for example.
 
-Suppose a package delivery company would like to monitor the gas mileage of their delivery trucks using embedded sensors. They would like to apply different analytics to the sensor data that can be used to make more informed business decisions. For instance, if a truck is reporting consistently poor mileage readings, the company might want to consider replacing that truck to save on gas costs.
+Suppose a package delivery company would like to monitor the gas mileage of their delivery trucks using embedded sensors. They would like to apply different analytics to the sensor data that can be used to make more informed business decisions. For instance, if a truck is reporting consistently poor mileage readings, the company might want to consider replacing that truck to save on gas costs. Perhaps the company also wants to convert the sensor readings to JSON format in order to easily display the data on a web page. It may also be interested in determining the expected gallons of gas used based on the current mileage.
 
-In this instance, we can apply different processing against the stream of mileage readings from the sensor and generate warnings when poor gas mileage is detected.
+In this instance, we can take the stream of mileage sensor readings and apply multiple types of processing against it so that we end up with streams that serve different purposes.
 
 ## Setting up the application
 
-We assume that the environment has been set up following the steps outlined in the [Getting Started Guide](../docs/quarks-getting-started). Let's begin by creating a `DirectProvider` and `Topology`. We choose a `DevelopmentProvider` so that we can view the topology graph using the console URL (refer to the [Application Console](../docs/console) page for a more detailed explanation of this provider). The initial mileage value has also been defined.
+We assume that the environment has been set up following the steps outlined in the [Getting Started Guide](../docs/quarks-getting-started). Let's begin by creating a `DirectProvider` and `Topology`. We choose a `DevelopmentProvider` so that we can view the topology graph using the console URL (refer to the [Application Console](../docs/console) page for a more detailed explanation of this provider). The initial mileage value and the number of miles in a typical delivery route have also been defined.
 
 ```java
-    public class TruckSensor {
+    import java.text.DecimalFormat;
+    import java.util.Random;
+    import java.util.concurrent.TimeUnit;
+
+    import com.google.gson.JsonObject;
+
+    import quarks.console.server.HttpServer;
+    import quarks.providers.development.DevelopmentProvider;
+    import quarks.providers.direct.DirectProvider;
+    import quarks.topology.TStream;
+    import quarks.topology.Topology;
+
+    public class ApplyDifferentProcessingAgainstStream {
         /**
-        * Hypothetical value for initial gas mileage
-        */
+         * Hypothetical values for the initial gas mileage and the
+         * number of miles in a typical delivery route
+         */
         static double currentMileage = 10.5;
+        static double ROUTE_MILES = 80;
 
         public static void main(String[] args) throws Exception {
 
@@ -27,43 +41,76 @@ We assume that the environment has been set up following the steps outlined in t
 
             Topology top = dp.newTopology("TruckSensor");
 
-            // The rest of the code pieces belong here.
+            // The rest of the code pieces belong here
         }
     }
 ```
 
 ## Generating mileage sensor readings
 
-The next step is to simulate a stream of gas mileage readings. In our `main()`, we use the `poll()` method to generate a flow of tuples (readings), where each tuple arrives every second.
+The next step is to simulate a stream of gas mileage readings. In our `main()`, we use the `poll()` method to generate a flow of tuples (readings), where each tuple arrives every second. We ensure that the generated reading is between 7.0 mpg and 14.0 mpg.
 
 ```java
-    // Generate a stream of mileage sensor readings.
+    // Generate a stream of mileage sensor readings
+    DecimalFormat df = new DecimalFormat("#.#");
     Random r = new Random();
     TStream<Double> mileage = top.poll(() -> {
-        // Change current mileage by some random amount between -0.4 and 0.4.
-        double newMileage = -0.4 + (0.4 + 0.4) * r.nextDouble() + currentMileage;
-        currentMileage = newMileage;
+        // Change current mileage by some random amount between -0.4 and 0.4
+        while (true) {
+            double newMileage = -0.4 + (0.4 + 0.4) * r.nextDouble() + currentMileage;
+            // Ensure that new temperature is within [7.0, 14.0]
+            if (newMileage >= 7.0 && newMileage <= 14.0) {
+                currentMileage = Double.valueOf(df.format(newMileage));
+                break;
+            } else {
+                continue;
+            }
+        }
         return currentMileage;
     }, 1, TimeUnit.SECONDS);
 ```
 
 ## Applying different processing to the stream
 
-The company can now perform analytics on the `mileage` stream to generate poor gas mileage warnings by starting with the original stream and altering it. First, we filter out values that are out of range. Then, we tag the stream with the _mileage_ tag for easier viewing in the console (we add this tag after every step). Next, we truncate the reading to one decimal place. We then use `peek` to print out the current mileage so that we can get a sense of the truck's current state. After, we keep the mileage readings that are considered "poor." Finally, we terminate the stream by printing out warnings for poor gas mileage.
+The company can now perform analytics on the `mileage` stream and feed it to different functions. 
+
+First, we can filter out mileage values that are considered poor and tag the resulting stream for easier viewing in the console.
 
 ```java
-    DecimalFormat df = new DecimalFormat("#.#");
+    // Filter out the poor gas mileage readings
+    TStream<Double> poorMileage = mileage
+            .filter(mpg -> mpg <= 9).tag("filtered");
+```
 
-    // Perform analytics on mileage readings to generate poor gas mileage warnings.
-    mileage = mileage.filter(tuple -> tuple >= 7.0 && tuple <= 14.0);
-    mileage = mileage.tag("mileage");
-    mileage = mileage.modify(tuple -> Double.valueOf(df.format(tuple)));
-    mileage = mileage.tag("mileage");
-    mileage = mileage.peek(tuple -> System.out.println("Mileage: " + tuple + " mpg"));
-    mileage = mileage.tag("mileage");
-    mileage = mileage.filter(tuple -> tuple <= 9);
-    mileage = mileage.tag("mileage");
-    mileage.sink(tuple -> System.out.println("Poor gas mileage! Only getting " + tuple + " mpg!"));
+If the company also wants the readings to be in JSON, we can easily create a new stream and convert from type `Double` to `JsonObject`.
+
+```java
+    // Map Double to JsonObject
+    TStream<JsonObject> json = mileage
+            .map(mpg -> {
+                JsonObject jObj = new JsonObject();
+                jObj.addProperty("mileage", mpg);
+                return jObj;
+            }).tag("mapped");
+```
+
+In addition, we can calculate the estimated gallons of gas used based on the current mileage using `modify`.
+
+```java
+    // Modify mileage stream to obtain a stream containing the estimated gallons of gas used
+    TStream<Double> gallonsUsed = mileage
+            .modify(mpg -> Double.valueOf(df.format(ROUTE_MILES / mpg))).tag("modified");
+```
+
+The three examples demonstrated here are a small subset of the many other possibilities of stream processing.
+
+With each of these resulting streams, the company can perform further analytics, but at this point, we terminate the streams by printing out the tuples on each stream.
+
+```java
+    // Terminate the streams
+    poorMileage.sink(mpg -> System.out.println("Poor mileage! " + mpg + " mpg"));
+    json.sink(mpg -> System.out.println("JSON: " + mpg));
+    gallonsUsed.sink(gas -> System.out.println("Gallons of gas: " + gas + "\n"));
 ```
 
 We end our application by submitting the `Topology`.
@@ -73,20 +120,24 @@ We end our application by submitting the `Topology`.
 When the final application is run, the output looks something like the following:
 
 ```
-    Mileage: 9.6 mpg
-    Mileage: 9.3 mpg
-    Mileage: 9.6 mpg
-    Mileage: 9.3 mpg
-    Mileage: 9.4 mpg
-    Mileage: 9.4 mpg
-    Mileage: 9.2 mpg
-    Mileage: 9.0 mpg
-    Poor gas mileage! Only getting 9.0 mpg!
+    JSON: {"mileage":9.5}
+    Gallons of gas: 8.4
+
+    JSON: {"mileage":9.2}
+    Gallons of gas: 8.7
+
+    Poor mileage! 9.0 mpg
+    JSON: {"mileage":9.0}
+    Gallons of gas: 8.9
+
+    Poor mileage! 8.8 mpg
+    JSON: {"mileage":8.8}
+    Gallons of gas: 9.1
 ```
 
 ## A look at the topology graph
 
-Let's see what the topology graph looks like. We can view it using the console URL that was printed to standard output at the start of the application. Notice how the graph makes it easier to visualize the various stream operations.
+Let's see what the topology graph looks like. We can view it using the console URL that was printed to standard output at the start of the application. We see that original stream is fanned out to three separate streams, and the `filter`, `map`, and `modify` operations are applied.
 
 <img src="images/different_processing_against_stream_topology_graph.jpg">
 
@@ -97,22 +148,29 @@ Let's see what the topology graph looks like. We can view it using the console U
     import java.util.Random;
     import java.util.concurrent.TimeUnit;
 
+    import com.google.gson.JsonObject;
+
     import quarks.console.server.HttpServer;
     import quarks.providers.development.DevelopmentProvider;
     import quarks.providers.direct.DirectProvider;
     import quarks.topology.TStream;
     import quarks.topology.Topology;
 
-    public class TruckSensor {
+    /**
+     * Fan out stream and perform different analytics on the resulting streams.
+     */
+    public class ApplyDifferentProcessingAgainstStream {
         /**
-         * Hypothetical value for initial gas mileage
+         * Hypothetical values for the initial gas mileage and the
+         * number of miles in a typical delivery route
          */
         static double currentMileage = 10.5;
+        static double ROUTE_MILES = 80;
 
         /**
          * Polls a simulated delivery truck sensor to periodically obtain
-         * mileage readings (in miles/gallon). Perform a series of data
-         * analysis steps on the stream to generate warnings.
+         * mileage readings (in miles/gallon). Feed the stream of sensor
+         * readings to different functions (filter, map, and modify).
          */
         public static void main(String[] args) throws Exception {
 
@@ -122,27 +180,44 @@ Let's see what the topology graph looks like. We can view it using the console U
 
             Topology top = dp.newTopology("TruckSensor");
 
-            // Generate a stream of mileage sensor readings.
+            // Generate a stream of mileage sensor readings
+            DecimalFormat df = new DecimalFormat("#.#");
             Random r = new Random();
             TStream<Double> mileage = top.poll(() -> {
-                // Change current mileage by some random amount between -0.4 and 0.4.
-                double newMileage = -0.4 + (0.4 + 0.4) * r.nextDouble() + currentMileage;
-                currentMileage = newMileage;
+                // Change current mileage by some random amount between -0.4 and 0.4
+                while (true) {
+                    double newMileage = -0.4 + (0.4 + 0.4) * r.nextDouble() + currentMileage;
+                    // Ensure that new temperature is within [7.0, 14.0]
+                    if (newMileage >= 7.0 && newMileage <= 14.0) {
+                        currentMileage = Double.valueOf(df.format(newMileage));
+                        break;
+                    } else {
+                        continue;
+                    }
+                }
                 return currentMileage;
             }, 1, TimeUnit.SECONDS);
 
-            DecimalFormat df = new DecimalFormat("#.#");
+            // Filter out the poor gas mileage readings
+            TStream<Double> poorMileage = mileage
+                    .filter(mpg -> mpg <= 9).tag("filtered");
 
-            // Perform analytics on mileage readings to generate poor gas mileage warnings.
-            mileage = mileage.filter(tuple -> tuple >= 7.0 && tuple <= 14.0);
-            mileage = mileage.tag("mileage");
-            mileage = mileage.modify(tuple -> Double.valueOf(df.format(tuple)));
-            mileage = mileage.tag("mileage");
-            mileage = mileage.peek(tuple -> System.out.println("Mileage: " + tuple + " mpg"));
-            mileage = mileage.tag("mileage");
-            mileage = mileage.filter(tuple -> tuple <= 9);
-            mileage = mileage.tag("mileage");
-            mileage.sink(tuple -> System.out.println("Poor gas mileage! Only getting " + tuple + " mpg!"));
+            // Map Double to JsonObject
+            TStream<JsonObject> json = mileage
+                    .map(mpg -> {
+                        JsonObject jObj = new JsonObject();
+                        jObj.addProperty("mileage", mpg);
+                        return jObj;
+                    }).tag("mapped");
+
+            // Modify mileage stream to obtain a stream containing the estimated gallons of gas used
+            TStream<Double> gallonsUsed = mileage
+                    .modify(mpg -> Double.valueOf(df.format(ROUTE_MILES / mpg))).tag("modified");
+
+            // Terminate the streams
+            poorMileage.sink(mpg -> System.out.println("Poor mileage! " + mpg + " mpg"));
+            json.sink(mpg -> System.out.println("JSON: " + mpg));
+            gallonsUsed.sink(gas -> System.out.println("Gallons of gas: " + gas + "\n"));
 
             dp.submit(top);
         }

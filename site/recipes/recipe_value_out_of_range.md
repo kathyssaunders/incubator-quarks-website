@@ -24,9 +24,9 @@ We assume that the environment has been set up following the steps outlined in t
     import quarks.topology.TStream;
     import quarks.topology.Topology;
 
-    public class OptimalGrowingTemps {
+    public class DetectValueOutOfRange {
         /**
-         * Optimal temperatures (in Fahrenheit) for corn growth
+         * Optimal temperatures (in Fahrenheit)
          */
         static double TEMP_LOW = 77.0;
         static double TEMP_HIGH = 91.0;
@@ -38,24 +38,24 @@ We assume that the environment has been set up following the steps outlined in t
 
             Topology top = dp.newTopology("TemperatureSensor");
 
-            // The rest of the code pieces belong here.
+            // The rest of the code pieces belong here
         }
     }
 ```
 
 ## Generating temperature sensor readings
 
-The next step is to simulate a stream of temperature readings. In our `main()`, we use the `poll()` method to generate a flow of tuples, where a new tuple (temperature reading) arrives every second.
+The next step is to simulate a stream of temperature readings. In our `main()`, we use the `poll()` method to generate a flow of tuples, where a new tuple (temperature reading) arrives every second. We ensure that the generated reading is between 28°F and 112°F.
 
 ```java
-    // Generate a stream of temperature sensor readings.
+    // Generate a stream of temperature sensor readings
     DecimalFormat df = new DecimalFormat("#.#");
     Random r = new Random();
     TStream<Double> temp = top.poll(() -> {
-        // Change current temp by some random amount between -1 and 1.
+        // Change current temp by some random amount between -1 and 1
         while (true) {
             double newTemp = -1 + (1 + 1) * r.nextDouble() + currentTemp;
-            // Ensure that new temperature is within [28, 112].
+            // Ensure that new temperature is within [28, 112]
             if (newTemp >= 28 && newTemp <= 112) {
                 currentTemp = Double.valueOf(df.format(newTemp));
                 break;
@@ -153,11 +153,10 @@ Note that the deadband filter outputs a warning message for the very first tempe
 
     /**
      * Detect a sensor value out of expected range.
-     *
      */
-    public class OptimalGrowingTemps {
+    public class DetectValueOutOfRange {
         /**
-         * Optimal temperatures (in Fahrenheit) for corn growth
+         * Optimal temperatures (in Fahrenheit)
          */
         static double TEMP_LOW = 77.0;
         static double TEMP_HIGH = 91.0;
@@ -165,8 +164,9 @@ Note that the deadband filter outputs a warning message for the very first tempe
 
         /**
          * Polls a simulated temperature sensor to periodically obtain
-         * temperature readings (in Fahrenheit). Perform a series of data
-         * analysis steps on the stream to generate out-of-range warnings.
+         * temperature readings (in Fahrenheit). Use a simple filter
+         * and a deadband filter to determine when the temperature
+         * is out of the optimal range.
          */
         public static void main(String[] args) throws Exception {
 
@@ -174,14 +174,14 @@ Note that the deadband filter outputs a warning message for the very first tempe
 
             Topology top = dp.newTopology("TemperatureSensor");
 
-            // Generate a stream of temperature sensor readings.
+            // Generate a stream of temperature sensor readings
             DecimalFormat df = new DecimalFormat("#.#");
             Random r = new Random();
             TStream<Double> temp = top.poll(() -> {
-                // Change current temp by some random amount between -1 and 1.
+                // Change current temp by some random amount between -1 and 1
                 while (true) {
                     double newTemp = -1 + (1 + 1) * r.nextDouble() + currentTemp;
-                    // Ensure that new temperature is within [28, 112].
+                    // Ensure that new temperature is within [28, 112]
                     if (newTemp >= 28 && newTemp <= 112) {
                         currentTemp = Double.valueOf(df.format(newTemp));
                         break;
@@ -194,7 +194,7 @@ Note that the deadband filter outputs a warning message for the very first tempe
 
             // Simple filter: Perform analytics on sensor readings to
             // detect when the temperature is completely out of the
-            // optimal range.
+            // optimal range and generate warnings
             TStream<Double> simpleFiltered = temp.filter(tuple ->
                     tuple < TEMP_LOW || tuple > TEMP_HIGH);
             simpleFiltered.sink(tuple -> System.out.println("Temperature is out of range! "
@@ -203,13 +203,13 @@ Note that the deadband filter outputs a warning message for the very first tempe
             // Deadband filter: Perform analytics on sensor readings to
             // output the first temperature, and to generate warnings
             // when the temperature is out of the optimal range and
-            // when it returns to normal.
+            // when it returns to normal
             TStream<Double> deadbandFiltered = Filters.deadband(temp,
                     identity(), tuple -> tuple >= TEMP_LOW && tuple <= TEMP_HIGH);
             deadbandFiltered.sink(tuple -> System.out.println("Temperature may not be "
                     + "optimal! It is " + tuple + "\u00b0F!"));
 
-            // See what the temperatures look like.
+            // See what the temperatures look like
             temp.print();
 
             dp.submit(top);
