@@ -63,6 +63,20 @@
   link: "<a href='../recipes/recipe_source_function.html'>Recipe 2. Writing a Source Function</a>"
 
 
+ 
+/recipes/recipe_value_out_of_range:
+  title: "Recipe 3. Detecting a Sensor Value Out of Expected Range"
+  url: "../recipes/recipe_value_out_of_range.html"
+  link: "<a href='../recipes/recipe_value_out_of_range.html'>Recipe 3. Detecting a Sensor Value Out of Expected Range</a>"
+
+
+ 
+/recipes/recipe_different_processing_against_stream:
+  title: "Recipe 4. Applying Different Processing Against a Single Stream"
+  url: "../recipes/recipe_different_processing_against_stream.html"
+  link: "<a href='../recipes/recipe_different_processing_against_stream.html'>Recipe 4. Applying Different Processing Against a Single Stream</a>"
+
+
 
 
  
