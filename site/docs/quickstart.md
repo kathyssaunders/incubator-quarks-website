@@ -31,7 +31,7 @@ Here's an example view:
 ## Quarks Code
 
 The full source is at:
-https://github.com/quarks-edge/quarks/blob/master/samples/connectors/src/main/java/quarks/samples/connectors/iotf/IotfQuickstart.java
+[IotfQuickstart.java](https://github.com/quarks-edge/quarks/blob/master/samples/connectors/src/main/java/quarks/samples/connectors/iotf/IotfQuickstart.java)
 
 The first step to is to create a `IotDevice` instance that represents the connection to IBM Watson IoT Platform Qucikstart service.
 
