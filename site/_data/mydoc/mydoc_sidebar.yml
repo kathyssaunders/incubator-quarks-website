@@ -97,6 +97,22 @@ entries:
       version: all
       output: web, pdf
 
+    - title: Recipe 3. Detecting a Sensor Value Out of Expected Range
+      url: /recipes/recipe_value_out_of_range.html
+      audience: writers, designers
+      platform: all
+      product: all
+      version: all
+      output: web, pdf
+
+    - title: Recipe 4. Applying Different Processing Against a Single Stream
+      url: /recipes/recipe_different_processing_against_stream.html
+      audience: writers, designers
+      platform: all
+      product: all
+      version: all
+      output: web, pdf
+
   - title: Sample Programs
     audience: writers, designers
     platform: all
