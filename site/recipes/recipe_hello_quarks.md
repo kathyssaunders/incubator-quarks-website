@@ -2,7 +2,7 @@
 title: Recipe 1. Hello Quarks!
 ---
 
-Quarks' pure Java implementation is a powerful feature which allows it to be run on the majority of JVM-compatible systems. It also has the added benefit of enabling the developer to develop applications entirely within the Eclipse and Intellij ecosystems. For the purposes of this recipe, it will be assumed that the developer is using Eclipse. To begin the Hello World recipe, create a new project and import the necessary libraries as outlined in the [getting started guide](quarks-getting-started). Next, write the following template application:
+Quarks' pure Java implementation is a powerful feature which allows it to be run on the majority of JVM-compatible systems. It also has the added benefit of enabling the developer to develop applications entirely within the Eclipse and Intellij ecosystems. For the purposes of this recipe, it will be assumed that the developer is using Eclipse. To begin the Hello World recipe, create a new project and import the necessary libraries as outlined in the [Getting Started Guide](../docs/quarks-getting-started). Next, write the following template application:
 
 ``` java
     public static void main(String[] args) {
