@@ -34,7 +34,7 @@ You can:
 * Report bugs and submit patches.
 * Contribute code, javadocs, documentation.
 
-Visit the [Contributing](http://www.apache.org/foundation/getinvolved.html) page and read [DEVELOPMENT.md] (https://github.com/apache/incubator-quarks/blob/master/DEVELOPMENT.md) at the top of the code tree for more information.
+Visit the [Contributing](http://www.apache.org/foundation/getinvolved.html) page for general Apache contribution information. If you plan to make any significant contribution, you will need to have an Individual Contributor License Agreement [\(ICLA\)] (https://www.apache.org/licenses/icla.txt)  on file with Apache.
 
 ### Mailing list
 
@@ -49,23 +49,23 @@ Get help using {{ site.data.project.short_name }} or contribute to the project o
 
 ### Issue tracker
 
-We use Jira here: [https://issues.apache.org/jira/browse/QUARKS](https://issues.apache.org/jira/browse/QUARKS)
+We use Jira here: [https://issues.apache.org/jira/browse/{{ site.data.project.jira }}](https://issues.apache.org/jira/browse/{{ site.data.project.jira }})
 
 #### Bug Reports
 
-Found bug? Enter an issue in the [Issue Tracker](https://issues.apache.org/jira/browse/{{ site.data.project.jira }}).
+Found bug? Enter an issue in  [Jira](https://issues.apache.org/jira/browse/{{ site.data.project.jira }}).
 
 Before submitting an issue, please:
 
 * Verify that the bug does in fact exist.
 * Search the issue tracker to verify there is no existing issue reporting the bug you've found.
-* Consider tracking down the bug yourself in the {{ site.data.project.short_name }} source and submitting apull request  along with your bug report. This is a great time saver for the  {{ site.data.project.short_name }} developers and helps ensure the bug will be fixed quickly.
+* Consider tracking down the bug yourself in the {{ site.data.project.short_name }} source and submitting a pull request  along with your bug report. This is a great time saver for the  {{ site.data.project.short_name }} developers and helps ensure the bug will be fixed quickly.
 
 
 
 #### Feature Requests
 
-Enhancement requests for new features are also welcome. The more concrete and rationale the request is, the greater the chance it will incorporated into future releases.
+Enhancement requests for new features are also welcome. The more concrete the request is and the better rationale you provide, the greater the chance it will incorporated into future releases.
 
 
   [https://issues.apache.org/jira/browse/{{ site.data.project.jira }}](https://issues.apache.org/jira/browse/{{ site.data.project.jira }})
@@ -73,9 +73,23 @@ Enhancement requests for new features are also welcome. The more concrete and ra
 
 ### Source Code
 
-The project sources are accessible via the [source code repository]({{ site.data.project.source_repository }}) which is also mirrored in [GitHub]({{ site.data.project.source_repository_mirror }})
+The project sources are accessible via the [source code repository]({{ site.data.project.source_repository }}) which is also mirrored in [GitHub]({{ site.data.project.source_repository_mirror }}). 
 
 
-### Website Source Code
+When you are considering a code contribution, make sure there is an [Issue](https://issues.apache.org/jira/browse/{{ site.data.project.jira }}) that describes your work or the bug you are fixing.  For significant contributions, please discuss your proposed changes in the Issue so that others can comment on your plans.  Someone else may be working on the same functionality, so it's good to communicate early and often.  A committer is more likely to accept your change if there is clear information in the Issue. 
 
-The project website sources are accessible via the [website source code repository]({{ site.data.project.website_repository }}) which is also mirrored in [GitHub]({{ site.data.project.website_repository_mirror }})
+To contribute, [fork](https://help.github.com/articles/fork-a-repo/) the [mirror]({{ site.data.project.source_repository_mirror }}) and issue a pull request. Put the Jira issue number, e.g. {{ site.data.project.jira }}-100 in the pull request title. The tag [WIP] can also be used in the title of pull requests to indicate that you are not ready to merge but want feedback. Remove [WIP] when you are ready for merge. Make sure you document your code and contribute tests along with the code.
+
+
+Read [DEVELOPMENT.md] (https://github.com/apache/incubator-quarks/blob/master/DEVELOPMENT.md) at the top of the code tree for details on setting up your development environment.
+
+ 
+### Web Site and Documentation  Source Code
+
+The project website and documentation sources are accessible via the [website source code repository]({{ site.data.project.website_repository }}) which is also mirrored in [GitHub]({{ site.data.project.website_repository_mirror }}). Contributing changes to the web site and documentation is similar to contributing code.  Follow the instructions in the Source Code section above, but fork and issue a pull request against the [web site mirror]({{ site.data.project.website_repository_mirror }}). Follow the instructions in the top level [README.md] ({{ site.data.project.website_repository_mirror }}/blob/master/README.md) for details on contributing to the web site and documentation.
+
+  You will need to use Markdown and Jekyll to develop pages. See:
+
+* [Markdown Cheat Sheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
+*  [Jekyll on linux and Mac] (https://jekyllrb.com/) 
+*  [Jekyll on Windows] (https://jekyllrb.com/docs/windows/) is not officially supported but people have gotten it to work.
