@@ -113,6 +113,15 @@ entries:
       version: all
       output: web, pdf
 
+    - title: Recipe 5. Splitting a Stream to Apply Different Processing
+             and Combining the Results into a Single Stream
+      url: /recipes/recipe_combining_streams_processing_results.html
+      audience: writers, designers
+      platform: all
+      product: all
+      version: all
+      output: web, pdf
+
   - title: Sample Programs
     audience: writers, designers
     platform: all
