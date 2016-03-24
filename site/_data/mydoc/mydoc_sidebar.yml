@@ -143,7 +143,7 @@ entries:
     output: web, pdf
     items:
     - title: How to participate
-      url: /docs/getinvolved.html
+      url: /docs/community.html
       audience: writers, designers
       platform: all
       product: all
