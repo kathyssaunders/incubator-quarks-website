@@ -10,7 +10,7 @@ TStream.map() is arguably the most used method in the Quarks API. Its two main p
 
 <br>
 
-#### Changing a TStream's Tuple Type
+### Changing a TStream's Tuple Type
 In addition to filtering tuples, TStreams support operations that *transform* tuples from one Java type to another by invoking the TStream.map() method.
 
 <img src="images/Map_Type_Change.jpg" style="width:750px;height:150px;">
@@ -43,7 +43,7 @@ As mentioned in the [getting started guide](quarks-getting-started), a TStream c
 <br>
 
 
-#### Performing Stateful Operations
+### Performing Stateful Operations
 
 In all previous examples, the operations performed on a TStream have been stateless; keeping track of information over multiple invocations of the same operation has not been necessary. What if we want to keep track of the number of Strings sent over a stream? To do this, we need our TStream.map() method to contain a counter as state.
 
