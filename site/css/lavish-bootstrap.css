@@ -5386,7 +5386,7 @@ body.modal-open,
   border: 0;
 }
 .affix {
-  position: fixed;
+  position: relative;
 }
 @-ms-viewport {
   width: device-width;
