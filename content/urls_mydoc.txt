@@ -77,6 +77,13 @@
   link: "<a href='../recipes/recipe_different_processing_against_stream.html'>Recipe 4. Applying Different Processing Against a Single Stream</a>"
 
 
+ 
+/recipes/recipe_combining_streams_processing_results:
+  title: "Recipe 5. Splitting a Stream to Apply Different Processing and Combining the Results into a Single Stream"
+  url: "../recipes/recipe_combining_streams_processing_results.html"
+  link: "<a href='../recipes/recipe_combining_streams_processing_results.html'>Recipe 5. Splitting a Stream to Apply Different Processing and Combining the Results into a Single Stream</a>"
+
+
 
 
  
@@ -105,10 +112,10 @@
 
 
  
-/docs/getinvolved:
+/docs/community:
   title: "How to participate"
-  url: "../docs/getinvolved.html"
-  link: "<a href='../docs/getinvolved.html'>How to participate</a>"
+  url: "../docs/community.html"
+  link: "<a href='../docs/community.html'>How to participate</a>"
 
 
  

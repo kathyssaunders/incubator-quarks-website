@@ -63,17 +63,6 @@
 
 
 {
-"title": "Get Involved",
-"tags": "",
-"keywords": "",
-"url": "../docs/getinvolved",
-"summary": ""
-},
-
-
-
-
-{
 "title": "Introduction",
 "tags": "getting_started",
 "keywords": "",
@@ -136,6 +125,17 @@
 "tags": "",
 "keywords": "",
 "url": "../docs/quickstart",
+"summary": ""
+},
+
+
+
+
+{
+"title": "Recipe 5. Splitting a Stream to Apply Different Processing and Combining the Results into a Single Stream",
+"tags": "",
+"keywords": "",
+"url": "../recipes/recipe_combining_streams_processing_results",
 "summary": ""
 },
 

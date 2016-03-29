@@ -74,6 +74,11 @@
                                   
                         
                      
+                         
+                            http://quarks.incubator.apache.org/recipes/recipe_combining_streams_processing_results.html
+                                  
+                        
+                     
               
           
               
@@ -102,7 +107,7 @@
               
                       
                          
-                            http://quarks.incubator.apache.org/docs/getinvolved.html
+                            http://quarks.incubator.apache.org/docs/community.html
                                   
                         
                      
