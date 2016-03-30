@@ -6,7 +6,9 @@ Quarks' pure Java implementation is a powerful feature which allows it to be run
 
 ``` java
     public static void main(String[] args) {
+
         DirectProvider dp = new DirectProvider();
+
         Topology top = dp.newTopology();
     }
 ```
@@ -19,9 +21,12 @@ The primary abstraction in Quarks is the `TStream`. A *TStream* represents the f
 
 ``` java
     public static void main(String[] args) {
+
         DirectProvider dp = new DirectProvider();
+
         Topology top = dp.newTopology();
-        TStream<String> helloStream = top.strings("Hello Quarks!");
+
+        TStream<String> helloStream = top.strings("Hello", "Quarks!");
     }
 ```
 
@@ -31,9 +36,13 @@ The `helloStream` stream is created, and the "Hello Quarks!" string will be sent
 
 ``` java
     public static void main(String[] args) {
+
         DirectProvider dp = new DirectProvider();
+
         Topology top = dp.newTopology();
-        TStream<String> helloStream = top.strings("Hello Quarks!");
+
+        TStream<String> helloStream = top.strings("Hello", "Quarks!");
+
 		helloStream.print();
     }
 ```
@@ -43,10 +52,15 @@ The only remaining step is to submit the application, which is performed by the 
 
 ``` java
     public static void main(String[] args) {
+
         DirectProvider dp = new DirectProvider();
+
         Topology top = dp.newTopology();
-        TStream<String> helloStream = top.strings("Hello Quarks!");
+
+        TStream<String> helloStream = top.strings("Hello", "Quarks!");
+
         helloStream.print();
+
         dp.submit(top);
     }
 ```
@@ -54,7 +68,8 @@ The only remaining step is to submit the application, which is performed by the 
 After running the application, the output is "Hello Quarks!":
 
 ```
-Hello Quarks!
+Hello
+Quarks!
 ```
 
 
