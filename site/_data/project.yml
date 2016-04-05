@@ -13,22 +13,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# Apache Project configurations
+# Quarks Project configurations
 #
-name: Apache SystemML
-short_name: SystemML
-unix_name: systemml
-incubator_name: incubator-systemml
-incubator_slash_name: incubator/systemml
-description: Apache SystemML is a distributed and declarative machine learning platform.
+name: Apache Quarks
+short_name: Quarks
+unix_name: quarks
+incubator_name: incubator-quarks
+incubator_slash_name: incubator/quarks
+description: Quarks is a community for accelerating analytics in edge devices. 
 
-download: /download.html
+download: https://github.com/apache/incubator-quarks
 
-dev_list: dev@systemml.incubator.apache.org
-dev_list_subscribe: dev-subscribe@systemml.incubator.apache.org
-dev_list_unsubscribe: dev-unsubscribe@systemml.incubator.apache.org
+dev_list: dev@quarks.incubator.apache.org
+dev_list_subscribe: dev-subscribe@quarks.incubator.apache.org
+dev_list_unsubscribe: dev-unsubscribe@quarks.incubator.apache.org
 dev_list_archive: http://mail-archives.apache.org/mod_mbox/systemml-dev/
-dev_list_archive_mailarchive: https://www.mail-archive.com/dev@systemml.incubator.apache.org/
+dev_list_archive_mailarchive: http://mail-archives.apache.org/mod_mbox/incubator-quarks-dev/
 dev_list_archive_markmail:
 
 user_list:
@@ -38,19 +38,19 @@ user_list_archive:
 user_list_archive_mailarchive:
 user_list_archive_markmail:
 
-commits_list: commits@systemml.incubator.apache.org
-commits_list_subscribe: commits-subscribe@systemml.incubator.apache.org
-commits_list_unsubscribe: commits-unsubscribe@systemml.incubator.apache.org
+commits_list: commits@quarks.incubator.apache.org
+commits_list_subscribe: commits-subscribe@quarks.incubator.apache.org
+commits_list_unsubscribe: commits-unsubscribe@quarks.incubator.apache.org
 commits_list_archive: http://mail-archives.apache.org/mod_mbox/systemml-commits/
-commits_list_archive_mailarchive: https://www.mail-archive.com/commits@systemml.incubator.apache.org/
+commits_list_archive_mailarchive: http://mail-archives.apache.org/mod_mbox/incubator-quarks-commits/
 commits_list_archive_markmail:
 
-jira: SYSTEMML
+jira: QUARKS
 
-source_repository: https://git-wip-us.apache.org/repos/asf/incubator-systemml.git
-source_repository_mirror: https://github.com/apache/incubator-systemml
+source_repository: https://git-wip-us.apache.org/repos/asf/incubator-quarks.git
+source_repository_mirror: https://github.com/apache/incubator-quarks
 
-website_repository: https://git-wip-us.apache.org/repos/asf/incubator-systemml-website.git
-website_repository_mirror: https://github.com/apache/incubator-systemml-website
+website_repository: https://git-wip-us.apache.org/repos/asf/incubator-quarks-website.git
+website_repository_mirror: https://github.com/apache/incubator-quarks-website
 
 podling: true

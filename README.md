@@ -17,69 +17,49 @@ limitations under the License.
 {% endcomment %}
 -->
 
-# Apache Website Template
+# Quarks web site
 
-This project contains a template web site that aims to follow all the various required
-Apache Website Policies.
+## Location
 
-This template was generated using [Jekyll](https://jekyllrb.com/).
+http://quarks.incubator.apache.org/
 
-To use it, copy the `site` directory into your project.  You must also
-include licensing information from the `LICENSE` and `NOTICE` files in
-your own project.
+## How it works
 
-# How to deploy your project's web site
+This procedure was borrowed in part from the apex site. (https://git-wip-us.apache.org/repos/asf?p=incubator-apex-site.git) except we use jekyll.
 
-(In the following instructions we assume that your project is called
-'Apache Foo'; search and replace with your actual project name.)
+ The master branch of this repo contains the source files that are used to generate the HTML that ultimately gets pushed to the incubator site.
+The `asf-site` branch is where the actual generated files are stored. Note that this branch must contain exactly one folder called `content`,
+ and so has been checked out as an orphan branch with its own commit history apart from the master branch. See the *Contributing* section below.
+ 
+Through a [gitpubsub](http://www.apache.org/dev/gitpubsub.html) mechanism on the apache.org server,
+files are taken from the `asf-site` branch and pushed to the live server.
 
-## Setup
+Contributing
+------------
+If you would like to make a change to the site:
+ 
+ 1. Fork the [github mirror](https://github.com/apache/incubator-quarks-website)
+ 2. Create a new branch from `master`
+ 3. Add commit(s) to your branch
+ 4. Test your changes locally (see Developing)
+ 5. Open a pull request on the github mirror
+ 6. A committer will merge your changes if all is good 
 
-```
-1. cd site
-2. svn co https://svn.apache.org/repos/asf/foo/site target
-3. sudo apt-get install rubygems ruby2.1-dev zlib1g-dev
-4. sudo gem install bundler github-pages jekyll
-5. bundle install
-```
+If you are a committer, do the following:
+  
+ 1. Update the master branch with your (or a Pull Request's) change.
+ 2. Push updated master to the asf remote master (https://git-wip-us.apache.org/repos/asf/incubator-quarks-site.git)
+ 3. Run `build.sh` from the master branch directory (requires jekyll). This checks out and updates the `asf-site` branch with a new commit of the build from the current branch
+ 
+ 4. At this point, you should be on the `asf-site` branch. Simply push this branch to the asf remote with  `git push origin asf-site` and the site will automatically be updated within seconds.
 
-## Add javadoc
+Note: If you want to try out the website locally on the asf-site branch before you push, you can do so with `jekyll serve -d content --skip-initial-build` and point your browser to http://localhost:4000
 
-If your project supports javadoc, you can copy the generated javadoc
-into svn each time you need to re-generate.
+Developing
+-----------
+ 1. Make your changes under site
+ 2. cd site
+ 3. jekyll serve .
+ 4. point your browser to http://localhost:4000/
 
-```
-1. cd ..
-2. mvn -DskipTests site
-3. mv target/site/apidocs site/target
-```
 
-## Running locally
-
-Before opening a pull request, you can preview your contributions by
-running from within the directory:
-
-```
-1. bundle exec jekyll serve
-2. Open [http://localhost:4000](http://localhost:4000)
-```
-
-## Pushing to site
-
-```
-1. cd site/target
-2. svn status
-3. You'll need to `svn add` any new files
-4. svn ci
-```
-
-Within a few minutes, svnpubsub should kick in and you'll be able to
-see the results at
-[foo.apache.org](https://foo.apache.org/).
-
-## Adding contributors
-
-To add a contributor to the project, or to modify existing contributors,
-edit `site/_data/contributors.yml`.
-The [project members]([http://localhost:4000/community.html#project-members]
-list will re-generate.
