@@ -51,37 +51,51 @@
 
  
 /recipes/recipe_hello_quarks:
-  title: "Recipe 1. Hello Quarks!"
+  title: "Hello Quarks!"
   url: "../recipes/recipe_hello_quarks.html"
-  link: "<a href='../recipes/recipe_hello_quarks.html'>Recipe 1. Hello Quarks!</a>"
+  link: "<a href='../recipes/recipe_hello_quarks.html'>Hello Quarks!</a>"
 
 
  
 /recipes/recipe_source_function:
-  title: "Recipe 2. Writing a Source Function"
+  title: "Writing a Source Function"
   url: "../recipes/recipe_source_function.html"
-  link: "<a href='../recipes/recipe_source_function.html'>Recipe 2. Writing a Source Function</a>"
+  link: "<a href='../recipes/recipe_source_function.html'>Writing a Source Function</a>"
 
 
  
 /recipes/recipe_value_out_of_range:
-  title: "Recipe 3. Detecting a Sensor Value Out of Expected Range"
+  title: "Detecting a Sensor Value Out of Expected Range"
   url: "../recipes/recipe_value_out_of_range.html"
-  link: "<a href='../recipes/recipe_value_out_of_range.html'>Recipe 3. Detecting a Sensor Value Out of Expected Range</a>"
+  link: "<a href='../recipes/recipe_value_out_of_range.html'>Detecting a Sensor Value Out of Expected Range</a>"
 
 
  
 /recipes/recipe_different_processing_against_stream:
-  title: "Recipe 4. Applying Different Processing Against a Single Stream"
+  title: "Applying Different Processing Against a Single Stream"
   url: "../recipes/recipe_different_processing_against_stream.html"
-  link: "<a href='../recipes/recipe_different_processing_against_stream.html'>Recipe 4. Applying Different Processing Against a Single Stream</a>"
+  link: "<a href='../recipes/recipe_different_processing_against_stream.html'>Applying Different Processing Against a Single Stream</a>"
 
 
  
 /recipes/recipe_combining_streams_processing_results:
-  title: "Recipe 5. Splitting a Stream to Apply Different Processing and Combining the Results into a Single Stream"
+  title: "Splitting a Stream to Apply Different Processing and Combining the Results into a Single Stream"
   url: "../recipes/recipe_combining_streams_processing_results.html"
-  link: "<a href='../recipes/recipe_combining_streams_processing_results.html'>Recipe 5. Splitting a Stream to Apply Different Processing and Combining the Results into a Single Stream</a>"
+  link: "<a href='../recipes/recipe_combining_streams_processing_results.html'>Splitting a Stream to Apply Different Processing and Combining the Results into a Single Stream</a>"
+
+
+ 
+/recipes/recipe_external_filter_range:
+  title: "Using an External Configuration File for Filter Ranges"
+  url: "../recipes/recipe_external_filter_range.html"
+  link: "<a href='../recipes/recipe_external_filter_range.html'>Using an External Configuration File for Filter Ranges</a>"
+
+
+ 
+/recipes/recipe_adaptable_filter_range:
+  title: "Adaptable Filter Behavior"
+  url: "../recipes/recipe_adaptable_filter_range.html"
+  link: "<a href='../recipes/recipe_adaptable_filter_range.html'>Adaptable Filter Behavior</a>"
 
 
 

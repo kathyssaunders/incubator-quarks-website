@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="keywords" content=" ">
-<title>Recipe 1. Hello Quarks!  | Quarks Documentation</title>
+<title>Hello Quarks!  | Apache Quarks Documentation</title>
 <link rel="stylesheet" type="text/css" href="../css/syntax.css">
 <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">
 <!--<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">-->
@@ -60,7 +60,7 @@
                 <span class="icon-bar"></span>
             </button>
 
-            <a class="fa fa-home fa-lg navbar-brand" href="home.html">&nbsp;<span class="projectTitle"> Quarks Documentation</span></a>
+            <a class="fa fa-home fa-lg navbar-brand" href="../docs/home.html">&nbsp;<span class="projectTitle"> Apache Quarks Documentation</span></a>
 
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -80,7 +80,7 @@
                     
                     
                     
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Github Repos<b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">GitHub Repos<b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         
                         
@@ -156,8 +156,8 @@
                 <!-- Send feedback function -->
 <script>
 function SendLinkByMail(href) {
-var subject= "Quarks Documentation feedback";
-var body = "I have some feedback about the Recipe 1. Hello Quarks! page: ";
+var subject= "Apache Quarks Documentation feedback";
+var body = "I have some feedback about the Hello Quarks! page: ";
 body += window.location.href;
 body += "";
 var uri = "mailto:?subject=";
@@ -184,7 +184,7 @@ window.location.href = uri;
                             searchInput: document.getElementById('search-input'),
                             resultsContainer: document.getElementById('results-container'),
                             dataSource: '../search.json',
-                            searchResultTemplate: '<li><a href="{url}" title="Recipe 1. Hello Quarks!">{title}</a></li>',
+                            searchResultTemplate: '<li><a href="{url}" title="Hello Quarks!">{title}</a></li>',
                         noResultsText: 'No results found.',
                                 limit: 10,
                                 fuzzy: true,
@@ -197,6 +197,7 @@ window.location.href = uri;
         </div>
         <!-- /.container -->
 </nav>
+
 
 
     <!-- Page Content -->
@@ -319,7 +320,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../recipes/recipe_hello_quarks.html">Recipe 1. Hello Quarks!</a></li>
+                    <li><a href="../recipes/recipe_hello_quarks.html">Hello Quarks!</a></li>
                     
 
                     
@@ -328,7 +329,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../recipes/recipe_source_function.html">Recipe 2. Writing a Source Function</a></li>
+                    <li><a href="../recipes/recipe_source_function.html">Writing a Source Function</a></li>
                     
 
                     
@@ -337,7 +338,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../recipes/recipe_value_out_of_range.html">Recipe 3. Detecting a Sensor Value Out of Expected Range</a></li>
+                    <li><a href="../recipes/recipe_value_out_of_range.html">Detecting a Sensor Value Out of Expected Range</a></li>
                     
 
                     
@@ -346,7 +347,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../recipes/recipe_different_processing_against_stream.html">Recipe 4. Applying Different Processing Against a Single Stream</a></li>
+                    <li><a href="../recipes/recipe_different_processing_against_stream.html">Applying Different Processing Against a Single Stream</a></li>
                     
 
                     
@@ -355,7 +356,25 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../recipes/recipe_combining_streams_processing_results.html">Recipe 5. Splitting a Stream to Apply Different Processing and Combining the Results into a Single Stream</a></li>
+                    <li><a href="../recipes/recipe_combining_streams_processing_results.html">Splitting a Stream to Apply Different Processing and Combining the Results into a Single Stream</a></li>
+                    
+
+                    
+
+                    
+                    
+                    
+                    
+                    <li><a href="../recipes/recipe_external_filter_range.html">Using an External Configuration File for Filter Ranges</a></li>
+                    
+
+                    
+
+                    
+                    
+                    
+                    
+                    <li><a href="../recipes/recipe_adaptable_filter_range.html">Adaptable Filter Behavior</a></li>
                     
 
                     
@@ -480,7 +499,7 @@ $('#toc').on('click', 'a', function() {
             <div class="col-md-9">
                 
                 <div class="post-header">
-   <h1 class="post-title-main">Recipe 1. Hello Quarks!</h1>
+   <h1 class="post-title-main">Hello Quarks!</h1>
 </div>
 
 <div class="post-content">
@@ -516,7 +535,9 @@ $('#toc').on('click', 'a', function() {
     
   <p>Quarks&#39; pure Java implementation is a powerful feature which allows it to be run on the majority of JVM-compatible systems. It also has the added benefit of enabling the developer to develop applications entirely within the Eclipse and Intellij ecosystems. For the purposes of this recipe, it will be assumed that the developer is using Eclipse. To begin the Hello World recipe, create a new project and import the necessary libraries as outlined in the <a href="../docs/quarks-getting-started">Getting Started Guide</a>. Next, write the following template application:</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+
         <span class="n">DirectProvider</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DirectProvider</span><span class="o">();</span>
+
         <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="na">newTopology</span><span class="o">();</span>
     <span class="o">}</span>
 </code></pre></div>
@@ -524,22 +545,29 @@ $('#toc').on('click', 'a', function() {
 
 <h2 id="using-topology-strings">Using Topology.strings</h2>
 
-<p>The primary abstraction in Quarks is the <code>TStream</code>. A <em>TStream</em> represents the flow of data in a Quarks application; for example, the periodic floating point readings from a temperature sensor. The data items which are sent through a <code>TStream</code> are Java objects -- in the &quot;Hello Quarks!&quot; example, we are sending a single java.lang.String. There are a number of ways to create a <code>TStream</code>, and <code>Topology.strings</code> is the simplest. The user specifies a number of strings which will be used as the stream&#39;s data items.</p>
+<p>The primary abstraction in Quarks is the <code>TStream</code>. A <em>TStream</em> represents the flow of data in a Quarks application; for example, the periodic floating point readings from a temperature sensor. The data items which are sent through a <code>TStream</code> are Java objects -- in the &quot;Hello Quarks!&quot; example, we are sending two strings. There are a number of ways to create a <code>TStream</code>, and <code>Topology.strings</code> is the simplest. The user specifies a number of strings which will be used as the stream&#39;s data items.</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+
         <span class="n">DirectProvider</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DirectProvider</span><span class="o">();</span>
+
         <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="na">newTopology</span><span class="o">();</span>
-        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">helloStream</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">strings</span><span class="o">(</span><span class="s">"Hello Quarks!"</span><span class="o">);</span>
+
+        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">helloStream</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">strings</span><span class="o">(</span><span class="s">"Hello"</span><span class="o">,</span> <span class="s">"Quarks!"</span><span class="o">);</span>
     <span class="o">}</span>
 </code></pre></div>
-<p>The <code>helloStream</code> stream is created, and the &quot;Hello Quarks!&quot; string will be sent as its single data item.</p>
+<p>The <code>helloStream</code> stream is created, and the &quot;Hello&quot; and &quot;Quarks!&quot; strings will be sent as its two data items.</p>
 
 <h2 id="printing-to-output">Printing to Output</h2>
 
 <p><code>TStream.print</code> can be used to print the data items of a stream to standard output by invoking the <code>toString</code> method of each data item. In this case the data items are already strings, but in principle <code>TStream.print</code> can be called on any stream, regardless of the datatype carried by the stream.</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+
         <span class="n">DirectProvider</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DirectProvider</span><span class="o">();</span>
+
         <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="na">newTopology</span><span class="o">();</span>
-        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">helloStream</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">strings</span><span class="o">(</span><span class="s">"Hello Quarks!"</span><span class="o">);</span>
+
+        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">helloStream</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">strings</span><span class="o">(</span><span class="s">"Hello"</span><span class="o">,</span> <span class="s">"Quarks!"</span><span class="o">);</span>
+
         <span class="n">helloStream</span><span class="o">.</span><span class="na">print</span><span class="o">();</span>
     <span class="o">}</span>
 </code></pre></div>
@@ -547,15 +575,21 @@ $('#toc').on('click', 'a', function() {
 
 <p>The only remaining step is to submit the application, which is performed by the <code>DirectProvider</code>. Submitting a Quarks application initializes the threads which execute the <code>Topology</code>, and begins processing its data sources.</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+
         <span class="n">DirectProvider</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DirectProvider</span><span class="o">();</span>
+
         <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="na">newTopology</span><span class="o">();</span>
-        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">helloStream</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">strings</span><span class="o">(</span><span class="s">"Hello Quarks!"</span><span class="o">);</span>
+
+        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">helloStream</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">strings</span><span class="o">(</span><span class="s">"Hello"</span><span class="o">,</span> <span class="s">"Quarks!"</span><span class="o">);</span>
+
         <span class="n">helloStream</span><span class="o">.</span><span class="na">print</span><span class="o">();</span>
+
         <span class="n">dp</span><span class="o">.</span><span class="na">submit</span><span class="o">(</span><span class="n">top</span><span class="o">);</span>
     <span class="o">}</span>
 </code></pre></div>
 <p>After running the application, the output is &quot;Hello Quarks!&quot;:</p>
-<div class="highlight"><pre><code class="language-" data-lang="">Hello Quarks!
+<div class="highlight"><pre><code class="language-" data-lang="">Hello
+Quarks!
 </code></pre></div>
 
 <div class="tags">
@@ -588,7 +622,7 @@ $('#toc').on('click', 'a', function() {
         <div class="col-lg-12 footer">
 
              Site last
-            generated: Mar 29, 2016 <br/>
+            generated: Apr 5, 2016 <br/>
 
         </div>
     </div>

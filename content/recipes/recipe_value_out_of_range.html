@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="keywords" content=" ">
-<title>Recipe 3. Detecting a Sensor Value Out of Expected Range  | Quarks Documentation</title>
+<title>Detecting a Sensor Value Out of Expected Range  | Apache Quarks Documentation</title>
 <link rel="stylesheet" type="text/css" href="../css/syntax.css">
 <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">
 <!--<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">-->
@@ -60,7 +60,7 @@
                 <span class="icon-bar"></span>
             </button>
 
-            <a class="fa fa-home fa-lg navbar-brand" href="home.html">&nbsp;<span class="projectTitle"> Quarks Documentation</span></a>
+            <a class="fa fa-home fa-lg navbar-brand" href="../docs/home.html">&nbsp;<span class="projectTitle"> Apache Quarks Documentation</span></a>
 
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -80,7 +80,7 @@
                     
                     
                     
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Github Repos<b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">GitHub Repos<b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         
                         
@@ -156,8 +156,8 @@
                 <!-- Send feedback function -->
 <script>
 function SendLinkByMail(href) {
-var subject= "Quarks Documentation feedback";
-var body = "I have some feedback about the Recipe 3. Detecting a Sensor Value Out of Expected Range page: ";
+var subject= "Apache Quarks Documentation feedback";
+var body = "I have some feedback about the Detecting a Sensor Value Out of Expected Range page: ";
 body += window.location.href;
 body += "";
 var uri = "mailto:?subject=";
@@ -184,7 +184,7 @@ window.location.href = uri;
                             searchInput: document.getElementById('search-input'),
                             resultsContainer: document.getElementById('results-container'),
                             dataSource: '../search.json',
-                            searchResultTemplate: '<li><a href="{url}" title="Recipe 3. Detecting a Sensor Value Out of Expected Range">{title}</a></li>',
+                            searchResultTemplate: '<li><a href="{url}" title="Detecting a Sensor Value Out of Expected Range">{title}</a></li>',
                         noResultsText: 'No results found.',
                                 limit: 10,
                                 fuzzy: true,
@@ -197,6 +197,7 @@ window.location.href = uri;
         </div>
         <!-- /.container -->
 </nav>
+
 
 
     <!-- Page Content -->
@@ -319,7 +320,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../recipes/recipe_hello_quarks.html">Recipe 1. Hello Quarks!</a></li>
+                    <li><a href="../recipes/recipe_hello_quarks.html">Hello Quarks!</a></li>
                     
 
                     
@@ -328,7 +329,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../recipes/recipe_source_function.html">Recipe 2. Writing a Source Function</a></li>
+                    <li><a href="../recipes/recipe_source_function.html">Writing a Source Function</a></li>
                     
 
                     
@@ -337,7 +338,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../recipes/recipe_value_out_of_range.html">Recipe 3. Detecting a Sensor Value Out of Expected Range</a></li>
+                    <li><a href="../recipes/recipe_value_out_of_range.html">Detecting a Sensor Value Out of Expected Range</a></li>
                     
 
                     
@@ -346,7 +347,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../recipes/recipe_different_processing_against_stream.html">Recipe 4. Applying Different Processing Against a Single Stream</a></li>
+                    <li><a href="../recipes/recipe_different_processing_against_stream.html">Applying Different Processing Against a Single Stream</a></li>
                     
 
                     
@@ -355,7 +356,25 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../recipes/recipe_combining_streams_processing_results.html">Recipe 5. Splitting a Stream to Apply Different Processing and Combining the Results into a Single Stream</a></li>
+                    <li><a href="../recipes/recipe_combining_streams_processing_results.html">Splitting a Stream to Apply Different Processing and Combining the Results into a Single Stream</a></li>
+                    
+
+                    
+
+                    
+                    
+                    
+                    
+                    <li><a href="../recipes/recipe_external_filter_range.html">Using an External Configuration File for Filter Ranges</a></li>
+                    
+
+                    
+
+                    
+                    
+                    
+                    
+                    <li><a href="../recipes/recipe_adaptable_filter_range.html">Adaptable Filter Behavior</a></li>
                     
 
                     
@@ -480,7 +499,7 @@ $('#toc').on('click', 'a', function() {
             <div class="col-md-9">
                 
                 <div class="post-header">
-   <h1 class="post-title-main">Recipe 3. Detecting a Sensor Value Out of Expected Range</h1>
+   <h1 class="post-title-main">Detecting a Sensor Value Out of Expected Range</h1>
 </div>
 
 <div class="post-content">
@@ -630,6 +649,26 @@ $('#toc').on('click', 'a', function() {
 </code></pre></div>
 <p>Note that the deadband filter outputs a warning message for the very first temperature reading of 79.1°F. When the temperature falls to 76.5°F (which is outside the optimal range), both the simple filter and deadband filter print out a warning message. However, when the temperature returns to normal at 77.5°F, only the deadband filter prints out a message as it is the first value inside the optimal range after a period of being outside it.</p>
 
+<h2 id="range-values">Range values</h2>
+
+<p>Filtering against a range of values is such a common analytic activity that the <code>quarks.analytics.sensors.Range</code> class is provided to assist with that.</p>
+
+<p>Using a Range can simplify and clarify your application code and lessen mistakes that may occur when writing expressions to deal with ranges.
+Though not covered in this recipe, Ranges offer additional conveniences for creating applications with external range specifications and adaptable filters.</p>
+
+<p>In the above examples, a single Range can be used in place of the two different expressions for the same logical range:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">static</span> <span class="kt">double</span> <span class="n">TEMP_LOW</span> <span class="o">=</span> <span class="mf">77.0</span><span class="o">;</span>
+    <span class="kd">static</span> <span class="kt">double</span> <span class="n">TEMP_HIGH</span> <span class="o">=</span> <span class="mf">91.0</span><span class="o">;</span>
+    <span class="kd">static</span> <span class="n">Range</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">optimalTempRange</span> <span class="o">=</span> <span class="n">Ranges</span><span class="o">.</span><span class="na">closed</span><span class="o">(</span><span class="n">TEMP_LOW</span><span class="o">,</span> <span class="n">TEMP_HIGH</span><span class="o">);</span>
+</code></pre></div>
+<p>Using <code>optimalTempRange</code> in the Simple filter example code:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">simpleFiltered</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> 
+            <span class="o">!</span><span class="n">optimalTempRange</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">tuple</span><span class="o">));</span>
+</code></pre></div>
+<p>Using <code>optimalTempRange</code> in the Deadband filter example code:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">deadbandFiltered</span> <span class="o">=</span> <span class="n">Filters</span><span class="o">.</span><span class="na">deadband</span><span class="o">(</span><span class="n">temp</span><span class="o">,</span>
+            <span class="n">identity</span><span class="o">(),</span> <span class="n">optimalTempRange</span><span class="o">);</span>
+</code></pre></div>
 <h2 id="the-final-application">The final application</h2>
 <div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kn">import</span> <span class="nn">static</span> <span class="n">quarks</span><span class="o">.</span><span class="na">function</span><span class="o">.</span><span class="na">Functions</span><span class="o">.</span><span class="na">identity</span><span class="o">;</span>
 
@@ -638,6 +677,8 @@ $('#toc').on('click', 'a', function() {
     <span class="kn">import</span> <span class="nn">java.util.concurrent.TimeUnit</span><span class="o">;</span>
 
     <span class="kn">import</span> <span class="nn">quarks.analytics.sensors.Filters</span><span class="o">;</span>
+    <span class="kn">import</span> <span class="nn">quarks.analytics.sensors.Range</span><span class="o">;</span>
+    <span class="kn">import</span> <span class="nn">quarks.analytics.sensors.Ranges</span><span class="o">;</span>
     <span class="kn">import</span> <span class="nn">quarks.providers.direct.DirectProvider</span><span class="o">;</span>
     <span class="kn">import</span> <span class="nn">quarks.topology.TStream</span><span class="o">;</span>
     <span class="kn">import</span> <span class="nn">quarks.topology.Topology</span><span class="o">;</span>
@@ -647,10 +688,11 @@ $('#toc').on('click', 'a', function() {
      */</span>
     <span class="kd">public</span> <span class="kd">class</span> <span class="nc">DetectValueOutOfRange</span> <span class="o">{</span>
         <span class="cm">/**
-         * Optimal temperatures (in Fahrenheit)
+         * Optimal temperatures inclusive (in Fahrenheit)
          */</span>
         <span class="kd">static</span> <span class="kt">double</span> <span class="n">TEMP_LOW</span> <span class="o">=</span> <span class="mf">77.0</span><span class="o">;</span>
         <span class="kd">static</span> <span class="kt">double</span> <span class="n">TEMP_HIGH</span> <span class="o">=</span> <span class="mf">91.0</span><span class="o">;</span>
+        <span class="kd">static</span> <span class="n">Range</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">optimalTempRange</span> <span class="o">=</span> <span class="n">Ranges</span><span class="o">.</span><span class="na">closed</span><span class="o">(</span><span class="n">TEMP_LOW</span><span class="o">,</span> <span class="n">TEMP_HIGH</span><span class="o">);</span>
         <span class="kd">static</span> <span class="kt">double</span> <span class="n">currentTemp</span> <span class="o">=</span> <span class="mf">80.0</span><span class="o">;</span>
 
         <span class="cm">/**
@@ -683,11 +725,10 @@ $('#toc').on('click', 'a', function() {
                 <span class="k">return</span> <span class="n">currentTemp</span><span class="o">;</span>
             <span class="o">},</span> <span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">);</span>
 
-            <span class="c1">// Simple filter: Perform analytics on sensor readings to</span>
-            <span class="c1">// detect when the temperature is completely out of the</span>
-            <span class="c1">// optimal range and generate warnings</span>
+            <span class="c1">// Simple filter: Perform analytics on sensor readings to detect when</span>
+            <span class="c1">// the temperature is out of the optimal range and generate warnings</span>
             <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">simpleFiltered</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span>
-                    <span class="n">tuple</span> <span class="o">&lt;</span> <span class="n">TEMP_LOW</span> <span class="o">||</span> <span class="n">tuple</span> <span class="o">&gt;</span> <span class="n">TEMP_HIGH</span><span class="o">);</span>
+                    <span class="o">!</span><span class="n">optimalTempRange</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">tuple</span><span class="o">));</span>
             <span class="n">simpleFiltered</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Temperature is out of range! "</span>
                     <span class="o">+</span> <span class="s">"It is "</span> <span class="o">+</span> <span class="n">tuple</span> <span class="o">+</span> <span class="s">"\u00b0F!"</span><span class="o">));</span>
 
@@ -696,7 +737,7 @@ $('#toc').on('click', 'a', function() {
             <span class="c1">// when the temperature is out of the optimal range and</span>
             <span class="c1">// when it returns to normal</span>
             <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">deadbandFiltered</span> <span class="o">=</span> <span class="n">Filters</span><span class="o">.</span><span class="na">deadband</span><span class="o">(</span><span class="n">temp</span><span class="o">,</span>
-                    <span class="n">identity</span><span class="o">(),</span> <span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">tuple</span> <span class="o">&gt;=</span> <span class="n">TEMP_LOW</span> <span class="o">&amp;&amp;</span> <span class="n">tuple</span> <span class="o">&lt;=</span> <span class="n">TEMP_HIGH</span><span class="o">);</span>
+                    <span class="n">identity</span><span class="o">(),</span> <span class="n">optimalTempRange</span><span class="o">);</span>
             <span class="n">deadbandFiltered</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Temperature may not be "</span>
                     <span class="o">+</span> <span class="s">"optimal! It is "</span> <span class="o">+</span> <span class="n">tuple</span> <span class="o">+</span> <span class="s">"\u00b0F!"</span><span class="o">));</span>
 
@@ -738,7 +779,7 @@ $('#toc').on('click', 'a', function() {
         <div class="col-lg-12 footer">
 
              Site last
-            generated: Mar 29, 2016 <br/>
+            generated: Apr 5, 2016 <br/>
 
         </div>
     </div>

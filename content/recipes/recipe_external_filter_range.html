@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="keywords" content=" ">
-<title>Navigation pages  | Apache Quarks Documentation</title>
+<title>Recipe - Use an external configuration file for a filter range specification.  | Apache Quarks Documentation</title>
 <link rel="stylesheet" type="text/css" href="../css/syntax.css">
 <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">
 <!--<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">-->
@@ -157,7 +157,7 @@
 <script>
 function SendLinkByMail(href) {
 var subject= "Apache Quarks Documentation feedback";
-var body = "I have some feedback about the Navigation pages page: ";
+var body = "I have some feedback about the Recipe - Use an external configuration file for a filter range specification. page: ";
 body += window.location.href;
 body += "";
 var uri = "mailto:?subject=";
@@ -184,7 +184,7 @@ window.location.href = uri;
                             searchInput: document.getElementById('search-input'),
                             resultsContainer: document.getElementById('results-container'),
                             dataSource: '../search.json',
-                            searchResultTemplate: '<li><a href="{url}" title="Navigation pages">{title}</a></li>',
+                            searchResultTemplate: '<li><a href="{url}" title="Recipe - Use an external configuration file for a filter range specification.">{title}</a></li>',
                         noResultsText: 'No results found.',
                                 limit: 10,
                                 fuzzy: true,
@@ -499,7 +499,7 @@ $('#toc').on('click', 'a', function() {
             <div class="col-md-9">
                 
                 <div class="post-header">
-   <h1 class="post-title-main">Navigation pages</h1>
+   <h1 class="post-title-main">Recipe - Use an external configuration file for a filter range specification.</h1>
 </div>
 
 <div class="post-content">
@@ -531,91 +531,114 @@ $('#toc').on('click', 'a', function() {
 
     
 
-    <a target="_blank" href="https://github.com/apache/incubator-quarks-website/blob/master/site/docs/tag_navigation.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
+    <a target="_blank" href="https://github.com/apache/incubator-quarks-website/blob/master/site/recipes/recipe_external_filter_range.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
     
-  <p>The following pages are tagged with <button type="button" style="cursor: default" class="btn btn-default navbar-btn">navigation</button></p>
-    <table><thead><tr><th>Page</th><th>Excerpt</th></tr></thead>
-    <tbody>
-    
-  
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-        
-     
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-    
-</tbody>
-</table>
+  <p>The <a href="recipe_value_out_of_range.html">Detecting a Sensor Value Out of Range</a> recipe introduced the basics of filtering as well as the use of a <a href="http://quarks-edge.github.io/quarks/docs/javadoc/quarks/analytics/sensors/Range.html">Range</a>.</p>
+
+<p>Oftentimes, a user wants to initialize a range specification from an external configuration file so the application code is more easily configured and reusable.</p>
+
+<p>The string form of a <code>Range</code> is natural, consise, and easy to use.  As such it&#39;s a convenient form to use in configuration files or for users to enter.  The range string can easily be converted back into a <code>Range</code>.</p>
+
+<p>We&#39;re going to assume familiarity with that earlier recipe and those concepts and focus on just the &quot;external range specification&quot; aspect of this recipe.</p>
+
+<h2 id="create-a-configuration-file">Create a configuration file</h2>
+
+<p>The file&#39;s syntax is that for a java.util.Properties object.
+See the Range documentation for the Range string syntax.</p>
+
+<p>Put this into a file:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span> <span class="n">the</span> <span class="n">Range</span> <span class="n">string</span> <span class="k">for</span> <span class="n">the</span> <span class="n">temperature</span> <span class="n">sensor</span> <span class="n">optimal</span> <span class="n">range</span>
+<span class="n">optimalTempRange</span><span class="o">=[</span><span class="mf">77.0</span><span class="o">..</span><span class="mf">91.0</span><span class="o">]</span>
+</code></pre></div>
+<p>Supply the pathname to this file as an argument to the application when you run it.</p>
+
+<h2 id="loading-the-configuration-file">Loading the Configuration file</h2>
+
+<p>A <code>java.util.Properties</code> object is often used for configuration parameters
+and it is easy to load the properties from a file.</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="c1">// Load the configuration file with the path string in configFilePath</span>
+    <span class="n">Properties</span> <span class="n">props</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Properties</span><span class="o">();</span>
+    <span class="n">props</span><span class="o">.</span><span class="na">load</span><span class="o">(</span><span class="n">Files</span><span class="o">.</span><span class="na">newBufferedReader</span><span class="o">(</span><span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="n">configFilePath</span><span class="o">).</span><span class="na">toPath</span><span class="o">()));</span>
+</code></pre></div>
+<h2 id="initializing-the-range">Initializing the Range</h2>
+<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="c1">// initialize the range from a Range string in the properties.</span>
+    <span class="c1">// Use a default value if a range isn't present.</span>
+    <span class="kd">static</span> <span class="n">String</span> <span class="n">DEFAULT_TEMP_RANGE_STR</span> <span class="o">=</span> <span class="s">"[60.0..100.0]"</span><span class="o">;</span>                                                                                
+    <span class="kd">static</span> <span class="n">Range</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">optimalTempRange</span> <span class="o">=</span> <span class="n">Ranges</span><span class="o">.</span><span class="na">valueOfDouble</span><span class="o">(</span>
+        <span class="n">props</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">"optimalTempRange"</span><span class="o">,</span> <span class="n">defaultRange</span><span class="o">));</span>
+</code></pre></div>
+<h2 id="the-final-application">The final application</h2>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.io.File</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.nio.file.Files</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Properties</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.concurrent.TimeUnit</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">quarks.analytics.sensors.Range</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">quarks.analytics.sensors.Ranges</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">quarks.providers.direct.DirectProvider</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">quarks.samples.utils.sensor.SimulatedTemperatureSensor</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">quarks.topology.TStream</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">quarks.topology.Topology</span><span class="o">;</span>                                                                                                           
+
+<span class="cm">/**
+ * Detect a sensor value out of expected range.
+ * Get the range specification from a configuration file.
+ */</span>                                                                                                                                        
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ExternalFilterRange</span> <span class="o">{</span>
+    <span class="cm">/**
+     * Optimal temperatures (in Fahrenheit)
+     */</span>
+    <span class="kd">static</span> <span class="n">String</span> <span class="n">DEFAULT_TEMP_RANGE_STR</span> <span class="o">=</span> <span class="s">"[60.0..100.0]"</span><span class="o">;</span>
+    <span class="kd">static</span> <span class="n">Range</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">optimalTempRange</span><span class="o">;</span>
+
+    <span class="cm">/** Initialize the application's configuration */</span>
+    <span class="kd">static</span> <span class="kt">void</span> <span class="n">initializeConfiguration</span><span class="o">(</span><span class="n">String</span> <span class="n">configFilePath</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="c1">// Load the configuration file</span>
+        <span class="n">Properties</span> <span class="n">props</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Properties</span><span class="o">();</span>
+        <span class="n">props</span><span class="o">.</span><span class="na">load</span><span class="o">(</span><span class="n">Files</span><span class="o">.</span><span class="na">newBufferedReader</span><span class="o">(</span><span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="n">configFilePath</span><span class="o">).</span><span class="na">toPath</span><span class="o">()));</span>
+
+        <span class="c1">// initialize the range from a Range string in the properties.</span>
+        <span class="c1">// Use a default value if a range isn't present in the properties.</span>
+        <span class="n">optimalTempRange</span> <span class="o">=</span> <span class="n">Ranges</span><span class="o">.</span><span class="na">valueOfDouble</span><span class="o">(</span>
+                <span class="n">props</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">"optimalTempRange"</span><span class="o">,</span> <span class="n">DEFAULT_TEMP_RANGE_STR</span><span class="o">));</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Using optimal temperature range: "</span> <span class="o">+</span> <span class="n">optimalTempRange</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * Polls a simulated temperature sensor to periodically obtain
+     * temperature readings (in Fahrenheit). Use a simple filter
+     * to determine when the temperature is out of the optimal range.
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">args</span><span class="o">.</span><span class="na">length</span> <span class="o">!=</span> <span class="mi">1</span><span class="o">)</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="n">Exception</span><span class="o">(</span><span class="s">"missing pathname to configuration file"</span><span class="o">);</span>
+        <span class="n">String</span> <span class="n">configFilePath</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
+
+        <span class="n">DirectProvider</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DirectProvider</span><span class="o">();</span>                                                                                          
+
+        <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="na">newTopology</span><span class="o">(</span><span class="s">"TemperatureSensor"</span><span class="o">);</span>
+
+        <span class="c1">// Initialize the configuration</span>
+        <span class="n">initializeConfiguration</span><span class="o">(</span><span class="n">configFilePath</span><span class="o">);</span>
+
+        <span class="c1">// Generate a stream of temperature sensor readings</span>
+        <span class="n">SimulatedTemperatureSensor</span> <span class="n">tempSensor</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SimulatedTemperatureSensor</span><span class="o">();</span>
+        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">poll</span><span class="o">(</span><span class="n">tempSensor</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">);</span>
+
+        <span class="c1">// Simple filter: Perform analytics on sensor readings to detect when</span>
+        <span class="c1">// the temperature is out of the optimal range and generate warnings</span>
+        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">simpleFiltered</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span>
+                <span class="o">!</span><span class="n">optimalTempRange</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">tuple</span><span class="o">));</span>
+        <span class="n">simpleFiltered</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Temperature is out of range! "</span>
+                <span class="o">+</span> <span class="s">"It is "</span> <span class="o">+</span> <span class="n">tuple</span> <span class="o">+</span> <span class="s">"\u00b0F!"</span><span class="o">));</span>
+
+        <span class="c1">// See what the temperatures look like</span>
+        <span class="n">temp</span><span class="o">.</span><span class="na">print</span><span class="o">();</span>
+
+        <span class="n">dp</span><span class="o">.</span><span class="na">submit</span><span class="o">(</span><span class="n">top</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
 
 <div class="tags">
     

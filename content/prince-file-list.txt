@@ -79,6 +79,16 @@
                                   
                         
                      
+                         
+                            http://quarks.incubator.apache.org/recipes/recipe_external_filter_range.html
+                                  
+                        
+                     
+                         
+                            http://quarks.incubator.apache.org/recipes/recipe_adaptable_filter_range.html
+                                  
+                        
+                     
               
           
               
