@@ -122,6 +122,22 @@ entries:
       version: all
       output: web, pdf
 
+    - title: Recipe 6. Using an External Configuration File for Filter Ranges
+      url: /recipes/recipe_external_filter_range.html
+      audience: writers, designers
+      platform: all
+      product: all
+      version: all
+      output: web, pdf
+
+    - title: Recipe 7. Adaptable Filter Behavior
+      url: /recipes/recipe_adaptable_filter_range.html
+      audience: writers, designers
+      platform: all
+      product: all
+      version: all
+      output: web, pdf
+
   - title: Sample Programs
     audience: writers, designers
     platform: all
