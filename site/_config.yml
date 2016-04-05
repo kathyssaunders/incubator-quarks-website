@@ -26,11 +26,11 @@ platform: all
 version: all
 output: web
 destination: ../_site
-topnav_title: Quarks Documentation
-homepage_title: Quarks Documentation
-site_title: Quarks Documentation
+topnav_title: Apache Quarks Documentation
+homepage_title: Apache Quarks Documentation
+site_title: Apache Quarks Documentation
 project_folder: docs
-company_name: Quarks
+company_name: Apache Quarks
 footer_image_location: ../../common_images/company_logo.png
 github_editme_path: apache/incubator-quarks-website/blob/master/site
 disqus_shortname: idrbwjekyll
@@ -91,7 +91,7 @@ defaults:
 
 url: http://quarks.incubator.apache.org
 baseurl:
-title: Quarks
+title: Apache Quarks
 description: Quarks is an open source community for accelerating analytics at the edge.
 
 # ----------------------- #

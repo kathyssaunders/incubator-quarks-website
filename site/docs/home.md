@@ -6,7 +6,7 @@ type: first_page
 homepage: true
 ---
 
-## Quarks Overview
+## Apache Quarks Overview
 Devices and sensors are everywhere, and more are coming online every day. You need a way to analyze all of the data coming from your devices, but it can be expensive to transmit all of the data from a sensor to your central analytics engine.
 
 Quarks is an open source programming model and runtime for edge devices that enables you to analyze data and events at the device. When you analyze on the edge, you can:
@@ -37,7 +37,7 @@ The following environments have been tested for deployment on edge devices:
 * Android
 
 ### Edge devices and back-end systems
-You can send data from a Quarks application to your back-end system when you need to perform analysis that cannot be performed on the edge device, such as:
+You can send data from an Apache Quarks application to your back-end system when you need to perform analysis that cannot be performed on the edge device, such as:
 
 * Running a complex analytic algorithm that requires more resources, such as CPU or memory, than are available on the edge device.
 * Maintaining large amounts of state information about a device, such as several hours worth of state information for a patient’s
