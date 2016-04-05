@@ -170,81 +170,81 @@ Using ``optimalTempRange`` in the Deadband filter example code:
 ## The final application
 
 ```java
-import static quarks.function.Functions.identity;
+    import static quarks.function.Functions.identity;
 
-import java.text.DecimalFormat;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
+    import java.text.DecimalFormat;
+    import java.util.Random;
+    import java.util.concurrent.TimeUnit;
 
-import quarks.analytics.sensors.Filters;
-import quarks.analytics.sensors.Range;
-import quarks.analytics.sensors.Ranges;
-import quarks.providers.direct.DirectProvider;
-import quarks.topology.TStream;
-import quarks.topology.Topology;
-
-/**
- * Detect a sensor value out of expected range.
- */
-public class DetectValueOutOfRange {
-    /**
-     * Optimal temperatures inclusive (in Fahrenheit)
-     */
-    static double TEMP_LOW = 77.0;
-    static double TEMP_HIGH = 91.0;
-    static Range<Double> optimalTempRange = Ranges.closed(TEMP_LOW, TEMP_HIGH);
-    static double currentTemp = 80.0;
+    import quarks.analytics.sensors.Filters;
+    import quarks.analytics.sensors.Range;
+    import quarks.analytics.sensors.Ranges;
+    import quarks.providers.direct.DirectProvider;
+    import quarks.topology.TStream;
+    import quarks.topology.Topology;
 
     /**
-     * Polls a simulated temperature sensor to periodically obtain
-     * temperature readings (in Fahrenheit). Use a simple filter
-     * and a deadband filter to determine when the temperature
-     * is out of the optimal range.
+     * Detect a sensor value out of expected range.
      */
-    public static void main(String[] args) throws Exception {
+    public class DetectValueOutOfRange {
+        /**
+         * Optimal temperatures inclusive (in Fahrenheit)
+         */
+        static double TEMP_LOW = 77.0;
+        static double TEMP_HIGH = 91.0;
+        static Range<Double> optimalTempRange = Ranges.closed(TEMP_LOW, TEMP_HIGH);
+        static double currentTemp = 80.0;
 
-        DirectProvider dp = new DirectProvider();
+        /**
+         * Polls a simulated temperature sensor to periodically obtain
+         * temperature readings (in Fahrenheit). Use a simple filter
+         * and a deadband filter to determine when the temperature
+         * is out of the optimal range.
+         */
+        public static void main(String[] args) throws Exception {
 
-        Topology top = dp.newTopology("TemperatureSensor");
+            DirectProvider dp = new DirectProvider();
 
-        // Generate a stream of temperature sensor readings
-        DecimalFormat df = new DecimalFormat("#.#");
-        Random r = new Random();
-        TStream<Double> temp = top.poll(() -> {
-            // Change current temp by some random amount between -1 and 1
-            while (true) {
-                double newTemp = -1 + (1 + 1) * r.nextDouble() + currentTemp;
-                // Ensure that new temperature is within [28, 112]
-                if (newTemp >= 28 && newTemp <= 112) {
-                    currentTemp = Double.valueOf(df.format(newTemp));
-                    break;
-                } else {
-                    continue;
+            Topology top = dp.newTopology("TemperatureSensor");
+
+            // Generate a stream of temperature sensor readings
+            DecimalFormat df = new DecimalFormat("#.#");
+            Random r = new Random();
+            TStream<Double> temp = top.poll(() -> {
+                // Change current temp by some random amount between -1 and 1
+                while (true) {
+                    double newTemp = -1 + (1 + 1) * r.nextDouble() + currentTemp;
+                    // Ensure that new temperature is within [28, 112]
+                    if (newTemp >= 28 && newTemp <= 112) {
+                        currentTemp = Double.valueOf(df.format(newTemp));
+                        break;
+                    } else {
+                        continue;
+                    }
                 }
-            }
-            return currentTemp;
-        }, 1, TimeUnit.SECONDS);
+                return currentTemp;
+            }, 1, TimeUnit.SECONDS);
 
-        // Simple filter: Perform analytics on sensor readings to detect when
-        // the temperature is out of the optimal range and generate warnings
-        TStream<Double> simpleFiltered = temp.filter(tuple ->
-                !optimalTempRange.contains(tuple));
-        simpleFiltered.sink(tuple -> System.out.println("Temperature is out of range! "
-                + "It is " + tuple + "\u00b0F!"));
+            // Simple filter: Perform analytics on sensor readings to detect when
+            // the temperature is out of the optimal range and generate warnings
+            TStream<Double> simpleFiltered = temp.filter(tuple ->
+                    !optimalTempRange.contains(tuple));
+            simpleFiltered.sink(tuple -> System.out.println("Temperature is out of range! "
+                    + "It is " + tuple + "\u00b0F!"));
 
-        // Deadband filter: Perform analytics on sensor readings to
-        // output the first temperature, and to generate warnings
-        // when the temperature is out of the optimal range and
-        // when it returns to normal
-        TStream<Double> deadbandFiltered = Filters.deadband(temp,
-                identity(), optimalTempRange);
-        deadbandFiltered.sink(tuple -> System.out.println("Temperature may not be "
-                + "optimal! It is " + tuple + "\u00b0F!"));
+            // Deadband filter: Perform analytics on sensor readings to
+            // output the first temperature, and to generate warnings
+            // when the temperature is out of the optimal range and
+            // when it returns to normal
+            TStream<Double> deadbandFiltered = Filters.deadband(temp,
+                    identity(), optimalTempRange);
+            deadbandFiltered.sink(tuple -> System.out.println("Temperature may not be "
+                    + "optimal! It is " + tuple + "\u00b0F!"));
 
-        // See what the temperatures look like
-        temp.print();
+            // See what the temperatures look like
+            temp.print();
 
-        dp.submit(top);
+            dp.submit(top);
+        }
     }
-}
 ```
