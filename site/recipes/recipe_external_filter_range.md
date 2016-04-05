@@ -1,5 +1,5 @@
 ---
-title: Recipe: Use an external configuration file for a filter range specification.
+title: Recipe - Use an external configuration file for a filter range specification.
 ---
 
 The [Detecting a Sensor Value Out of Range](recipe_value_out_of_range.html) recipe introduced the basics of filtering as well as the use of a [Range](http://quarks-edge.github.io/quarks/docs/javadoc/quarks/analytics/sensors/Range.html).
