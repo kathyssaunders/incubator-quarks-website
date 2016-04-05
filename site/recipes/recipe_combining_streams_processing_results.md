@@ -1,5 +1,5 @@
 ---
-title: Recipe 5. Splitting a Stream to Apply Different Processing and Combining the Results into a Single Stream
+title: Splitting a Stream to Apply Different Processing and Combining the Results into a Single Stream
 ---
 
 In some cases, a developer might want to perform analytics taking into account the nature of the data. Say, for example, the data consists of log records each containing a level attribute. It would be logical to handle *fatal* log messages differently than *info* or *debug* messages. The same reasoning could also apply in the healthcare industry.

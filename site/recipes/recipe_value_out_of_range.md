@@ -1,5 +1,5 @@
 ---
-title: Recipe 3. Detecting a Sensor Value Out of Expected Range
+title: Detecting a Sensor Value Out of Expected Range
 ---
 
 Oftentimes, a user expects a sensor value to fall within a particular range. If a reading is outside the accepted limits, the user may want to determine what caused the anomaly and/or take action to reduce the impact. For instance, consider the following scenario.

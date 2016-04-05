@@ -1,5 +1,5 @@
 ---
-title: Recipe 2. Writing a Source Function
+title: Writing a Source Function
 ---
 In the previous [Hello Quarks!](recipe_hello_quarks) example, we create a data source which only generates a single Java String and prints it to output. Yet Quarks sources support the ability generate any data type as a source, not just Java types such as Strings and Doubles. Moreover, because the user supplies the code which generates the data, the user has complete flexibility for *how* the data is generated. This recipe demonstrates how a user could write such a custom data source.
 

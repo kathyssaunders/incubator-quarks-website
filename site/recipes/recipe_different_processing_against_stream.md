@@ -1,5 +1,5 @@
 ---
-title: Recipe 4. Applying Different Processing Against a Single Stream
+title: Applying Different Processing Against a Single Stream
 ---
 
 In the previous [recipe](recipe_value_out_of_range), we learned how to filter a stream to obtain the interesting sensor readings and ignore the mundane data. Typically, a user scenario is more involved, where data is processed using different stream operations. Consider the following scenario, for example.
