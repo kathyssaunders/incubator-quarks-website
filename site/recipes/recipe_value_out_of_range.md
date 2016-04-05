@@ -144,8 +144,7 @@ Filtering against a range of values is such a common analytic activity that the 
 Using a Range can simplify and clarify your application code and lessen mistakes that may occur when writing expressions to deal with ranges.
 Though not covered in this recipe, Ranges offer additional conveniences for creating applications with external range specifications and adaptable filters.
 
-In the above examples, a single Range can be used in place of the two
-different expressions for the same logical range:
+In the above examples, a single Range can be used in place of the two different expressions for the same logical range:
 
 ```java
     static double TEMP_LOW = 77.0;
