@@ -1,5 +1,5 @@
 ---
-title: Recipe - Use an external configuration file for a filter range specification.
+title: Use an External Configuration File for Filter Ranges
 ---
 
 The [Detecting a Sensor Value Out of Range](recipe_value_out_of_range.html) recipe introduced the basics of filtering as well as the use of a [Range](http://quarks-edge.github.io/quarks/docs/javadoc/quarks/analytics/sensors/Range.html).
@@ -12,12 +12,12 @@ We're going to assume familiarity with that earlier recipe and those concepts an
 
 ## Create a configuration file
 
-The file's syntax is that for a java.util.Properties object.
-See the Range documentation for the Range string syntax.
+The file's syntax is that for a ``java.util.Properties`` object.
+See the ``Range`` documentation for its string syntax.
 
 Put this into a file:
 
-```java
+```
 # the Range string for the temperature sensor optimal range
 optimalTempRange=[77.0..91.0]
 ```
@@ -42,7 +42,7 @@ and it is easy to load the properties from a file.
     // Use a default value if a range isn't present.
     static String DEFAULT_TEMP_RANGE_STR = "[60.0..100.0]";                                                                                
     static Range<Double> optimalTempRange = Ranges.valueOfDouble(
-        props.getProperty("optimalTempRange", defaultRange));
+            props.getProperty("optimalTempRange", defaultRange));
 ```
 
 ## The final application

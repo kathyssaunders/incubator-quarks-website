@@ -1,5 +1,5 @@
 ---
-title: Recipe - Adaptable filter behavior.
+title: Adaptable filter behavior
 ---
 
 The [Detecting a Sensor Value Out of Range](recipe_value_out_of_range.html) recipe introduced the basics of filtering as well as the use of a [Range](http://quarks-edge.github.io/quarks/docs/javadoc/quarks/analytics/sensors/Range.html).
@@ -33,9 +33,9 @@ A ``java.util.concurrent.atomic.AtomicReference`` is used to provide the necessa
 
 The filter just uses ``optimalTempRangeRef.get()`` to use the current range setting.
 
-## Simulate a setOptimalTempRange command stream
+## Simulate a command stream
 
-Create a ``TStream<Range<Double>> setRangeCmds`` stream where a new range specification tuple is created every 10 seconds.  A ``sink`` on the stream calls ``setOptimalTempRange()`` to change the range and hence the filter's bahavior.
+A ``TStream<Range<Double>> setRangeCmds`` stream is created and a new range specification tuple is generated every 10 seconds.  A ``sink`` on the stream calls ``setOptimalTempRange()`` to change the range and hence the filter's bahavior.
 
 ```java
     // Simulate a command stream to change the optimal range.
