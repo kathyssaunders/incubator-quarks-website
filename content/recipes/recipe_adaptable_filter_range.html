@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="keywords" content=" ">
-<title>Recipe - Adaptable filter behavior.  | Apache Quarks Documentation</title>
+<title>Adaptable filter behavior  | Apache Quarks Documentation</title>
 <link rel="stylesheet" type="text/css" href="../css/syntax.css">
 <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">
 <!--<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">-->
@@ -157,7 +157,7 @@
 <script>
 function SendLinkByMail(href) {
 var subject= "Apache Quarks Documentation feedback";
-var body = "I have some feedback about the Recipe - Adaptable filter behavior. page: ";
+var body = "I have some feedback about the Adaptable filter behavior page: ";
 body += window.location.href;
 body += "";
 var uri = "mailto:?subject=";
@@ -184,7 +184,7 @@ window.location.href = uri;
                             searchInput: document.getElementById('search-input'),
                             resultsContainer: document.getElementById('results-container'),
                             dataSource: '../search.json',
-                            searchResultTemplate: '<li><a href="{url}" title="Recipe - Adaptable filter behavior.">{title}</a></li>',
+                            searchResultTemplate: '<li><a href="{url}" title="Adaptable filter behavior">{title}</a></li>',
                         noResultsText: 'No results found.',
                                 limit: 10,
                                 fuzzy: true,
@@ -499,7 +499,7 @@ $('#toc').on('click', 'a', function() {
             <div class="col-md-9">
                 
                 <div class="post-header">
-   <h1 class="post-title-main">Recipe - Adaptable filter behavior.</h1>
+   <h1 class="post-title-main">Adaptable filter behavior</h1>
 </div>
 
 <div class="post-content">
@@ -558,9 +558,9 @@ $('#toc').on('click', 'a', function() {
 </code></pre></div>
 <p>The filter just uses <code>optimalTempRangeRef.get()</code> to use the current range setting.</p>
 
-<h2 id="simulate-a-setoptimaltemprange-command-stream">Simulate a setOptimalTempRange command stream</h2>
+<h2 id="simulate-a-command-stream">Simulate a command stream</h2>
 
-<p>Create a <code>TStream&lt;Range&lt;Double&gt;&gt; setRangeCmds</code> stream where a new range specification tuple is created every 10 seconds.  A <code>sink</code> on the stream calls <code>setOptimalTempRange()</code> to change the range and hence the filter&#39;s bahavior.</p>
+<p>A <code>TStream&lt;Range&lt;Double&gt;&gt; setRangeCmds</code> stream is created and a new range specification tuple is generated every 10 seconds.  A <code>sink</code> on the stream calls <code>setOptimalTempRange()</code> to change the range and hence the filter&#39;s bahavior.</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="c1">// Simulate a command stream to change the optimal range.</span>
     <span class="c1">// Such a stream might be from an IotDevice command.</span>
     <span class="n">String</span><span class="o">[]</span> <span class="n">ranges</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">[]</span> <span class="o">{</span>
@@ -674,7 +674,7 @@ $('#toc').on('click', 'a', function() {
         <div class="col-lg-12 footer">
 
              Site last
-            generated: Apr 5, 2016 <br/>
+            generated: Apr 6, 2016 <br/>
 
         </div>
     </div>
