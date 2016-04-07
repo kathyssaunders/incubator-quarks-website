@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Apache Quarks Community
+title: Apache Quarks community
 description: Project Community Page
 group: nav-right
 ---

@@ -1,5 +1,5 @@
 ---
-title: Sample Programs
+title: Sample programs
 ---
 
 The [Getting started guide](quarks-getting-started) includes a step-by-step walkthrough of a simple Quarks application.

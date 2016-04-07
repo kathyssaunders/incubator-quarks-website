@@ -1,5 +1,5 @@
 ---
-title:  Apache Quarks Documentation
+title:  Apache Quarks documentation
 audience: field engineers, clients
 ---
 

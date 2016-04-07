@@ -1,5 +1,5 @@
 ---
-title: Common Quarks Operations
+title: Common Quarks operations
 ---
 
 In the [Getting started guide](quarks-getting-started), we covered a Quarks application where we read from a device's simulated temperature sensor. Yet Quarks supports more operations than simple filtering. Data analysis and streaming require a suite of functionality, the most important components of which will be outlined below.
