@@ -58,7 +58,7 @@ entries:
     version: all
     output: web, pdf
     items:
-    - title: 1. Getting Started Guide
+    - title: Getting started guide
       url: /docs/quarks-getting-started.html
       audience: writers, designers
       platform: all
@@ -66,7 +66,7 @@ entries:
       version: all
       output: web, pdf
 
-    - title: 2. Common Operations
+    - title: Common operations
       url: /docs/common-quarks-operations.html
       audience: writers, designers
       platform: all
@@ -89,7 +89,7 @@ entries:
       version: all
       output: web, pdf
 
-    - title: Writing a Source Function
+    - title: Writing a source function
       url: /recipes/recipe_source_function.html
       audience: writers, designers
       platform: all
@@ -97,7 +97,7 @@ entries:
       version: all
       output: web, pdf
 
-    - title: Detecting a Sensor Value Out of Expected Range
+    - title: Detecting a sensor value out of expected range
       url: /recipes/recipe_value_out_of_range.html
       audience: writers, designers
       platform: all
@@ -105,7 +105,7 @@ entries:
       version: all
       output: web, pdf
 
-    - title: Applying Different Processing Against a Single Stream
+    - title: Applying different processing against a single stream
       url: /recipes/recipe_different_processing_against_stream.html
       audience: writers, designers
       platform: all
@@ -113,8 +113,8 @@ entries:
       version: all
       output: web, pdf
 
-    - title: Splitting a Stream to Apply Different Processing
-             and Combining the Results into a Single Stream
+    - title: Splitting a stream to apply different processing
+             and combining the results into a single stream
       url: /recipes/recipe_combining_streams_processing_results.html
       audience: writers, designers
       platform: all
@@ -122,7 +122,7 @@ entries:
       version: all
       output: web, pdf
 
-    - title: Using an External Configuration File for Filter Ranges
+    - title: Using an external configuration file for filter ranges
       url: /recipes/recipe_external_filter_range.html
       audience: writers, designers
       platform: all
@@ -130,7 +130,7 @@ entries:
       version: all
       output: web, pdf
 
-    - title: Adaptable Filter Behavior
+    - title: Adaptable filter behavior
       url: /recipes/recipe_adaptable_filter_range.html
       audience: writers, designers
       platform: all
@@ -145,7 +145,7 @@ entries:
     version: all
     output: web, pdf
     items:
-    - title: 1. Samples
+    - title: Samples
       url: /docs/samples.html
       audience: writers, designers
       platform: all
@@ -153,7 +153,7 @@ entries:
       version: all
       output: web, pdf
 
-    - title: 2. Quickstart IBM Watson IoT Platform
+    - title: Quickstart IBM Watson IoT Platform
       url: /docs/quickstart.html
       audience: writers, designers
       platform: all
@@ -161,14 +161,14 @@ entries:
       version: all
       output: web, pdf
 
-  - title: Using The Console
+  - title: Using the Console
     audience: writers, designers
     platform: all
     product: all
     version: all
     output: web, pdf
     items:
-    - title: 1. Using The Console
+    - title: Using the console
       url: /docs/console.html
       audience: writers, designers
       platform: all
@@ -176,7 +176,7 @@ entries:
       version: all
       output: web, pdf
 
-  - title: Get involved
+  - title: Get Involved
     audience: writers, designers
     platform: all
     product: all

@@ -3,11 +3,11 @@ title: Committers
 description: Commit Activity and How to Become a Committer
 ---
 
-# Commit Activity
+## Commit activity
 
 To see commit activity for Quarks, click [here](https://github.com/apache/incubator-quarks/pulse).
 
-# How to Become a Committer
+## How to become a committer
 
 You can become a committer by contributing to Quarks. Qualifications for a new committer include:
 

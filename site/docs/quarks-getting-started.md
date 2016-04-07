@@ -8,7 +8,7 @@ Quarks is an open source programming model and runtime for edge devices that ena
 
 * Reduce the amount of data that you store
 
-For more information, see the [Quarks overview](home)
+For more information, see the [Quarks overview](home).
 
 ### Quarks and streaming analytics
 The fundamental building block of a Quarks application is a **stream**: a continuous sequence of tuples (messages, events, sensor readings, and so on).
@@ -109,7 +109,7 @@ Our sample Quarks application processes this stream by filtering the data and pr
 
 To understand how the application processes the stream, let's review each line.
 
-### Specifying a Provider
+### Specifying a provider
 Your first step when you write a Quarks application is to create a
 [`DirectProvider`](http://quarks-edge.github.io/quarks/docs/javadoc/index.html?quarks/providers/direct/DirectProvider.html) :
 
@@ -139,7 +139,7 @@ In the TempSensor application above, we have exactly one data source: the `TempS
     TStream<Double> tempReadings = topology.poll(sensor, 1, TimeUnit.MILLISECONDS);
 ```
 
-### Defining The TStream object
+### Defining the TStream object
 Calling `topology.poll()` to define a source stream creates a `TStream<Double>` instance, which represents the series of readings taken from the temperature sensor.
 
 A streaming application can run indefinitely, so the TStream might see an arbitrarily large number of readings pass through it. Because a TStream represents the flow of your data, it supports a number of operations which allow you to modify your data.

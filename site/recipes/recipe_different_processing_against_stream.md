@@ -1,5 +1,5 @@
 ---
-title: Applying Different Processing Against a Single Stream
+title: Applying different processing against a single stream
 ---
 
 In the previous [recipe](recipe_value_out_of_range), we learned how to filter a stream to obtain the interesting sensor readings and ignore the mundane data. Typically, a user scenario is more involved, where data is processed using different stream operations. Consider the following scenario, for example.
@@ -10,7 +10,7 @@ In this instance, we can take the stream of mileage sensor readings and apply mu
 
 ## Setting up the application
 
-We assume that the environment has been set up following the steps outlined in the [Getting Started Guide](../docs/quarks-getting-started). Let's begin by creating a `DirectProvider` and `Topology`. We choose a `DevelopmentProvider` so that we can view the topology graph using the console URL (refer to the [Application Console](../docs/console) page for a more detailed explanation of this provider). The initial mileage value and the number of miles in a typical delivery route have also been defined.
+We assume that the environment has been set up following the steps outlined in the [Getting started guide](../docs/quarks-getting-started). Let's begin by creating a `DirectProvider` and `Topology`. We choose a `DevelopmentProvider` so that we can view the topology graph using the console URL (refer to the [Application console](../docs/console) page for a more detailed explanation of this provider). The initial mileage value and the number of miles in a typical delivery route have also been defined.
 
 ```java
     import java.text.DecimalFormat;

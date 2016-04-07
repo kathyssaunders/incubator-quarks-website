@@ -1,8 +1,8 @@
 ---
-title: Quickstart IBM Watson IoT Platform Sample
+title: Quickstart IBM Watson IoT Platform sample
 ---
 
-# Quarks to Quickstart Quickly!
+## Quarks to Quickstart quickly!
 
 IoT devices running quarks applications typically connect to back-end analytic systems through a message hub.
 Message hubs are used to isolate the back-end system from having to handle connections from thousands to millions of devices.
@@ -28,10 +28,10 @@ Here's an example view:
 
 <img border="0" alt="Quickstart service output" src="images/Quickstart.png">
 
-## Quarks Code
+## Quarks code
 
 The full source is at:
-[IotfQuickstart.java](https://github.com/quarks-edge/quarks/blob/master/samples/connectors/src/main/java/quarks/samples/connectors/iotf/IotfQuickstart.java)
+[IotfQuickstart.java](https://github.com/apache/incubator-quarks/blob/master/samples/connectors/src/main/java/quarks/samples/connectors/iotf/IotfQuickstart.java)
 
 The first step to is to create a `IotDevice` instance that represents the connection to IBM Watson IoT Platform Qucikstart service.
 

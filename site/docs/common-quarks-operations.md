@@ -2,15 +2,12 @@
 title: Common Quarks Operations
 ---
 
-# Common Quarks Operations
-In the first [getting started guide](quarks-getting-started), we covered a "hello world" Quarks application where we read from a device's simulated temperature sensor. Yet Quarks supports more operations than simple filtering. Data analysis and streaming require a suite of functionality, the most important components of which will be outlined below.
+In the [Getting started guide](quarks-getting-started), we covered a Quarks application where we read from a device's simulated temperature sensor. Yet Quarks supports more operations than simple filtering. Data analysis and streaming require a suite of functionality, the most important components of which will be outlined below.
 
 ## TStream.map()
 TStream.map() is arguably the most used method in the Quarks API. Its two main purposes are to perform stateful or stateless operations on a stream's tuples, and to produce a TStream with tuples of a different type from that of the calling stream.
 
-<br>
-
-### Changing a TStream's Tuple Type
+### Changing a TStream's tuple type
 In addition to filtering tuples, TStreams support operations that *transform* tuples from one Java type to another by invoking the TStream.map() method.
 
 <img src="images/Map_Type_Change.jpg" style="width:750px;height:150px;">
@@ -38,12 +35,9 @@ Since each tuple is now a list of strings, the *wordsInLine* stream is of type L
     wordsInLine.sink(list -> System.out.println(list.get(2)));
 ```
 
-As mentioned in the [getting started guide](quarks-getting-started), a TStream can be parameterized to any serializable Java type, including ones created by the user.
+As mentioned in the [Getting started guide](quarks-getting-started), a TStream can be parameterized to any serializable Java type, including ones created by the user.
 
-<br>
-
-
-### Performing Stateful Operations
+### Performing stateful operations
 
 In all previous examples, the operations performed on a TStream have been stateless; keeping track of information over multiple invocations of the same operation has not been necessary. What if we want to keep track of the number of Strings sent over a stream? To do this, we need our TStream.map() method to contain a counter as state.
 
@@ -64,5 +58,3 @@ This can be achieved by creating an anonymous Function class, and giving it the 
 ```
 
 The *count* field will now contain the number of Strings which were sent over streamOfStrings. Although this is a simple example, the anonymous Function passed to TStream.map() can contain any kind of state! This could be a HashMap<K, T>, a running list of tuples, or any serializable Java type. The state will be maintained throughout the entire runtime of your application.
-
-<br>

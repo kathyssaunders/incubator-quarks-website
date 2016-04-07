@@ -1,7 +1,7 @@
 ---
 title: FAQ  
 ---
-## What Is Quarks?
+## What is Quarks?
 
 Quarks provides APIs and a lightweight runtime to analyze streaming data at the edge.
 
@@ -82,6 +82,6 @@ Click [Issues](https://issues.apache.org/jira/browse/QUARKS) to submit a bug rep
 
 Use [site.data.project.user_list](mailto:{{ site.data.project.user_list }}) to submit questions to the Quarks community.
 
-## Why is Quarks Open Source?
+## Why is Quarks open source?
 
 With the growth of the Internet of Things there is a need to execute analytics at the edge. Quarks was developed to address requirements for analytics at the edge for IoT use cases that were not addressed by central analytic solutions.  These capabilities will be useful to many organizations and that the diverse nature of edge devices and use cases is best addressed by an open community.  Our goal is to develop a vibrant community of developers and users to expand the capabilities and real-world use of Quarks by companies and individuals to enable edge analytics and further innovation for the IoT space.

@@ -2,7 +2,7 @@
 title: Hello Quarks!
 ---
 
-Quarks' pure Java implementation is a powerful feature which allows it to be run on the majority of JVM-compatible systems. It also has the added benefit of enabling the developer to develop applications entirely within the Eclipse and Intellij ecosystems. For the purposes of this recipe, it will be assumed that the developer is using Eclipse. To begin the Hello World recipe, create a new project and import the necessary libraries as outlined in the [Getting Started Guide](../docs/quarks-getting-started). Next, write the following template application:
+Quarks' pure Java implementation is a powerful feature which allows it to be run on the majority of JVM-compatible systems. It also has the added benefit of enabling the developer to develop applications entirely within the Eclipse and Intellij ecosystems. For the purposes of this recipe, it will be assumed that the developer is using Eclipse. To begin the Hello World recipe, create a new project and import the necessary libraries as outlined in the [Getting started guide](../docs/quarks-getting-started). Next, write the following template application:
 
 ``` java
     public static void main(String[] args) {
@@ -31,7 +31,7 @@ The primary abstraction in Quarks is the `TStream`. A *TStream* represents the f
 ```
 
 The `helloStream` stream is created, and the "Hello" and "Quarks!" strings will be sent as its two data items.
-## Printing to Output
+## Printing to output
 `TStream.print` can be used to print the data items of a stream to standard output by invoking the `toString` method of each data item. In this case the data items are already strings, but in principle `TStream.print` can be called on any stream, regardless of the datatype carried by the stream.
 
 ``` java
@@ -47,7 +47,7 @@ The `helloStream` stream is created, and the "Hello" and "Quarks!" strings will 
     }
 ```
 
-## Submitting the Application
+## Submitting the application
 The only remaining step is to submit the application, which is performed by the `DirectProvider`. Submitting a Quarks application initializes the threads which execute the `Topology`, and begins processing its data sources.
 
 ``` java
