@@ -10,27 +10,35 @@ In this instance, we can take the stream of mileage sensor readings and apply mu
 
 ## Setting up the application
 
-We assume that the environment has been set up following the steps outlined in the [Getting started guide](../docs/quarks-getting-started). Let's begin by creating a `DirectProvider` and `Topology`. We choose a `DevelopmentProvider` so that we can view the topology graph using the console URL (refer to the [Application console](../docs/console) page for a more detailed explanation of this provider). The initial mileage value and the number of miles in a typical delivery route have also been defined.
+We assume that the environment has been set up following the steps outlined in the [Getting started guide](../docs/quarks-getting-started). Let's begin by creating a `DirectProvider` and `Topology`. We choose a `DevelopmentProvider` so that we can view the topology graph using the console URL (refer to the [Application console](../docs/console) page for a more detailed explanation of this provider). The gas mileage bounds, initial mileage value, and the number of miles in a typical delivery route have also been defined.
 
 ```java
     import java.text.DecimalFormat;
-    import java.util.Random;
     import java.util.concurrent.TimeUnit;
 
     import com.google.gson.JsonObject;
 
+    import quarks.analytics.sensors.Ranges;
     import quarks.console.server.HttpServer;
     import quarks.providers.development.DevelopmentProvider;
     import quarks.providers.direct.DirectProvider;
+    import quarks.samples.utils.sensor.SimpleSimulatedSensor;
     import quarks.topology.TStream;
     import quarks.topology.Topology;
 
     public class ApplyDifferentProcessingAgainstStream {
         /**
-         * Hypothetical values for the initial gas mileage and the
-         * number of miles in a typical delivery route
+         * Gas mileage value bounds
          */
-        static double currentMileage = 10.5;
+        static double MILEAGE_LOW = 7.0;
+        static double MILEAGE_HIGH = 14.0;
+        /**
+         * Initial gas mileage sensor value
+         */
+        static double INITIAL_MILEAGE = 10.5;
+        /**
+         * Hypothetical value for the number of miles in a typical delivery route
+         */
         static double ROUTE_MILES = 80;
 
         public static void main(String[] args) throws Exception {
@@ -39,7 +47,7 @@ We assume that the environment has been set up following the steps outlined in t
 
             System.out.println(dp.getServices().getService(HttpServer.class).getConsoleUrl());
 
-            Topology top = dp.newTopology("TruckSensor");
+            Topology top = dp.newTopology("MileageSensor");
 
             // The rest of the code pieces belong here
         }
@@ -48,26 +56,13 @@ We assume that the environment has been set up following the steps outlined in t
 
 ## Generating mileage sensor readings
 
-The next step is to simulate a stream of gas mileage readings. In our `main()`, we use the `poll()` method to generate a flow of tuples (readings), where each tuple arrives every second. We ensure that the generated reading is between 7.0 mpg and 14.0 mpg.
+The next step is to simulate a stream of gas mileage readings using [`SimpleSimulatedSensor`](https://github.com/apache/incubator-quarks/blob/master/samples/utils/src/main/java/quarks/samples/utils/sensor/SimpleSimulatedSensor.java). We set the initial mileage and delta factor in the first two arguments. The last argument ensures that the sensor reading falls in an acceptable range (between 7.0 mpg and 14.0 mpg). In our `main()`, we use the `poll()` method to generate a flow of tuples (readings), where each tuple arrives every second.
 
 ```java
     // Generate a stream of mileage sensor readings
-    DecimalFormat df = new DecimalFormat("#.#");
-    Random r = new Random();
-    TStream<Double> mileage = top.poll(() -> {
-        // Change current mileage by some random amount between -0.4 and 0.4
-        while (true) {
-            double newMileage = -0.4 + (0.4 + 0.4) * r.nextDouble() + currentMileage;
-            // Ensure that new temperature is within [7.0, 14.0]
-            if (newMileage >= 7.0 && newMileage <= 14.0) {
-                currentMileage = Double.valueOf(df.format(newMileage));
-                break;
-            } else {
-                continue;
-            }
-        }
-        return currentMileage;
-    }, 1, TimeUnit.SECONDS);
+    SimpleSimulatedSensor mileageSensor = new SimpleSimulatedSensor(INITIAL_MILEAGE,
+            0.4, Ranges.closed(MILEAGE_LOW, MILEAGE_HIGH));
+    TStream<Double> mileage = top.poll(mileageSensor, 1, TimeUnit.SECONDS);
 ```
 
 ## Applying different processing to the stream
@@ -98,6 +93,7 @@ In addition, we can calculate the estimated gallons of gas used based on the cur
 
 ```java
     // Modify mileage stream to obtain a stream containing the estimated gallons of gas used
+    DecimalFormat df = new DecimalFormat("#.#");
     TStream<Double> gallonsUsed = mileage
             .modify(mpg -> Double.valueOf(df.format(ROUTE_MILES / mpg))).tag("modified");
 ```
@@ -145,14 +141,15 @@ Let's see what the topology graph looks like. We can view it using the console U
 
 ```java
     import java.text.DecimalFormat;
-    import java.util.Random;
     import java.util.concurrent.TimeUnit;
 
     import com.google.gson.JsonObject;
 
+    import quarks.analytics.sensors.Ranges;
     import quarks.console.server.HttpServer;
     import quarks.providers.development.DevelopmentProvider;
     import quarks.providers.direct.DirectProvider;
+    import quarks.samples.utils.sensor.SimpleSimulatedSensor;
     import quarks.topology.TStream;
     import quarks.topology.Topology;
 
@@ -161,10 +158,17 @@ Let's see what the topology graph looks like. We can view it using the console U
      */
     public class ApplyDifferentProcessingAgainstStream {
         /**
-         * Hypothetical values for the initial gas mileage and the
-         * number of miles in a typical delivery route
+         * Gas mileage value bounds
          */
-        static double currentMileage = 10.5;
+        static double MILEAGE_LOW = 7.0;
+        static double MILEAGE_HIGH = 14.0;
+        /**
+         * Initial gas mileage sensor value
+         */
+        static double INITIAL_MILEAGE = 10.5;
+        /**
+         * Hypothetical value for the number of miles in a typical delivery route
+         */
         static double ROUTE_MILES = 80;
 
         /**
@@ -178,29 +182,16 @@ Let's see what the topology graph looks like. We can view it using the console U
 
             System.out.println(dp.getServices().getService(HttpServer.class).getConsoleUrl());
 
-            Topology top = dp.newTopology("TruckSensor");
+            Topology top = dp.newTopology("MileageSensor");
 
             // Generate a stream of mileage sensor readings
-            DecimalFormat df = new DecimalFormat("#.#");
-            Random r = new Random();
-            TStream<Double> mileage = top.poll(() -> {
-                // Change current mileage by some random amount between -0.4 and 0.4
-                while (true) {
-                    double newMileage = -0.4 + (0.4 + 0.4) * r.nextDouble() + currentMileage;
-                    // Ensure that new temperature is within [7.0, 14.0]
-                    if (newMileage >= 7.0 && newMileage <= 14.0) {
-                        currentMileage = Double.valueOf(df.format(newMileage));
-                        break;
-                    } else {
-                        continue;
-                    }
-                }
-                return currentMileage;
-            }, 1, TimeUnit.SECONDS);
+            SimpleSimulatedSensor mileageSensor = new SimpleSimulatedSensor(INITIAL_MILEAGE,
+                    0.4, Ranges.closed(MILEAGE_LOW, MILEAGE_HIGH));
+            TStream<Double> mileage = top.poll(mileageSensor, 1, TimeUnit.SECONDS);
 
             // Filter out the poor gas mileage readings
             TStream<Double> poorMileage = mileage
-                    .filter(mpg -> mpg <= 9).tag("filtered");
+                    .filter(mpg -> mpg <= 9.0).tag("filtered");
 
             // Map Double to JsonObject
             TStream<JsonObject> json = mileage
@@ -211,6 +202,7 @@ Let's see what the topology graph looks like. We can view it using the console U
                     }).tag("mapped");
 
             // Modify mileage stream to obtain a stream containing the estimated gallons of gas used
+            DecimalFormat df = new DecimalFormat("#.#");
             TStream<Double> gallonsUsed = mileage
                     .modify(mpg -> Double.valueOf(df.format(ROUTE_MILES / mpg))).tag("modified");
 

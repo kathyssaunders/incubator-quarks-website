@@ -10,27 +10,28 @@ In this instance, we can use a filter to detect out-of-range temperature values.
 
 ## Setting up the application
 
-We assume that the environment has been set up following the steps outlined in the [Getting started guide](../docs/quarks-getting-started). Let's begin by creating a `DirectProvider` and `Topology`. We also define the optimal temperature range and the initial temperature.
+We assume that the environment has been set up following the steps outlined in the [Getting started guide](../docs/quarks-getting-started). Let's begin by creating a `DirectProvider` and `Topology`. We also define the optimal temperature range.
 
 ```java
     import static quarks.function.Functions.identity;
 
-    import java.text.DecimalFormat;
-    import java.util.Random;
     import java.util.concurrent.TimeUnit;
 
     import quarks.analytics.sensors.Filters;
+    import quarks.analytics.sensors.Range;
+    import quarks.analytics.sensors.Ranges;
     import quarks.providers.direct.DirectProvider;
+    import quarks.samples.utils.sensor.SimulatedTemperatureSensor;
     import quarks.topology.TStream;
     import quarks.topology.Topology;
 
     public class DetectValueOutOfRange {
         /**
-         * Optimal temperatures (in Fahrenheit)
+         * Optimal temperature range (in Fahrenheit)
          */
-        static double TEMP_LOW = 77.0;
-        static double TEMP_HIGH = 91.0;
-        static double currentTemp = 80.0;
+        static double OPTIMAL_TEMP_LOW = 77.0;
+        static double OPTIMAL_TEMP_HIGH = 91.0;
+        static Range<Double> optimalTempRange = Ranges.closed(OPTIMAL_TEMP_LOW, OPTIMAL_TEMP_HIGH);
 
         public static void main(String[] args) throws Exception {
 
@@ -45,26 +46,12 @@ We assume that the environment has been set up following the steps outlined in t
 
 ## Generating temperature sensor readings
 
-The next step is to simulate a stream of temperature readings. In our `main()`, we use the `poll()` method to generate a flow of tuples, where a new tuple (temperature reading) arrives every second. We ensure that the generated reading is between 28°F and 112°F.
+The next step is to simulate a stream of temperature readings using [`SimulatedTemperatureSensor`](https://github.com/apache/incubator-quarks/blob/master/samples/utils/src/main/java/quarks/samples/utils/sensor/SimulatedTemperatureSensor.java). By default, the sensor sets the initial temperature to 80°F and ensures that new readings are between 28°F and 112°F. In our `main()`, we use the `poll()` method to generate a flow of tuples, where a new tuple (temperature reading) arrives every second.
 
 ```java
     // Generate a stream of temperature sensor readings
-    DecimalFormat df = new DecimalFormat("#.#");
-    Random r = new Random();
-    TStream<Double> temp = top.poll(() -> {
-        // Change current temp by some random amount between -1 and 1
-        while (true) {
-            double newTemp = -1 + (1 + 1) * r.nextDouble() + currentTemp;
-            // Ensure that new temperature is within [28, 112]
-            if (newTemp >= 28 && newTemp <= 112) {
-                currentTemp = Double.valueOf(df.format(newTemp));
-                break;
-            } else {
-                continue;
-            }
-        }
-        return currentTemp;
-    }, 1, TimeUnit.SECONDS);
+    SimulatedTemperatureSensor tempSensor = new SimulatedTemperatureSensor();
+    TStream<Double> temp = top.poll(tempSensor, 1, TimeUnit.SECONDS);
 ```
 
 ## Simple filtering
@@ -75,7 +62,7 @@ In this case, we want to keep temperatures below the lower range value *or* abov
 
 ```java
     TStream<Double> simpleFiltered = temp.filter(tuple ->
-            tuple < TEMP_LOW || tuple > TEMP_HIGH);
+            tuple < OPTIMAL_TEMP_LOW || tuple > OPTIMAL_TEMP_HIGH);
     simpleFiltered.sink(tuple -> System.out.println("Temperature is out of range! "
             + "It is " + tuple + "\u00b0F!"));
 ```
@@ -100,7 +87,7 @@ As with the simple filter, the stream is terminated by printing out the warnings
 
 ```java
     TStream<Double> deadbandFiltered = Filters.deadband(temp,
-            identity(), tuple -> tuple >= TEMP_LOW && tuple <= TEMP_HIGH);
+            identity(), tuple -> tuple >= OPTIMAL_TEMP_LOW && tuple <= OPTIMAL_TEMP_HIGH);
     deadbandFiltered.sink(tuple -> System.out.println("Temperature may not be "
             + "optimal! It is " + tuple + "\u00b0F!"));
 ```
@@ -147,9 +134,9 @@ Though not covered in this recipe, Ranges offer additional conveniences for crea
 In the above examples, a single Range can be used in place of the two different expressions for the same logical range:
 
 ```java
-    static double TEMP_LOW = 77.0;
-    static double TEMP_HIGH = 91.0;
-    static Range<Double> optimalTempRange = Ranges.closed(TEMP_LOW, TEMP_HIGH);
+    static double OPTIMAL_TEMP_LOW = 77.0;
+    static double OPTIMAL_TEMP_HIGH = 91.0;
+    static Range<Double> optimalTempRange = Ranges.closed(OPTIMAL_TEMP_LOW, OPTIMAL_TEMP_HIGH);
 ```
 
 Using ``optimalTempRange`` in the Simple filter example code:
@@ -171,14 +158,13 @@ Using ``optimalTempRange`` in the Deadband filter example code:
 ```java
     import static quarks.function.Functions.identity;
 
-    import java.text.DecimalFormat;
-    import java.util.Random;
     import java.util.concurrent.TimeUnit;
 
     import quarks.analytics.sensors.Filters;
     import quarks.analytics.sensors.Range;
     import quarks.analytics.sensors.Ranges;
     import quarks.providers.direct.DirectProvider;
+    import quarks.samples.utils.sensor.SimulatedTemperatureSensor;
     import quarks.topology.TStream;
     import quarks.topology.Topology;
 
@@ -187,12 +173,11 @@ Using ``optimalTempRange`` in the Deadband filter example code:
      */
     public class DetectValueOutOfRange {
         /**
-         * Optimal temperatures inclusive (in Fahrenheit)
+         * Optimal temperature range (in Fahrenheit)
          */
-        static double TEMP_LOW = 77.0;
-        static double TEMP_HIGH = 91.0;
-        static Range<Double> optimalTempRange = Ranges.closed(TEMP_LOW, TEMP_HIGH);
-        static double currentTemp = 80.0;
+        static double OPTIMAL_TEMP_LOW = 77.0;
+        static double OPTIMAL_TEMP_HIGH = 91.0;
+        static Range<Double> optimalTempRange = Ranges.closed(OPTIMAL_TEMP_LOW, OPTIMAL_TEMP_HIGH);
 
         /**
          * Polls a simulated temperature sensor to periodically obtain
@@ -207,25 +192,12 @@ Using ``optimalTempRange`` in the Deadband filter example code:
             Topology top = dp.newTopology("TemperatureSensor");
 
             // Generate a stream of temperature sensor readings
-            DecimalFormat df = new DecimalFormat("#.#");
-            Random r = new Random();
-            TStream<Double> temp = top.poll(() -> {
-                // Change current temp by some random amount between -1 and 1
-                while (true) {
-                    double newTemp = -1 + (1 + 1) * r.nextDouble() + currentTemp;
-                    // Ensure that new temperature is within [28, 112]
-                    if (newTemp >= 28 && newTemp <= 112) {
-                        currentTemp = Double.valueOf(df.format(newTemp));
-                        break;
-                    } else {
-                        continue;
-                    }
-                }
-                return currentTemp;
-            }, 1, TimeUnit.SECONDS);
+            SimulatedTemperatureSensor tempSensor = new SimulatedTemperatureSensor();
+            TStream<Double> temp = top.poll(tempSensor, 1, TimeUnit.SECONDS);
 
-            // Simple filter: Perform analytics on sensor readings to detect when
-            // the temperature is out of the optimal range and generate warnings
+            // Simple filter: Perform analytics on sensor readings to
+            // detect when the temperature is completely out of the
+            // optimal range and generate warnings
             TStream<Double> simpleFiltered = temp.filter(tuple ->
                     !optimalTempRange.contains(tuple));
             simpleFiltered.sink(tuple -> System.out.println("Temperature is out of range! "
