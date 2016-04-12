@@ -1,6 +1,6 @@
 ---
 title: Committers  
-description: Commit Activity and How to Become a Committer
+description: Commit activity and how to become a committer
 ---
 
 ## Commit activity
