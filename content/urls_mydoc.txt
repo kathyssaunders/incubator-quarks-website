@@ -35,16 +35,16 @@
 
  
 /docs/quarks-getting-started:
-  title: "1. Getting Started Guide"
+  title: "Getting started guide"
   url: "../docs/quarks-getting-started.html"
-  link: "<a href='../docs/quarks-getting-started.html'>1. Getting Started Guide</a>"
+  link: "<a href='../docs/quarks-getting-started.html'>Getting started guide</a>"
 
 
  
 /docs/common-quarks-operations:
-  title: "2. Common Operations"
+  title: "Common operations"
   url: "../docs/common-quarks-operations.html"
-  link: "<a href='../docs/common-quarks-operations.html'>2. Common Operations</a>"
+  link: "<a href='../docs/common-quarks-operations.html'>Common operations</a>"
 
 
 
@@ -58,69 +58,69 @@
 
  
 /recipes/recipe_source_function:
-  title: "Writing a Source Function"
+  title: "Writing a source function"
   url: "../recipes/recipe_source_function.html"
-  link: "<a href='../recipes/recipe_source_function.html'>Writing a Source Function</a>"
+  link: "<a href='../recipes/recipe_source_function.html'>Writing a source function</a>"
 
 
  
 /recipes/recipe_value_out_of_range:
-  title: "Detecting a Sensor Value Out of Expected Range"
+  title: "Detecting a sensor value out of expected range"
   url: "../recipes/recipe_value_out_of_range.html"
-  link: "<a href='../recipes/recipe_value_out_of_range.html'>Detecting a Sensor Value Out of Expected Range</a>"
+  link: "<a href='../recipes/recipe_value_out_of_range.html'>Detecting a sensor value out of expected range</a>"
 
 
  
 /recipes/recipe_different_processing_against_stream:
-  title: "Applying Different Processing Against a Single Stream"
+  title: "Applying different processing against a single stream"
   url: "../recipes/recipe_different_processing_against_stream.html"
-  link: "<a href='../recipes/recipe_different_processing_against_stream.html'>Applying Different Processing Against a Single Stream</a>"
+  link: "<a href='../recipes/recipe_different_processing_against_stream.html'>Applying different processing against a single stream</a>"
 
 
  
 /recipes/recipe_combining_streams_processing_results:
-  title: "Splitting a Stream to Apply Different Processing and Combining the Results into a Single Stream"
+  title: "Splitting a stream to apply different processing and combining the results into a single stream"
   url: "../recipes/recipe_combining_streams_processing_results.html"
-  link: "<a href='../recipes/recipe_combining_streams_processing_results.html'>Splitting a Stream to Apply Different Processing and Combining the Results into a Single Stream</a>"
+  link: "<a href='../recipes/recipe_combining_streams_processing_results.html'>Splitting a stream to apply different processing and combining the results into a single stream</a>"
 
 
  
 /recipes/recipe_external_filter_range:
-  title: "Using an External Configuration File for Filter Ranges"
+  title: "Using an external configuration file for filter ranges"
   url: "../recipes/recipe_external_filter_range.html"
-  link: "<a href='../recipes/recipe_external_filter_range.html'>Using an External Configuration File for Filter Ranges</a>"
+  link: "<a href='../recipes/recipe_external_filter_range.html'>Using an external configuration file for filter ranges</a>"
 
 
  
 /recipes/recipe_adaptable_filter_range:
-  title: "Adaptable Filter Behavior"
+  title: "Adaptable filter behavior"
   url: "../recipes/recipe_adaptable_filter_range.html"
-  link: "<a href='../recipes/recipe_adaptable_filter_range.html'>Adaptable Filter Behavior</a>"
+  link: "<a href='../recipes/recipe_adaptable_filter_range.html'>Adaptable filter behavior</a>"
 
 
 
 
  
 /docs/samples:
-  title: "1. Samples"
+  title: "Samples"
   url: "../docs/samples.html"
-  link: "<a href='../docs/samples.html'>1. Samples</a>"
+  link: "<a href='../docs/samples.html'>Samples</a>"
 
 
  
 /docs/quickstart:
-  title: "2. Quickstart IBM Watson IoT Platform"
+  title: "Quickstart IBM Watson IoT Platform"
   url: "../docs/quickstart.html"
-  link: "<a href='../docs/quickstart.html'>2. Quickstart IBM Watson IoT Platform</a>"
+  link: "<a href='../docs/quickstart.html'>Quickstart IBM Watson IoT Platform</a>"
 
 
 
 
  
 /docs/console:
-  title: "1. Using The Console"
+  title: "Using the console"
   url: "../docs/console.html"
-  link: "<a href='../docs/console.html'>1. Using The Console</a>"
+  link: "<a href='../docs/console.html'>Using the console</a>"
 
 
 

@@ -295,7 +295,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../docs/quarks-getting-started.html">1. Getting Started Guide</a></li>
+                    <li><a href="../docs/quarks-getting-started.html">Getting started guide</a></li>
                     
 
                     
@@ -304,7 +304,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../docs/common-quarks-operations.html">2. Common Operations</a></li>
+                    <li><a href="../docs/common-quarks-operations.html">Common operations</a></li>
                     
 
                     
@@ -329,7 +329,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../recipes/recipe_source_function.html">Writing a Source Function</a></li>
+                    <li><a href="../recipes/recipe_source_function.html">Writing a source function</a></li>
                     
 
                     
@@ -338,7 +338,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../recipes/recipe_value_out_of_range.html">Detecting a Sensor Value Out of Expected Range</a></li>
+                    <li><a href="../recipes/recipe_value_out_of_range.html">Detecting a sensor value out of expected range</a></li>
                     
 
                     
@@ -347,7 +347,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../recipes/recipe_different_processing_against_stream.html">Applying Different Processing Against a Single Stream</a></li>
+                    <li><a href="../recipes/recipe_different_processing_against_stream.html">Applying different processing against a single stream</a></li>
                     
 
                     
@@ -356,7 +356,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../recipes/recipe_combining_streams_processing_results.html">Splitting a Stream to Apply Different Processing and Combining the Results into a Single Stream</a></li>
+                    <li><a href="../recipes/recipe_combining_streams_processing_results.html">Splitting a stream to apply different processing and combining the results into a single stream</a></li>
                     
 
                     
@@ -365,7 +365,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../recipes/recipe_external_filter_range.html">Using an External Configuration File for Filter Ranges</a></li>
+                    <li><a href="../recipes/recipe_external_filter_range.html">Using an external configuration file for filter ranges</a></li>
                     
 
                     
@@ -374,7 +374,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../recipes/recipe_adaptable_filter_range.html">Adaptable Filter Behavior</a></li>
+                    <li><a href="../recipes/recipe_adaptable_filter_range.html">Adaptable filter behavior</a></li>
                     
 
                     
@@ -390,7 +390,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../docs/samples.html">1. Samples</a></li>
+                    <li><a href="../docs/samples.html">Samples</a></li>
                     
 
                     
@@ -399,7 +399,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../docs/quickstart.html">2. Quickstart IBM Watson IoT Platform</a></li>
+                    <li><a href="../docs/quickstart.html">Quickstart IBM Watson IoT Platform</a></li>
                     
 
                     
@@ -410,12 +410,12 @@ window.location.href = uri;
                 
                 
             
-            <li><a href="#">Using The Console</a>
+            <li><a href="#">Using the Console</a>
                 <ul>
                     
                     
                     
-                    <li><a href="../docs/console.html">1. Using The Console</a></li>
+                    <li><a href="../docs/console.html">Using the console</a></li>
                     
 
                     
@@ -426,7 +426,7 @@ window.location.href = uri;
                 
                 
             
-            <li><a href="#">Get involved</a>
+            <li><a href="#">Get Involved</a>
                 <ul>
                     
                     
@@ -533,7 +533,7 @@ $('#toc').on('click', 'a', function() {
 
     <a target="_blank" href="https://github.com/apache/incubator-quarks-website/blob/master/site/recipes/recipe_hello_quarks.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
     
-  <p>Quarks&#39; pure Java implementation is a powerful feature which allows it to be run on the majority of JVM-compatible systems. It also has the added benefit of enabling the developer to develop applications entirely within the Eclipse and Intellij ecosystems. For the purposes of this recipe, it will be assumed that the developer is using Eclipse. To begin the Hello World recipe, create a new project and import the necessary libraries as outlined in the <a href="../docs/quarks-getting-started">Getting Started Guide</a>. Next, write the following template application:</p>
+  <p>Quarks&#39; pure Java implementation is a powerful feature which allows it to be run on the majority of JVM-compatible systems. It also has the added benefit of enabling the developer to develop applications entirely within the Eclipse and Intellij ecosystems. For the purposes of this recipe, it will be assumed that the developer is using Eclipse. To begin the Hello World recipe, create a new project and import the necessary libraries as outlined in the <a href="../docs/quarks-getting-started">Getting started guide</a>. Next, write the following template application:</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
 
         <span class="n">DirectProvider</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DirectProvider</span><span class="o">();</span>
@@ -557,7 +557,7 @@ $('#toc').on('click', 'a', function() {
 </code></pre></div>
 <p>The <code>helloStream</code> stream is created, and the &quot;Hello&quot; and &quot;Quarks!&quot; strings will be sent as its two data items.</p>
 
-<h2 id="printing-to-output">Printing to Output</h2>
+<h2 id="printing-to-output">Printing to output</h2>
 
 <p><code>TStream.print</code> can be used to print the data items of a stream to standard output by invoking the <code>toString</code> method of each data item. In this case the data items are already strings, but in principle <code>TStream.print</code> can be called on any stream, regardless of the datatype carried by the stream.</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
@@ -571,7 +571,7 @@ $('#toc').on('click', 'a', function() {
         <span class="n">helloStream</span><span class="o">.</span><span class="na">print</span><span class="o">();</span>
     <span class="o">}</span>
 </code></pre></div>
-<h2 id="submitting-the-application">Submitting the Application</h2>
+<h2 id="submitting-the-application">Submitting the application</h2>
 
 <p>The only remaining step is to submit the application, which is performed by the <code>DirectProvider</code>. Submitting a Quarks application initializes the threads which execute the <code>Topology</code>, and begins processing its data sources.</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
