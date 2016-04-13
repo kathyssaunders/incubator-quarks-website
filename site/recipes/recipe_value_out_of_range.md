@@ -1,5 +1,5 @@
 ---
-title: Detecting a Sensor Value Out of Expected Range
+title: Detecting a sensor value out of expected range
 ---
 
 Oftentimes, a user expects a sensor value to fall within a particular range. If a reading is outside the accepted limits, the user may want to determine what caused the anomaly and/or take action to reduce the impact. For instance, consider the following scenario.
@@ -10,7 +10,7 @@ In this instance, we can use a filter to detect out-of-range temperature values.
 
 ## Setting up the application
 
-We assume that the environment has been set up following the steps outlined in the [Getting Started Guide](../docs/quarks-getting-started). Let's begin by creating a `DirectProvider` and `Topology`. We also define the optimal temperature range and the initial temperature.
+We assume that the environment has been set up following the steps outlined in the [Getting started guide](../docs/quarks-getting-started). Let's begin by creating a `DirectProvider` and `Topology`. We also define the optimal temperature range and the initial temperature.
 
 ```java
     import static quarks.function.Functions.identity;

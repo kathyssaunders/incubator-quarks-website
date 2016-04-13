@@ -1,5 +1,5 @@
 ---
-title: Splitting a Stream to Apply Different Processing and Combining the Results into a Single Stream
+title: Splitting a stream to apply different processing and combining the results into a single stream
 ---
 
 In some cases, a developer might want to perform analytics taking into account the nature of the data. Say, for example, the data consists of log records each containing a level attribute. It would be logical to handle *fatal* log messages differently than *info* or *debug* messages. The same reasoning could also apply in the healthcare industry.
@@ -10,7 +10,7 @@ In this instance, we can use `split` to separate blood pressure readings by cate
 
 ## Setting up the application
 
-We assume that the environment has been set up following the steps outlined in the [Getting Started Guide](../docs/quarks-getting-started).
+We assume that the environment has been set up following the steps outlined in the [Getting started guide](../docs/quarks-getting-started).
 
 First, we need to define a class for a heart monitor. We generate random blood pressure readings, each consisting of the systolic pressure (the top number) and the diastolic pressure (the bottom number). For example, with a blood pressure of 115/75 (read as "115 over 75"), the systolic pressure is 115 and the diastolic pressure is 75. These two pressures are stored in a `map`, and each call to `get()` returns new values.
 

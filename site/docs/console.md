@@ -1,5 +1,5 @@
 ---
-title: Application Console
+title: Application console
 ---
 
 ## Visualizing and monitoring your application

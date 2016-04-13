@@ -1,8 +1,8 @@
 ---
-title: Use an External Configuration File for Filter Ranges
+title: Using an external configuration file for filter ranges
 ---
 
-The [Detecting a Sensor Value Out of Range](recipe_value_out_of_range.html) recipe introduced the basics of filtering as well as the use of a [Range](http://quarks-edge.github.io/quarks/docs/javadoc/quarks/analytics/sensors/Range.html).
+The [Detecting a sensor value out of range](recipe_value_out_of_range.html) recipe introduced the basics of filtering as well as the use of a [Range](http://quarks-edge.github.io/quarks/docs/javadoc/quarks/analytics/sensors/Range.html).
 
 Oftentimes, a user wants to initialize a range specification from an external configuration file so the application code is more easily configured and reusable.
 
@@ -24,7 +24,7 @@ optimalTempRange=[77.0..91.0]
 
 Supply the pathname to this file as an argument to the application when you run it.
 
-## Loading the Configuration file
+## Loading the configuration file
 
 A ``java.util.Properties`` object is often used for configuration parameters
 and it is easy to load the properties from a file.

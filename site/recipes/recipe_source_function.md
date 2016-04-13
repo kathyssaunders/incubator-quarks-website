@@ -1,9 +1,9 @@
 ---
-title: Writing a Source Function
+title: Writing a source function
 ---
 In the previous [Hello Quarks!](recipe_hello_quarks) example, we create a data source which only generates a single Java String and prints it to output. Yet Quarks sources support the ability generate any data type as a source, not just Java types such as Strings and Doubles. Moreover, because the user supplies the code which generates the data, the user has complete flexibility for *how* the data is generated. This recipe demonstrates how a user could write such a custom data source.
 
-## Custom Source: Reading the Lines of a Web Page
+## Custom source: reading the lines of a web page
 {{site.data.alerts.note}} Quarks' API provides convenience methods for performing HTTP requests. For the sake of example we are writing a HTTP data source manually, but in principle there are easier methods. {{site.data.alerts.end}}
 
 One example of a custom data source could be retrieving the contents of a web page and printing each line to output. For example, the user could be querying the Yahoo Finance website for the most recent stock price data of Bank of America, Cabot Oil & Gas, and Freeport-McMoRan Inc:

@@ -1,9 +1,9 @@
 ---
-title:  Apache Quarks Documentation
+title:  Apache Quarks documentation
 audience: field engineers, clients
 ---
 
-## New Documentation
+## New documentation
 Apache Quarks is evolving, and so is the documentation. If the existing documentation hasn't answered your questions, you can request new or updated documentation by opening an issue.
 
 Click on "New Documentation" to open an issue:
@@ -11,7 +11,7 @@ Click on "New Documentation" to open an issue:
    <a href="https://github.com/quarks-edge/quarks.documentation/issues/new"><button type="button" class="btn btn-primary">New Documentation</button></a>
 <br>
 
-## Providing Feedback
+## Providing feedback
 
 To provide feedback on our documentation:
 
@@ -20,7 +20,7 @@ To provide feedback on our documentation:
 
 This will open an issue for the page that you are currently visiting.  
 
-## Contributing Documentation 
+## Contributing documentation
 
 If you have ideas on how we can better document or explain some of the concepts, we would love to have your contribution!  The quarks.documentation site uses GitHub's flavor of Markdown and Jekyll markdown for our documentation.
 
