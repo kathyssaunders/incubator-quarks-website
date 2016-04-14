@@ -295,7 +295,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../docs/quarks-getting-started.html">1. Getting Started Guide</a></li>
+                    <li><a href="../docs/quarks-getting-started.html">Getting started guide</a></li>
                     
 
                     
@@ -304,7 +304,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../docs/common-quarks-operations.html">2. Common Operations</a></li>
+                    <li><a href="../docs/common-quarks-operations.html">Common operations</a></li>
                     
 
                     
@@ -329,7 +329,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../recipes/recipe_source_function.html">Writing a Source Function</a></li>
+                    <li><a href="../recipes/recipe_source_function.html">Writing a source function</a></li>
                     
 
                     
@@ -338,7 +338,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../recipes/recipe_value_out_of_range.html">Detecting a Sensor Value Out of Expected Range</a></li>
+                    <li><a href="../recipes/recipe_value_out_of_range.html">Detecting a sensor value out of expected range</a></li>
                     
 
                     
@@ -347,7 +347,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../recipes/recipe_different_processing_against_stream.html">Applying Different Processing Against a Single Stream</a></li>
+                    <li><a href="../recipes/recipe_different_processing_against_stream.html">Applying different processing against a single stream</a></li>
                     
 
                     
@@ -356,7 +356,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../recipes/recipe_combining_streams_processing_results.html">Splitting a Stream to Apply Different Processing and Combining the Results into a Single Stream</a></li>
+                    <li><a href="../recipes/recipe_combining_streams_processing_results.html">Splitting a stream to apply different processing and combining the results into a single stream</a></li>
                     
 
                     
@@ -365,7 +365,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../recipes/recipe_external_filter_range.html">Using an External Configuration File for Filter Ranges</a></li>
+                    <li><a href="../recipes/recipe_external_filter_range.html">Using an external configuration file for filter ranges</a></li>
                     
 
                     
@@ -374,7 +374,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../recipes/recipe_adaptable_filter_range.html">Adaptable Filter Behavior</a></li>
+                    <li><a href="../recipes/recipe_adaptable_filter_range.html">Adaptable filter behavior</a></li>
                     
 
                     
@@ -390,7 +390,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../docs/samples.html">1. Samples</a></li>
+                    <li><a href="../docs/samples.html">Samples</a></li>
                     
 
                     
@@ -399,7 +399,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../docs/quickstart.html">2. Quickstart IBM Watson IoT Platform</a></li>
+                    <li><a href="../docs/quickstart.html">Quickstart IBM Watson IoT Platform</a></li>
                     
 
                     
@@ -410,12 +410,12 @@ window.location.href = uri;
                 
                 
             
-            <li><a href="#">Using The Console</a>
+            <li><a href="#">Using the Console</a>
                 <ul>
                     
                     
                     
-                    <li><a href="../docs/console.html">1. Using The Console</a></li>
+                    <li><a href="../docs/console.html">Using the console</a></li>
                     
 
                     
@@ -426,7 +426,7 @@ window.location.href = uri;
                 
                 
             
-            <li><a href="#">Get involved</a>
+            <li><a href="#">Get Involved</a>
                 <ul>
                     
                     
@@ -542,7 +542,7 @@ $('#toc').on('click', 'a', function() {
 <li><p>Reduce the amount of data that you store</p></li>
 </ul>
 
-<p>For more information, see the <a href="home">Quarks overview</a></p>
+<p>For more information, see the <a href="home">Quarks overview</a>.</p>
 
 <h3 id="quarks-and-streaming-analytics">Quarks and streaming analytics</h3>
 
@@ -635,7 +635,7 @@ Your environment is set up! You can start writing your first Quarks application.
 </code></pre></div>
 <p>To understand how the application processes the stream, let&#39;s review each line.</p>
 
-<h3 id="specifying-a-provider">Specifying a Provider</h3>
+<h3 id="specifying-a-provider">Specifying a provider</h3>
 
 <p>Your first step when you write a Quarks application is to create a
 <a href="http://quarks-edge.github.io/quarks/docs/javadoc/index.html?quarks/providers/direct/DirectProvider.html"><code>DirectProvider</code></a> :</p>
@@ -659,7 +659,7 @@ Your environment is set up! You can start writing your first Quarks application.
 <p>In the TempSensor application above, we have exactly one data source: the <code>TempSensor</code> object. We define the source stream by calling <code>topology.poll()</code>, which takes both a Supplier function and a time parameter to indicate how frequently readings should be taken. In our case, we read from the sensor every millisecond:</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">tempReadings</span> <span class="o">=</span> <span class="n">topology</span><span class="o">.</span><span class="na">poll</span><span class="o">(</span><span class="n">sensor</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">);</span>
 </code></pre></div>
-<h3 id="defining-the-tstream-object">Defining The TStream object</h3>
+<h3 id="defining-the-tstream-object">Defining the TStream object</h3>
 
 <p>Calling <code>topology.poll()</code> to define a source stream creates a <code>TStream&lt;Double&gt;</code> instance, which represents the series of readings taken from the temperature sensor.</p>
 
