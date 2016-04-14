@@ -10,9 +10,9 @@
 
 
 githubrepos_dropdowns:
-- title: Github Repos dropdowns
+- title: GitHub Repos dropdowns
   subcategories:
-    - title: Github Repos
+    - title: GitHub Repos
       audience: writers, designers
       platform: all
       product: all
