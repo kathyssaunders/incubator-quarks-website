@@ -1,5 +1,5 @@
 ---
-title: Adaptable polling source frequency
+title: Adaptable Polling Source Frequency
 ---
 
 The [Writing a Source Function](recipe_source_function.html) recipe introduced the basics of creating a source stream by polling a data source periodically.

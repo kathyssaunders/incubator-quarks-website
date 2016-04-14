@@ -154,7 +154,7 @@ entries:
       version: all
       output: web, pdf
 
-    - title: Adaptable Polling Source Behavior
+    - title: Adaptable Polling Source Frequency
       url: /recipes/recipe_adaptable_polling_source.html
       audience: writers, designers
       platform: all
