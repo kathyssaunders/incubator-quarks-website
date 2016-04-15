@@ -541,25 +541,26 @@ $('#toc').on('click', 'a', function() {
 
 <h2 id="setting-up-the-application">Setting up the application</h2>
 
-<p>We assume that the environment has been set up following the steps outlined in the <a href="../docs/quarks-getting-started">Getting started guide</a>. Let&#39;s begin by creating a <code>DirectProvider</code> and <code>Topology</code>. We also define the optimal temperature range and the initial temperature.</p>
+<p>We assume that the environment has been set up following the steps outlined in the <a href="../docs/quarks-getting-started">Getting started guide</a>. Let&#39;s begin by creating a <code>DirectProvider</code> and <code>Topology</code>. We also define the optimal temperature range.</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kn">import</span> <span class="nn">static</span> <span class="n">quarks</span><span class="o">.</span><span class="na">function</span><span class="o">.</span><span class="na">Functions</span><span class="o">.</span><span class="na">identity</span><span class="o">;</span>
 
-    <span class="kn">import</span> <span class="nn">java.text.DecimalFormat</span><span class="o">;</span>
-    <span class="kn">import</span> <span class="nn">java.util.Random</span><span class="o">;</span>
     <span class="kn">import</span> <span class="nn">java.util.concurrent.TimeUnit</span><span class="o">;</span>
 
     <span class="kn">import</span> <span class="nn">quarks.analytics.sensors.Filters</span><span class="o">;</span>
+    <span class="kn">import</span> <span class="nn">quarks.analytics.sensors.Range</span><span class="o">;</span>
+    <span class="kn">import</span> <span class="nn">quarks.analytics.sensors.Ranges</span><span class="o">;</span>
     <span class="kn">import</span> <span class="nn">quarks.providers.direct.DirectProvider</span><span class="o">;</span>
+    <span class="kn">import</span> <span class="nn">quarks.samples.utils.sensor.SimulatedTemperatureSensor</span><span class="o">;</span>
     <span class="kn">import</span> <span class="nn">quarks.topology.TStream</span><span class="o">;</span>
     <span class="kn">import</span> <span class="nn">quarks.topology.Topology</span><span class="o">;</span>
 
     <span class="kd">public</span> <span class="kd">class</span> <span class="nc">DetectValueOutOfRange</span> <span class="o">{</span>
         <span class="cm">/**
-         * Optimal temperatures (in Fahrenheit)
+         * Optimal temperature range (in Fahrenheit)
          */</span>
-        <span class="kd">static</span> <span class="kt">double</span> <span class="n">TEMP_LOW</span> <span class="o">=</span> <span class="mf">77.0</span><span class="o">;</span>
-        <span class="kd">static</span> <span class="kt">double</span> <span class="n">TEMP_HIGH</span> <span class="o">=</span> <span class="mf">91.0</span><span class="o">;</span>
-        <span class="kd">static</span> <span class="kt">double</span> <span class="n">currentTemp</span> <span class="o">=</span> <span class="mf">80.0</span><span class="o">;</span>
+        <span class="kd">static</span> <span class="kt">double</span> <span class="n">OPTIMAL_TEMP_LOW</span> <span class="o">=</span> <span class="mf">77.0</span><span class="o">;</span>
+        <span class="kd">static</span> <span class="kt">double</span> <span class="n">OPTIMAL_TEMP_HIGH</span> <span class="o">=</span> <span class="mf">91.0</span><span class="o">;</span>
+        <span class="kd">static</span> <span class="n">Range</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">optimalTempRange</span> <span class="o">=</span> <span class="n">Ranges</span><span class="o">.</span><span class="na">closed</span><span class="o">(</span><span class="n">OPTIMAL_TEMP_LOW</span><span class="o">,</span> <span class="n">OPTIMAL_TEMP_HIGH</span><span class="o">);</span>
 
         <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
 
@@ -573,24 +574,10 @@ $('#toc').on('click', 'a', function() {
 </code></pre></div>
 <h2 id="generating-temperature-sensor-readings">Generating temperature sensor readings</h2>
 
-<p>The next step is to simulate a stream of temperature readings. In our <code>main()</code>, we use the <code>poll()</code> method to generate a flow of tuples, where a new tuple (temperature reading) arrives every second. We ensure that the generated reading is between 28°F and 112°F.</p>
+<p>The next step is to simulate a stream of temperature readings using <a href="https://github.com/apache/incubator-quarks/blob/master/samples/utils/src/main/java/quarks/samples/utils/sensor/SimulatedTemperatureSensor.java"><code>SimulatedTemperatureSensor</code></a>. By default, the sensor sets the initial temperature to 80°F and ensures that new readings are between 28°F and 112°F. In our <code>main()</code>, we use the <code>poll()</code> method to generate a flow of tuples, where a new tuple (temperature reading) arrives every second.</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="c1">// Generate a stream of temperature sensor readings</span>
-    <span class="n">DecimalFormat</span> <span class="n">df</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DecimalFormat</span><span class="o">(</span><span class="s">"#.#"</span><span class="o">);</span>
-    <span class="n">Random</span> <span class="n">r</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Random</span><span class="o">();</span>
-    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">poll</span><span class="o">(()</span> <span class="o">-&gt;</span> <span class="o">{</span>
-        <span class="c1">// Change current temp by some random amount between -1 and 1</span>
-        <span class="k">while</span> <span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
-            <span class="kt">double</span> <span class="n">newTemp</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">+</span> <span class="o">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span> <span class="o">*</span> <span class="n">r</span><span class="o">.</span><span class="na">nextDouble</span><span class="o">()</span> <span class="o">+</span> <span class="n">currentTemp</span><span class="o">;</span>
-            <span class="c1">// Ensure that new temperature is within [28, 112]</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">newTemp</span> <span class="o">&gt;=</span> <span class="mi">28</span> <span class="o">&amp;&amp;</span> <span class="n">newTemp</span> <span class="o">&lt;=</span> <span class="mi">112</span><span class="o">)</span> <span class="o">{</span>
-                <span class="n">currentTemp</span> <span class="o">=</span> <span class="n">Double</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">df</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="n">newTemp</span><span class="o">));</span>
-                <span class="k">break</span><span class="o">;</span>
-            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                <span class="k">continue</span><span class="o">;</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">currentTemp</span><span class="o">;</span>
-    <span class="o">},</span> <span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">);</span>
+    <span class="n">SimulatedTemperatureSensor</span> <span class="n">tempSensor</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SimulatedTemperatureSensor</span><span class="o">();</span>
+    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">poll</span><span class="o">(</span><span class="n">tempSensor</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">);</span>
 </code></pre></div>
 <h2 id="simple-filtering">Simple filtering</h2>
 
@@ -598,7 +585,7 @@ $('#toc').on('click', 'a', function() {
 
 <p>In this case, we want to keep temperatures below the lower range value <em>or</em> above the upper range value. This is expressed in the filter predicate, which follows Java&#39;s syntax for <a href="https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html#syntax">lambda expressions</a>. Then, we terminate the stream (using <code>sink</code>) by printing out the warning to standard out. Note that <code>\u00b0</code> is the Unicode encoding for the degree (°) symbol.</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">simpleFiltered</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span>
-            <span class="n">tuple</span> <span class="o">&lt;</span> <span class="n">TEMP_LOW</span> <span class="o">||</span> <span class="n">tuple</span> <span class="o">&gt;</span> <span class="n">TEMP_HIGH</span><span class="o">);</span>
+            <span class="n">tuple</span> <span class="o">&lt;</span> <span class="n">OPTIMAL_TEMP_LOW</span> <span class="o">||</span> <span class="n">tuple</span> <span class="o">&gt;</span> <span class="n">OPTIMAL_TEMP_HIGH</span><span class="o">);</span>
     <span class="n">simpleFiltered</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Temperature is out of range! "</span>
             <span class="o">+</span> <span class="s">"It is "</span> <span class="o">+</span> <span class="n">tuple</span> <span class="o">+</span> <span class="s">"\u00b0F!"</span><span class="o">));</span>
 </code></pre></div>
@@ -619,7 +606,7 @@ $('#toc').on('click', 'a', function() {
 
 <p>As with the simple filter, the stream is terminated by printing out the warnings.</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">deadbandFiltered</span> <span class="o">=</span> <span class="n">Filters</span><span class="o">.</span><span class="na">deadband</span><span class="o">(</span><span class="n">temp</span><span class="o">,</span>
-            <span class="n">identity</span><span class="o">(),</span> <span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">tuple</span> <span class="o">&gt;=</span> <span class="n">TEMP_LOW</span> <span class="o">&amp;&amp;</span> <span class="n">tuple</span> <span class="o">&lt;=</span> <span class="n">TEMP_HIGH</span><span class="o">);</span>
+            <span class="n">identity</span><span class="o">(),</span> <span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">tuple</span> <span class="o">&gt;=</span> <span class="n">OPTIMAL_TEMP_LOW</span> <span class="o">&amp;&amp;</span> <span class="n">tuple</span> <span class="o">&lt;=</span> <span class="n">OPTIMAL_TEMP_HIGH</span><span class="o">);</span>
     <span class="n">deadbandFiltered</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Temperature may not be "</span>
             <span class="o">+</span> <span class="s">"optimal! It is "</span> <span class="o">+</span> <span class="n">tuple</span> <span class="o">+</span> <span class="s">"\u00b0F!"</span><span class="o">));</span>
 </code></pre></div>
@@ -657,9 +644,9 @@ $('#toc').on('click', 'a', function() {
 Though not covered in this recipe, Ranges offer additional conveniences for creating applications with external range specifications and adaptable filters.</p>
 
 <p>In the above examples, a single Range can be used in place of the two different expressions for the same logical range:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">static</span> <span class="kt">double</span> <span class="n">TEMP_LOW</span> <span class="o">=</span> <span class="mf">77.0</span><span class="o">;</span>
-    <span class="kd">static</span> <span class="kt">double</span> <span class="n">TEMP_HIGH</span> <span class="o">=</span> <span class="mf">91.0</span><span class="o">;</span>
-    <span class="kd">static</span> <span class="n">Range</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">optimalTempRange</span> <span class="o">=</span> <span class="n">Ranges</span><span class="o">.</span><span class="na">closed</span><span class="o">(</span><span class="n">TEMP_LOW</span><span class="o">,</span> <span class="n">TEMP_HIGH</span><span class="o">);</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">static</span> <span class="kt">double</span> <span class="n">OPTIMAL_TEMP_LOW</span> <span class="o">=</span> <span class="mf">77.0</span><span class="o">;</span>
+    <span class="kd">static</span> <span class="kt">double</span> <span class="n">OPTIMAL_TEMP_HIGH</span> <span class="o">=</span> <span class="mf">91.0</span><span class="o">;</span>
+    <span class="kd">static</span> <span class="n">Range</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">optimalTempRange</span> <span class="o">=</span> <span class="n">Ranges</span><span class="o">.</span><span class="na">closed</span><span class="o">(</span><span class="n">OPTIMAL_TEMP_LOW</span><span class="o">,</span> <span class="n">OPTIMAL_TEMP_HIGH</span><span class="o">);</span>
 </code></pre></div>
 <p>Using <code>optimalTempRange</code> in the Simple filter example code:</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">simpleFiltered</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> 
@@ -672,14 +659,13 @@ Though not covered in this recipe, Ranges offer additional conveniences for crea
 <h2 id="the-final-application">The final application</h2>
 <div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kn">import</span> <span class="nn">static</span> <span class="n">quarks</span><span class="o">.</span><span class="na">function</span><span class="o">.</span><span class="na">Functions</span><span class="o">.</span><span class="na">identity</span><span class="o">;</span>
 
-    <span class="kn">import</span> <span class="nn">java.text.DecimalFormat</span><span class="o">;</span>
-    <span class="kn">import</span> <span class="nn">java.util.Random</span><span class="o">;</span>
     <span class="kn">import</span> <span class="nn">java.util.concurrent.TimeUnit</span><span class="o">;</span>
 
     <span class="kn">import</span> <span class="nn">quarks.analytics.sensors.Filters</span><span class="o">;</span>
     <span class="kn">import</span> <span class="nn">quarks.analytics.sensors.Range</span><span class="o">;</span>
     <span class="kn">import</span> <span class="nn">quarks.analytics.sensors.Ranges</span><span class="o">;</span>
     <span class="kn">import</span> <span class="nn">quarks.providers.direct.DirectProvider</span><span class="o">;</span>
+    <span class="kn">import</span> <span class="nn">quarks.samples.utils.sensor.SimulatedTemperatureSensor</span><span class="o">;</span>
     <span class="kn">import</span> <span class="nn">quarks.topology.TStream</span><span class="o">;</span>
     <span class="kn">import</span> <span class="nn">quarks.topology.Topology</span><span class="o">;</span>
 
@@ -688,12 +674,11 @@ Though not covered in this recipe, Ranges offer additional conveniences for crea
      */</span>
     <span class="kd">public</span> <span class="kd">class</span> <span class="nc">DetectValueOutOfRange</span> <span class="o">{</span>
         <span class="cm">/**
-         * Optimal temperatures inclusive (in Fahrenheit)
+         * Optimal temperature range (in Fahrenheit)
          */</span>
-        <span class="kd">static</span> <span class="kt">double</span> <span class="n">TEMP_LOW</span> <span class="o">=</span> <span class="mf">77.0</span><span class="o">;</span>
-        <span class="kd">static</span> <span class="kt">double</span> <span class="n">TEMP_HIGH</span> <span class="o">=</span> <span class="mf">91.0</span><span class="o">;</span>
-        <span class="kd">static</span> <span class="n">Range</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">optimalTempRange</span> <span class="o">=</span> <span class="n">Ranges</span><span class="o">.</span><span class="na">closed</span><span class="o">(</span><span class="n">TEMP_LOW</span><span class="o">,</span> <span class="n">TEMP_HIGH</span><span class="o">);</span>
-        <span class="kd">static</span> <span class="kt">double</span> <span class="n">currentTemp</span> <span class="o">=</span> <span class="mf">80.0</span><span class="o">;</span>
+        <span class="kd">static</span> <span class="kt">double</span> <span class="n">OPTIMAL_TEMP_LOW</span> <span class="o">=</span> <span class="mf">77.0</span><span class="o">;</span>
+        <span class="kd">static</span> <span class="kt">double</span> <span class="n">OPTIMAL_TEMP_HIGH</span> <span class="o">=</span> <span class="mf">91.0</span><span class="o">;</span>
+        <span class="kd">static</span> <span class="n">Range</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">optimalTempRange</span> <span class="o">=</span> <span class="n">Ranges</span><span class="o">.</span><span class="na">closed</span><span class="o">(</span><span class="n">OPTIMAL_TEMP_LOW</span><span class="o">,</span> <span class="n">OPTIMAL_TEMP_HIGH</span><span class="o">);</span>
 
         <span class="cm">/**
          * Polls a simulated temperature sensor to periodically obtain
@@ -708,25 +693,12 @@ Though not covered in this recipe, Ranges offer additional conveniences for crea
             <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="na">newTopology</span><span class="o">(</span><span class="s">"TemperatureSensor"</span><span class="o">);</span>
 
             <span class="c1">// Generate a stream of temperature sensor readings</span>
-            <span class="n">DecimalFormat</span> <span class="n">df</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DecimalFormat</span><span class="o">(</span><span class="s">"#.#"</span><span class="o">);</span>
-            <span class="n">Random</span> <span class="n">r</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Random</span><span class="o">();</span>
-            <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">poll</span><span class="o">(()</span> <span class="o">-&gt;</span> <span class="o">{</span>
-                <span class="c1">// Change current temp by some random amount between -1 and 1</span>
-                <span class="k">while</span> <span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="kt">double</span> <span class="n">newTemp</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">+</span> <span class="o">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span> <span class="o">*</span> <span class="n">r</span><span class="o">.</span><span class="na">nextDouble</span><span class="o">()</span> <span class="o">+</span> <span class="n">currentTemp</span><span class="o">;</span>
-                    <span class="c1">// Ensure that new temperature is within [28, 112]</span>
-                    <span class="k">if</span> <span class="o">(</span><span class="n">newTemp</span> <span class="o">&gt;=</span> <span class="mi">28</span> <span class="o">&amp;&amp;</span> <span class="n">newTemp</span> <span class="o">&lt;=</span> <span class="mi">112</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="n">currentTemp</span> <span class="o">=</span> <span class="n">Double</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">df</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="n">newTemp</span><span class="o">));</span>
-                        <span class="k">break</span><span class="o">;</span>
-                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                        <span class="k">continue</span><span class="o">;</span>
-                    <span class="o">}</span>
-                <span class="o">}</span>
-                <span class="k">return</span> <span class="n">currentTemp</span><span class="o">;</span>
-            <span class="o">},</span> <span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">);</span>
+            <span class="n">SimulatedTemperatureSensor</span> <span class="n">tempSensor</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SimulatedTemperatureSensor</span><span class="o">();</span>
+            <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">poll</span><span class="o">(</span><span class="n">tempSensor</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">);</span>
 
-            <span class="c1">// Simple filter: Perform analytics on sensor readings to detect when</span>
-            <span class="c1">// the temperature is out of the optimal range and generate warnings</span>
+            <span class="c1">// Simple filter: Perform analytics on sensor readings to</span>
+            <span class="c1">// detect when the temperature is completely out of the</span>
+            <span class="c1">// optimal range and generate warnings</span>
             <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">simpleFiltered</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span>
                     <span class="o">!</span><span class="n">optimalTempRange</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">tuple</span><span class="o">));</span>
             <span class="n">simpleFiltered</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Temperature is out of range! "</span>
@@ -779,7 +751,7 @@ Though not covered in this recipe, Ranges offer additional conveniences for crea
         <div class="col-lg-12 footer">
 
              Site last
-            generated: Apr 14, 2016 <br/>
+            generated: Apr 15, 2016 <br/>
 
         </div>
     </div>
