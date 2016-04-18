@@ -13,7 +13,7 @@ and Quarks provides a [connector](http://quarks-edge.github.io/quarks/docs/javad
 
 You can test out the service without any registration by using its Quickstart service and the Quarks sample application: [code](https://github.com/apache/incubator-quarks/blob/master/samples/connectors/src/main/java/quarks/samples/connectors/iotf/IotfQuickstart.java), [JavaDocs](http://quarks-edge.github.io/quarks/docs/javadoc/index.html?quarks/samples/connectors/iotf/IotfQuickstart.html).
 
-You can execute the class directly from Eclipse, or using the script: `quarks/java8/scripts/connectors/iotf/runiotfquickstart.sh`
+You can execute the class directly from Eclipse, or using the script: [`quarks/java8/scripts/connectors/iotf/runiotfquickstart.sh`](https://github.com/quarks-edge/quarks/blob/master/scripts/connectors/iotf/runiotfquickstart.sh)
 
 When run it produces output like this, with a URL as the third line.
 
