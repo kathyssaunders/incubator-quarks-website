@@ -44,7 +44,7 @@ In this recipe we'll just filter the direct engineTemp sensor reading stream.  I
 ```java
     static <T> void setDeadtimePeriod(Deadtime<T> deadtime, long period, TimeUnit unit) {
         System.out.println("Setting deadtime period="+period+" "+unit);
-        deadtime.setDeadtimePeriod(period, unit);
+        deadtime.setPeriod(period, unit);
     }
 ```
 
@@ -125,7 +125,7 @@ public class AdaptableDeadtimeFilterRecipe {
     
     static <T> void setDeadtimePeriod(Deadtime<T> deadtime, long period, TimeUnit unit) {
         System.out.println("Setting deadtime period="+period+" "+unit);
-        deadtime.setDeadtimePeriod(period, unit);
+        deadtime.setPeriod(period, unit);
     }
     
     static TStream<JsonObject> simulatedSetDeadtimePeriodCmds(Topology top) {
