@@ -1,7 +1,7 @@
 ---
-title: Getting started with Quarks
+title: Getting started with Apache Quarks
 ---
-## What is Quarks?
+## What is Apache Quarks?
 Quarks is an open source programming model and runtime for edge devices that enables you to analyze streaming data on your edge devices. When you analyze on the edge, you can:
 
 * Reduce the amount of data that you transmit to your analytics server
@@ -10,7 +10,7 @@ Quarks is an open source programming model and runtime for edge devices that ena
 
 For more information, see the [Quarks overview](home).
 
-### Quarks and streaming analytics
+### Apache Quarks and streaming analytics
 The fundamental building block of a Quarks application is a **stream**: a continuous sequence of tuples (messages, events, sensor readings, and so on).
 
 The Quarks API provides the ability to process or analyze each tuple as it appears on a stream, resulting in a derived stream.
@@ -22,10 +22,10 @@ Streams are terminated using sink functions that can perform local device contro
 Quarks' primary API is functional where streams are sourced, transformed, analyzed or sinked though functions, typically represented as lambda expressions, such as `reading -> reading < 50 || reading > 80` to filter temperature readings in Fahrenheit.
 
 
-### Downloading Quarks
-To access Quarks, download a release from GitHub. We recommend downloading the [latest release](https://github.com/quarks-edge/quarks/releases/latest).
+### Downloading Apache Quarks
+To use Quarks, access the source code and build it. You can read more about building Quarks [here](https://github.com/apache/incubator-quarks/blob/master/DEVELOPMENT.md).
 
-After you download and extract the Quarks package, you can set up your environment.
+After you build the Quarks package, you can set up your environment.
 
 ### Setting up your environment
 Ensure that you are running a supported environment. For more information, see the [Quarks overview](home). This guide assumes you're running Java 8.
