@@ -2,23 +2,23 @@
 title: Using an Adaptable Deadtime Filter
 ---
 
-Oftentimes, an application wants to control the frequency that continuously generated analytic results are made available to other parts of the application or "published" to other applications or an event hub.
+Oftentimes, an application wants to control the frequency that continuously generated analytic results are made available to other parts of the application or published to other applications or an event hub.
 
-For example, an application polls an engine temperature sensor every second and performs various analytics on each reading - an analytic result is generated every second.  By default, the application only wants to "publish" a (healthy) analytic result every 30 minutes.  However, under certain conditions, the desire is to publish every per-second analytic result.
+For example, an application polls an engine temperature sensor every second and performs various analytics on each reading - an analytic result is generated every second.  By default, the application only wants to publish a (healthy) analytic result every 30 minutes.  However, under certain conditions, the desire is to publish every per-second analytic result.
 
 Such a condition may be locally detected, such as detecting a sudden rise in the engine temperature or it may be as a result of receiving some external command to change the publishing frequency.
 
 Note this is a different case than simply changing the polling frequency for the sensor as doing that would disable local continuous monitoring and analysis of the engine temperature.
 
-The filtering behavior that we're looking for a "deadtime filter".  In contrast to a "deadband filter", which skips tuples based on a "deadband" value range, a deadtime filter skips tuples based on a deadtime period following the most recent tuple that the filter allows to to pass through.  E.g., if the "deadtime period" is 30 minutes, after allowing a tuple to pass, the filter skips any tuples received for the next 30 minutes.  The next tuple recieved after that is allowed to pass through, and a new deadtime period is begun.
+This case needs a *deadtime filter* and Quarks provides one for your use!  In contrast to a *deadband filter*, which skips tuples based on a deadband value range, a deadtime filter skips tuples based on a *deadtime period* following a tuple that is allowed to pass through.  E.g., if the deadtime period is 30 minutes, after allowing a tuple to pass, the filter skips any tuples received for the next 30 minutes.  The next tuple received after that is allowed to pass through, and a new deadtime period is begun.
 
-The code to implement a "deadtime filter" isn't overly complicated but it's a common analytic so Quarks provides an implementation!  See quarks.analytics.sensors.Deadtime and quarks.analytics.sensors.Filters.deadtime().
+See quarks.analytics.sensors.Filters.deadtime() and quarks.analytics.sensors.Deadtime.
 
-This recipe demonstrates how to used an adaptable deadtime filter.
+This recipe demonstrates how to use an adaptable deadtime filter.
 
 A Quarks IotProvider and IoTDevice with its command streams would be a natural way to control the application.  In this recipe we will just simulate a "set deadtime period" command stream.
 
-## Create the polled stream
+## Create a polled sensor readings stream
 
 ```java
         Topology top = ...;
@@ -59,6 +59,8 @@ Our commands are on the "TStream&lt;JsonObject&gt; cmds" stream.  Each JsonObjec
 ```
 
 ## The final application
+
+When the application is run it will initially print out temperature sensor readings every second for 15 seconds - the deadtime period is 0.  Then every 15 seconds the application will toggle the deadtime period between 5 seconds and 0 seconds, resulting in a reduction in tuples being printed during the 5 second deadtime period.
 
 ```java
 import java.util.Date;
