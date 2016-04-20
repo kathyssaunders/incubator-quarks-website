@@ -8,14 +8,14 @@ Imagine a topology that has a variety of analytics that it can perform.  Each an
 
 ## Valve
 
-A ``quarks.topology.plumbing.Valve`` is a simple construct that can be inserted in stream flows to dynamically enable or disable downstream processing.  A Valve is used as a Predicate to ``TStream.filter()``.  The valve is either OPEN, tuples are accepted, or CLOSED, tuples are rejected, essentially enabling or disabling downstream processing respectively.
+A ``quarks.topology.plumbing.Valve`` is a simple construct that can be inserted in stream flows to dynamically enable or disable downstream processing.  A valve is either open or closed.  When used as a Predicate to ``TStream.filter()``, filter passes tuples only when the valve is open. Hence downstream processing is enabled when the valve is open and effectively disabled when the valve is closed.
 
 For example, consider a a topology consisting of 3 analytic processing flows that want to be dynamically enabled or disabled:
 
 ```java
-    Valve<Readings> flow1Valve = new Valve<>();  // default is OPEN
-    Valve<Readings> flow2Valve = new Valve<>(Valve.State.CLOSED);
-    Valve<Readings> flow3Valve = new Valve<>(Valve.State.CLOSED);
+    Valve<Readings> flow1Valve = new Valve<>();  // default is open
+    Valve<Readings> flow2Valve = new Valve<>(false);  // closed
+    Valve<Readings> flow3Valve = new Valve<>(false);
 
     TStream<Readings> readings = topology.poll(mySensor, 1, TimeUnit.SECONDS);
     addAnalyticFlow1(readings.filter(flow1Valve));
@@ -29,24 +29,23 @@ Elsewhere in the application, perhaps as a result of processing some device comm
    TStream<JsonObject> cmds = simulatedValveCommands(topology);
    cmds.sink(json -> {
        String valveId = json.getPrimitive("valve").getAsString();
-       String stateName = json.getPrimitive("state").getAsString();
-       Valve.State state = Valve.State.valueOf(stateName);
+       boolean isOpen = json.getPrimitive("isOpen").getAsBoolean();
        switch(valveId) {
-         case "flow1": flow1Valve.setState(state); break;
-         case "flow2": flow2Valve.setState(state); break;
-         case "flow3": flow3Valve.setState(state); break;
+         case "flow1": flow1Valve.setOpen(isOpen); break;
+         case "flow2": flow2Valve.setOpen(isOpen); break;
+         case "flow3": flow3Valve.setOpen(isOpen); break;
        }
    });
 ```
 
 ## Loosely Coupled Quarks Applications
 
-Another approach for achieving dynamic control over what analytics flows are running is to utilize loosely coupled applications.  The following is a brief introduction to the topic.
+Another approach for achieving dynamic control over what analytics flows are running is to utilize loosely coupled applications.
 
 In this approach, the overall application is partitioned into multiple applications (topologies). In the above example there could be four applications: one that publishes the sensor Readings stream, and one for each of the analytic flows.
 
-The separate applications can connect to each other using the ``quarks.connectors.pubsub.PublishSubscribe`` connector.
+The separate applications can connect to each other's streams using the ``quarks.connectors.pubsub.PublishSubscribe`` connector.
 
-Rather than having all of the analytic topologies running all of the time, applications can be registered with an ApplicationService.  Registered applications can then be started dynamically and a started application, a "job", can be dynamically cancelled.
+Rather than having all of the analytic applications running all of the time, applications can be registered with a ``quarks.topology.services.ApplicationService``.  Registered applications can then be started and stopped dynamically.
 
-The Quarks IotProvider packages up all of these services and more in support of this style of use.
+The ``quarks.providers.iot.IotProvider`` is designed to facilitate this style of use.
