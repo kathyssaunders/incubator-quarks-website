@@ -132,6 +132,17 @@
 
 
 {
+"title": "Using an Adaptable Deadtime Filter",
+"tags": "",
+"keywords": "",
+"url": "../recipes/recipe_adaptable_deadtime_filter",
+"summary": ""
+},
+
+
+
+
+{
 "title": "Adaptable filter behavior",
 "tags": "",
 "keywords": "",
@@ -158,6 +169,17 @@
 "tags": "",
 "keywords": "",
 "url": "../recipes/recipe_different_processing_against_stream",
+"summary": ""
+},
+
+
+
+
+{
+"title": "Dynamically Enabling Analytic Flows",
+"tags": "",
+"keywords": "",
+"url": "../recipes/recipe_dynamic_analytic_control",
 "summary": ""
 },
 

@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="keywords" content=" ">
-<title>Adaptable filter behavior  | Apache Quarks Documentation</title>
+<title>Dynamically Enabling Analytic Flows  | Apache Quarks Documentation</title>
 <link rel="stylesheet" type="text/css" href="../css/syntax.css">
 <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">
 <!--<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">-->
@@ -157,7 +157,7 @@
 <script>
 function SendLinkByMail(href) {
 var subject= "Apache Quarks Documentation feedback";
-var body = "I have some feedback about the Adaptable filter behavior page: ";
+var body = "I have some feedback about the Dynamically Enabling Analytic Flows page: ";
 body += window.location.href;
 body += "";
 var uri = "mailto:?subject=";
@@ -184,7 +184,7 @@ window.location.href = uri;
                             searchInput: document.getElementById('search-input'),
                             resultsContainer: document.getElementById('results-container'),
                             dataSource: '../search.json',
-                            searchResultTemplate: '<li><a href="{url}" title="Adaptable filter behavior">{title}</a></li>',
+                            searchResultTemplate: '<li><a href="{url}" title="Dynamically Enabling Analytic Flows">{title}</a></li>',
                         noResultsText: 'No results found.',
                                 limit: 10,
                                 fuzzy: true,
@@ -517,7 +517,7 @@ $('#toc').on('click', 'a', function() {
             <div class="col-md-9">
                 
                 <div class="post-header">
-   <h1 class="post-title-main">Adaptable filter behavior</h1>
+   <h1 class="post-title-main">Dynamically Enabling Analytic Flows</h1>
 </div>
 
 <div class="post-content">
@@ -549,118 +549,50 @@ $('#toc').on('click', 'a', function() {
 
     
 
-    <a target="_blank" href="https://github.com/apache/incubator-quarks-website/blob/master/site/recipes/recipe_adaptable_filter_range.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
+    <a target="_blank" href="https://github.com/apache/incubator-quarks-website/blob/master/site/recipes/recipe_dynamic_analytic_control.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
     
-  <p>The <a href="recipe_value_out_of_range.html">Detecting a sensor value out of range</a> recipe introduced the basics of filtering as well as the use of a <a href="http://quarks-edge.github.io/quarks/docs/javadoc/quarks/analytics/sensors/Range.html">Range</a>.</p>
+  <p>This recipe addresses the question: How can I dynamically enable or disable entire portions of my application&#39;s analytics?</p>
 
-<p>Oftentimes, a user wants a filter&#39;s behavior to be adaptable rather than static.  A filter&#39;s range can be made changeable via commands from some external source or just changed as a result of some other local analytics.</p>
+<p>Imagine a topology that has a variety of analytics that it can perform.  Each analytic flow comes with certain costs in terms of demands on the CPU or memory and implications for power consumption.  Hence an application may wish to dynamically control whether or not an analytic flow is currently enabled.</p>
 
-<p>A Quarks IotProvider and IoTDevice with its command streams would be a natural way to control the application.  In this recipe we will just simulate a &quot;set optimal temp range&quot; command stream.</p>
+<h2 id="valve">Valve</h2>
 
-<p>The string form of a <code>Range</code> is natural, consise, and easy to use.  As such it&#39;s a convenient form to use as external range format. The range string can easily be converted back into a <code>Range</code>.</p>
+<p>A <code>quarks.topology.plumbing.Valve</code> is a simple construct that can be inserted in stream flows to dynamically enable or disable downstream processing.  A valve is either open or closed.  When used as a Predicate to <code>TStream.filter()</code>, filter passes tuples only when the valve is open. Hence downstream processing is enabled when the valve is open and effectively disabled when the valve is closed.</p>
 
-<p>We&#39;re going to assume familiarity with that earlier recipe and those concepts and focus on just the &quot;adaptable range specification&quot; aspect of this recipe.</p>
+<p>For example, consider a a topology consisting of 3 analytic processing flows that want to be dynamically enabled or disabled:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="n">Valve</span><span class="o">&lt;</span><span class="n">Readings</span><span class="o">&gt;</span> <span class="n">flow1Valve</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Valve</span><span class="o">&lt;&gt;();</span>  <span class="c1">// default is open</span>
+    <span class="n">Valve</span><span class="o">&lt;</span><span class="n">Readings</span><span class="o">&gt;</span> <span class="n">flow2Valve</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Valve</span><span class="o">&lt;&gt;(</span><span class="kc">false</span><span class="o">);</span>  <span class="c1">// closed</span>
+    <span class="n">Valve</span><span class="o">&lt;</span><span class="n">Readings</span><span class="o">&gt;</span> <span class="n">flow3Valve</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Valve</span><span class="o">&lt;&gt;(</span><span class="kc">false</span><span class="o">);</span>
 
-<h2 id="define-the-range">Define the range</h2>
-
-<p>A <code>java.util.concurrent.atomic.AtomicReference</code> is used to provide the necessary thread synchronization.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">static</span> <span class="n">Range</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">DEFAULT_TEMP_RANGE</span> <span class="o">=</span> <span class="n">Ranges</span><span class="o">.</span><span class="na">valueOfDouble</span><span class="o">(</span><span class="s">"[77.0..91.0]"</span><span class="o">);</span>
-    <span class="kd">static</span> <span class="n">AtomicReference</span><span class="o">&lt;</span><span class="n">Range</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;&gt;</span> <span class="n">optimalTempRangeRef</span> <span class="o">=</span>
-            <span class="k">new</span> <span class="n">AtomicReference</span><span class="o">&lt;&gt;(</span><span class="n">DEFAULT_TEMP_RANGE</span><span class="o">);</span>
+    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Readings</span><span class="o">&gt;</span> <span class="n">readings</span> <span class="o">=</span> <span class="n">topology</span><span class="o">.</span><span class="na">poll</span><span class="o">(</span><span class="n">mySensor</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">);</span>
+    <span class="n">addAnalyticFlow1</span><span class="o">(</span><span class="n">readings</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">flow1Valve</span><span class="o">));</span>
+    <span class="n">addAnalyticFlow2</span><span class="o">(</span><span class="n">readings</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">flow2Valve</span><span class="o">));</span>
+    <span class="n">addAnalyticFlow3</span><span class="o">(</span><span class="n">readings</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">flow3Valve</span><span class="o">));</span>
 </code></pre></div>
-<h2 id="define-a-method-to-change-the-range">Define a method to change the range</h2>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">static</span> <span class="kt">void</span> <span class="nf">setOptimalTempRange</span><span class="p">(</span><span class="n">Range</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">range</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Using optimal temperature range: "</span> <span class="o">+</span> <span class="n">range</span><span class="o">);</span>
-        <span class="n">optimalTempRangeRef</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">range</span><span class="o">);</span>
-    <span class="o">}</span>
+<p>Elsewhere in the application, perhaps as a result of processing some device command from an external service such as when using an IotProvider or IotDevice, valves may be opened and closed dynamically to achieve the desired effects.  For example:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java">   <span class="n">TStream</span><span class="o">&lt;</span><span class="n">JsonObject</span><span class="o">&gt;</span> <span class="n">cmds</span> <span class="o">=</span> <span class="n">simulatedValveCommands</span><span class="o">(</span><span class="n">topology</span><span class="o">);</span>
+   <span class="n">cmds</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">json</span> <span class="o">-&gt;</span> <span class="o">{</span>
+       <span class="n">String</span> <span class="n">valveId</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="na">getPrimitive</span><span class="o">(</span><span class="s">"valve"</span><span class="o">).</span><span class="na">getAsString</span><span class="o">();</span>
+       <span class="kt">boolean</span> <span class="n">isOpen</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="na">getPrimitive</span><span class="o">(</span><span class="s">"isOpen"</span><span class="o">).</span><span class="na">getAsBoolean</span><span class="o">();</span>
+       <span class="k">switch</span><span class="o">(</span><span class="n">valveId</span><span class="o">)</span> <span class="o">{</span>
+         <span class="k">case</span> <span class="s">"flow1"</span><span class="o">:</span> <span class="n">flow1Valve</span><span class="o">.</span><span class="na">setOpen</span><span class="o">(</span><span class="n">isOpen</span><span class="o">);</span> <span class="k">break</span><span class="o">;</span>
+         <span class="k">case</span> <span class="s">"flow2"</span><span class="o">:</span> <span class="n">flow2Valve</span><span class="o">.</span><span class="na">setOpen</span><span class="o">(</span><span class="n">isOpen</span><span class="o">);</span> <span class="k">break</span><span class="o">;</span>
+         <span class="k">case</span> <span class="s">"flow3"</span><span class="o">:</span> <span class="n">flow3Valve</span><span class="o">.</span><span class="na">setOpen</span><span class="o">(</span><span class="n">isOpen</span><span class="o">);</span> <span class="k">break</span><span class="o">;</span>
+       <span class="o">}</span>
+   <span class="o">});</span>
 </code></pre></div>
-<p>The filter just uses <code>optimalTempRangeRef.get()</code> to use the current range setting.</p>
+<h2 id="loosely-coupled-quarks-applications">Loosely Coupled Quarks Applications</h2>
 
-<h2 id="simulate-a-command-stream">Simulate a command stream</h2>
+<p>Another approach for achieving dynamic control over what analytics flows are running is to utilize loosely coupled applications.</p>
 
-<p>A <code>TStream&lt;Range&lt;Double&gt;&gt; setRangeCmds</code> stream is created and a new range specification tuple is generated every 10 seconds.  A <code>sink</code> on the stream calls <code>setOptimalTempRange()</code> to change the range and hence the filter&#39;s bahavior.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="c1">// Simulate a command stream to change the optimal range.</span>
-    <span class="c1">// Such a stream might be from an IotDevice command.</span>
-    <span class="n">String</span><span class="o">[]</span> <span class="n">ranges</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">[]</span> <span class="o">{</span>
-        <span class="s">"[70.0..120.0]"</span><span class="o">,</span> <span class="s">"[80.0..130.0]"</span><span class="o">,</span> <span class="s">"[90.0..140.0]"</span><span class="o">,</span>
-    <span class="o">};</span>
-    <span class="n">AtomicInteger</span> <span class="n">count</span> <span class="o">=</span> <span class="k">new</span> <span class="n">AtomicInteger</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
-    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Range</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;&gt;</span> <span class="n">setRangeCmds</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">poll</span><span class="o">(()</span> 
-            <span class="o">-&gt;</span> <span class="n">Ranges</span><span class="o">.</span><span class="na">valueOfDouble</span><span class="o">(</span><span class="n">ranges</span><span class="o">[</span><span class="n">count</span><span class="o">.</span><span class="na">incrementAndGet</span><span class="o">()</span> <span class="o">%</span> <span class="n">ranges</span><span class="o">.</span><span class="na">length</span><span class="o">]),</span>
-            <span class="mi">10</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">);</span>
+<p>In this approach, the overall application is partitioned into multiple applications (topologies). In the above example there could be four applications: one that publishes the sensor Readings stream, and one for each of the analytic flows.</p>
 
-    <span class="n">setRangeCmds</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">setOptimalTempRange</span><span class="o">(</span><span class="n">tuple</span><span class="o">));</span>
-</code></pre></div>
-<h2 id="the-final-application">The final application</h2>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.util.concurrent.TimeUnit</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.concurrent.atomic.AtomicInteger</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.concurrent.atomic.AtomicReference</span><span class="o">;</span>
+<p>The separate applications can connect to each other&#39;s streams using the <code>quarks.connectors.pubsub.PublishSubscribe</code> connector.</p>
 
-<span class="kn">import</span> <span class="nn">quarks.analytics.sensors.Range</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">quarks.analytics.sensors.Ranges</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">quarks.providers.direct.DirectProvider</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">quarks.samples.utils.sensor.SimulatedTemperatureSensor</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">quarks.topology.TStream</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">quarks.topology.Topology</span><span class="o">;</span>
+<p>Rather than having all of the analytic applications running all of the time, applications can be registered with a <code>quarks.topology.services.ApplicationService</code>.  Registered applications can then be started and stopped dynamically.</p>
 
-<span class="cm">/**
- * Detect a sensor value out of expected range.
- * Simulate an adaptable range changed by external commands.
- */</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AdaptableFilterRange</span> <span class="o">{</span>
-    <span class="cm">/**
-     * Optimal temperatures (in Fahrenheit)
-     */</span>
-    <span class="kd">static</span> <span class="n">Range</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">DEFAULT_TEMP_RANGE</span> <span class="o">=</span> <span class="n">Ranges</span><span class="o">.</span><span class="na">valueOfDouble</span><span class="o">(</span><span class="s">"[77.0..91.0]"</span><span class="o">);</span>
-    <span class="kd">static</span> <span class="n">AtomicReference</span><span class="o">&lt;</span><span class="n">Range</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;&gt;</span> <span class="n">optimalTempRangeRef</span> <span class="o">=</span>
-            <span class="k">new</span> <span class="n">AtomicReference</span><span class="o">&lt;&gt;(</span><span class="n">DEFAULT_TEMP_RANGE</span><span class="o">);</span>
+<p>The <code>quarks.providers.iot.IotProvider</code> is designed to facilitate this style of use.</p>
 
-    <span class="kd">static</span> <span class="kt">void</span> <span class="n">setOptimalTempRange</span><span class="o">(</span><span class="n">Range</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">range</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Using optimal temperature range: "</span> <span class="o">+</span> <span class="n">range</span><span class="o">);</span>
-        <span class="n">optimalTempRangeRef</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">range</span><span class="o">);</span>
-    <span class="o">}</span>
-
-    <span class="cm">/**
-     * Polls a simulated temperature sensor to periodically obtain
-     * temperature readings (in Fahrenheit). Use a simple filter
-     * to determine when the temperature is out of the optimal range.
-     */</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-
-        <span class="n">DirectProvider</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DirectProvider</span><span class="o">();</span>
-
-        <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="na">newTopology</span><span class="o">(</span><span class="s">"TemperatureSensor"</span><span class="o">);</span>
-
-        <span class="c1">// Generate a stream of temperature sensor readings</span>
-        <span class="n">SimulatedTemperatureSensor</span> <span class="n">tempSensor</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SimulatedTemperatureSensor</span><span class="o">();</span>
-        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">poll</span><span class="o">(</span><span class="n">tempSensor</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">);</span>
-
-        <span class="c1">// Simple filter: Perform analytics on sensor readings to detect when</span>
-        <span class="c1">// the temperature is out of the optimal range and generate warnings</span>
-        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">simpleFiltered</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span>
-                <span class="o">!</span><span class="n">optimalTempRangeRef</span><span class="o">.</span><span class="na">get</span><span class="o">().</span><span class="na">contains</span><span class="o">(</span><span class="n">tuple</span><span class="o">));</span>
-        <span class="n">simpleFiltered</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Temperature is out of range! "</span>
-                <span class="o">+</span> <span class="s">"It is "</span> <span class="o">+</span> <span class="n">tuple</span> <span class="o">+</span> <span class="s">"\u00b0F!"</span><span class="o">));</span>
-
-        <span class="c1">// See what the temperatures look like</span>
-        <span class="n">temp</span><span class="o">.</span><span class="na">print</span><span class="o">();</span>
-
-        <span class="c1">// Simulate a command stream to change the optimal range.</span>
-        <span class="c1">// Such a stream might be from an IotDevice command.</span>
-        <span class="n">String</span><span class="o">[]</span> <span class="n">ranges</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">[]</span> <span class="o">{</span>
-            <span class="s">"[70.0..120.0]"</span><span class="o">,</span> <span class="s">"[80.0..130.0]"</span><span class="o">,</span> <span class="s">"[90.0..140.0]"</span><span class="o">,</span>
-        <span class="o">};</span>
-        <span class="n">AtomicInteger</span> <span class="n">count</span> <span class="o">=</span> <span class="k">new</span> <span class="n">AtomicInteger</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
-        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Range</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;&gt;</span> <span class="n">setRangeCmds</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">poll</span><span class="o">(</span>
-                <span class="o">()</span> <span class="o">-&gt;</span> <span class="n">Ranges</span><span class="o">.</span><span class="na">valueOfDouble</span><span class="o">(</span><span class="n">ranges</span><span class="o">[</span><span class="n">count</span><span class="o">.</span><span class="na">incrementAndGet</span><span class="o">()</span> <span class="o">%</span> <span class="n">ranges</span><span class="o">.</span><span class="na">length</span><span class="o">]),</span>
-                <span class="mi">10</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">);</span>
-
-        <span class="n">setRangeCmds</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">setOptimalTempRange</span><span class="o">(</span><span class="n">tuple</span><span class="o">));</span>
-
-        <span class="n">dp</span><span class="o">.</span><span class="na">submit</span><span class="o">(</span><span class="n">top</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div>
 
 <div class="tags">
     

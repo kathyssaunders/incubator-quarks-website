@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="keywords" content=" ">
-<title>Adaptable filter behavior  | Apache Quarks Documentation</title>
+<title>Using an Adaptable Deadtime Filter  | Apache Quarks Documentation</title>
 <link rel="stylesheet" type="text/css" href="../css/syntax.css">
 <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">
 <!--<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">-->
@@ -157,7 +157,7 @@
 <script>
 function SendLinkByMail(href) {
 var subject= "Apache Quarks Documentation feedback";
-var body = "I have some feedback about the Adaptable filter behavior page: ";
+var body = "I have some feedback about the Using an Adaptable Deadtime Filter page: ";
 body += window.location.href;
 body += "";
 var uri = "mailto:?subject=";
@@ -184,7 +184,7 @@ window.location.href = uri;
                             searchInput: document.getElementById('search-input'),
                             resultsContainer: document.getElementById('results-container'),
                             dataSource: '../search.json',
-                            searchResultTemplate: '<li><a href="{url}" title="Adaptable filter behavior">{title}</a></li>',
+                            searchResultTemplate: '<li><a href="{url}" title="Using an Adaptable Deadtime Filter">{title}</a></li>',
                         noResultsText: 'No results found.',
                                 limit: 10,
                                 fuzzy: true,
@@ -517,7 +517,7 @@ $('#toc').on('click', 'a', function() {
             <div class="col-md-9">
                 
                 <div class="post-header">
-   <h1 class="post-title-main">Adaptable filter behavior</h1>
+   <h1 class="post-title-main">Using an Adaptable Deadtime Filter</h1>
 </div>
 
 <div class="post-content">
@@ -549,117 +549,144 @@ $('#toc').on('click', 'a', function() {
 
     
 
-    <a target="_blank" href="https://github.com/apache/incubator-quarks-website/blob/master/site/recipes/recipe_adaptable_filter_range.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
+    <a target="_blank" href="https://github.com/apache/incubator-quarks-website/blob/master/site/recipes/recipe_adaptable_deadtime_filter.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
     
-  <p>The <a href="recipe_value_out_of_range.html">Detecting a sensor value out of range</a> recipe introduced the basics of filtering as well as the use of a <a href="http://quarks-edge.github.io/quarks/docs/javadoc/quarks/analytics/sensors/Range.html">Range</a>.</p>
+  <p>Oftentimes, an application wants to control the frequency that continuously generated analytic results are made available to other parts of the application or published to other applications or an event hub.</p>
 
-<p>Oftentimes, a user wants a filter&#39;s behavior to be adaptable rather than static.  A filter&#39;s range can be made changeable via commands from some external source or just changed as a result of some other local analytics.</p>
+<p>For example, an application polls an engine temperature sensor every second and performs various analytics on each reading - an analytic result is generated every second.  By default, the application only wants to publish a (healthy) analytic result every 30 minutes.  However, under certain conditions, the desire is to publish every per-second analytic result.</p>
 
-<p>A Quarks IotProvider and IoTDevice with its command streams would be a natural way to control the application.  In this recipe we will just simulate a &quot;set optimal temp range&quot; command stream.</p>
+<p>Such a condition may be locally detected, such as detecting a sudden rise in the engine temperature or it may be as a result of receiving some external command to change the publishing frequency.</p>
 
-<p>The string form of a <code>Range</code> is natural, consise, and easy to use.  As such it&#39;s a convenient form to use as external range format. The range string can easily be converted back into a <code>Range</code>.</p>
+<p>Note this is a different case than simply changing the polling frequency for the sensor as doing that would disable local continuous monitoring and analysis of the engine temperature.</p>
 
-<p>We&#39;re going to assume familiarity with that earlier recipe and those concepts and focus on just the &quot;adaptable range specification&quot; aspect of this recipe.</p>
+<p>This case needs a <em>deadtime filter</em> and Quarks provides one for your use!  In contrast to a <em>deadband filter</em>, which skips tuples based on a deadband value range, a deadtime filter skips tuples based on a <em>deadtime period</em> following a tuple that is allowed to pass through.  E.g., if the deadtime period is 30 minutes, after allowing a tuple to pass, the filter skips any tuples received for the next 30 minutes.  The next tuple received after that is allowed to pass through, and a new deadtime period is begun.</p>
 
-<h2 id="define-the-range">Define the range</h2>
+<p>See quarks.analytics.sensors.Filters.deadtime() and quarks.analytics.sensors.Deadtime.</p>
 
-<p>A <code>java.util.concurrent.atomic.AtomicReference</code> is used to provide the necessary thread synchronization.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">static</span> <span class="n">Range</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">DEFAULT_TEMP_RANGE</span> <span class="o">=</span> <span class="n">Ranges</span><span class="o">.</span><span class="na">valueOfDouble</span><span class="o">(</span><span class="s">"[77.0..91.0]"</span><span class="o">);</span>
-    <span class="kd">static</span> <span class="n">AtomicReference</span><span class="o">&lt;</span><span class="n">Range</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;&gt;</span> <span class="n">optimalTempRangeRef</span> <span class="o">=</span>
-            <span class="k">new</span> <span class="n">AtomicReference</span><span class="o">&lt;&gt;(</span><span class="n">DEFAULT_TEMP_RANGE</span><span class="o">);</span>
+<p>This recipe demonstrates how to use an adaptable deadtime filter.</p>
+
+<p>A Quarks IotProvider and IoTDevice with its command streams would be a natural way to control the application.  In this recipe we will just simulate a &quot;set deadtime period&quot; command stream.</p>
+
+<h2 id="create-a-polled-sensor-readings-stream">Create a polled sensor readings stream</h2>
+<div class="highlight"><pre><code class="language-java" data-lang="java">        <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="o">...;</span>
+        <span class="n">SimulatedTemperatureSensor</span> <span class="n">tempSensor</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SimulatedTemperatureSensor</span><span class="o">();</span>
+        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">engineTemp</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">poll</span><span class="o">(</span><span class="n">tempSensor</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">)</span>
+                                      <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"engineTemp"</span><span class="o">);</span>
 </code></pre></div>
-<h2 id="define-a-method-to-change-the-range">Define a method to change the range</h2>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">static</span> <span class="kt">void</span> <span class="nf">setOptimalTempRange</span><span class="p">(</span><span class="n">Range</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">range</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Using optimal temperature range: "</span> <span class="o">+</span> <span class="n">range</span><span class="o">);</span>
-        <span class="n">optimalTempRangeRef</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">range</span><span class="o">);</span>
+<p>It&#39;s also a good practice to add tags to streams to improve the usability of the development mode Quarks console.</p>
+
+<h2 id="create-a-deadtime-filtered-stream-initially-no-deadtime">Create a deadtime filtered stream - initially no deadtime</h2>
+
+<p>In this recipe we&#39;ll just filter the direct engineTemp sensor reading stream.  In practice this filtering would be performed after some analytics stages and used as the input to <code>IotDevice.event()</code> or some other connector publish operation.</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java">        <span class="n">Deadtime</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">deadtime</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Deadtime</span><span class="o">&lt;&gt;();</span>
+        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">deadtimeFilteredEngineTemp</span> <span class="o">=</span> <span class="n">engineTemp</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">deadtime</span><span class="o">)</span>
+                                      <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"deadtimeFilteredEngineTemp"</span><span class="o">);</span>
+</code></pre></div>
+<h2 id="define-a-quot-set-deadtime-period-quot-method">Define a &quot;set deadtime period&quot; method</h2>
+<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">static</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="kt">void</span> <span class="n">setDeadtimePeriod</span><span class="o">(</span><span class="n">Deadtime</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">deadtime</span><span class="o">,</span> <span class="kt">long</span> <span class="n">period</span><span class="o">,</span> <span class="n">TimeUnit</span> <span class="n">unit</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Setting deadtime period="</span><span class="o">+</span><span class="n">period</span><span class="o">+</span><span class="s">" "</span><span class="o">+</span><span class="n">unit</span><span class="o">);</span>
+        <span class="n">deadtime</span><span class="o">.</span><span class="na">setPeriod</span><span class="o">(</span><span class="n">period</span><span class="o">,</span> <span class="n">unit</span><span class="o">);</span>
     <span class="o">}</span>
 </code></pre></div>
-<p>The filter just uses <code>optimalTempRangeRef.get()</code> to use the current range setting.</p>
+<h2 id="process-the-quot-set-deadtime-period-quot-command-stream">Process the &quot;set deadtime period&quot; command stream</h2>
 
-<h2 id="simulate-a-command-stream">Simulate a command stream</h2>
-
-<p>A <code>TStream&lt;Range&lt;Double&gt;&gt; setRangeCmds</code> stream is created and a new range specification tuple is generated every 10 seconds.  A <code>sink</code> on the stream calls <code>setOptimalTempRange()</code> to change the range and hence the filter&#39;s bahavior.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="c1">// Simulate a command stream to change the optimal range.</span>
-    <span class="c1">// Such a stream might be from an IotDevice command.</span>
-    <span class="n">String</span><span class="o">[]</span> <span class="n">ranges</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">[]</span> <span class="o">{</span>
-        <span class="s">"[70.0..120.0]"</span><span class="o">,</span> <span class="s">"[80.0..130.0]"</span><span class="o">,</span> <span class="s">"[90.0..140.0]"</span><span class="o">,</span>
-    <span class="o">};</span>
-    <span class="n">AtomicInteger</span> <span class="n">count</span> <span class="o">=</span> <span class="k">new</span> <span class="n">AtomicInteger</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
-    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Range</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;&gt;</span> <span class="n">setRangeCmds</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">poll</span><span class="o">(()</span> 
-            <span class="o">-&gt;</span> <span class="n">Ranges</span><span class="o">.</span><span class="na">valueOfDouble</span><span class="o">(</span><span class="n">ranges</span><span class="o">[</span><span class="n">count</span><span class="o">.</span><span class="na">incrementAndGet</span><span class="o">()</span> <span class="o">%</span> <span class="n">ranges</span><span class="o">.</span><span class="na">length</span><span class="o">]),</span>
-            <span class="mi">10</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">);</span>
-
-    <span class="n">setRangeCmds</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">setOptimalTempRange</span><span class="o">(</span><span class="n">tuple</span><span class="o">));</span>
+<p>Our commands are on the &quot;TStream&lt;JsonObject&gt; cmds&quot; stream.  Each JsonObject tuple is a command with the properties &quot;period&quot; and &quot;unit&quot;.</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java">        <span class="n">cmds</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">json</span> <span class="o">-&gt;</span> <span class="n">setDeadtimePeriod</span><span class="o">(</span><span class="n">deadtimeFilteredEngineTemp</span><span class="o">,</span>
+            <span class="n">json</span><span class="o">.</span><span class="na">getAsJsonPrimitive</span><span class="o">(</span><span class="s">"period"</span><span class="o">).</span><span class="na">getAsLong</span><span class="o">(),</span>
+            <span class="n">TimeUnit</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">json</span><span class="o">.</span><span class="na">getAsJsonPrimitive</span><span class="o">(</span><span class="s">"unit"</span><span class="o">).</span><span class="na">getAsString</span><span class="o">())));</span>
 </code></pre></div>
 <h2 id="the-final-application">The final application</h2>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.util.concurrent.TimeUnit</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.concurrent.atomic.AtomicInteger</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.concurrent.atomic.AtomicReference</span><span class="o">;</span>
 
-<span class="kn">import</span> <span class="nn">quarks.analytics.sensors.Range</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">quarks.analytics.sensors.Ranges</span><span class="o">;</span>
+<p>When the application is run it will initially print out temperature sensor readings every second for 15 seconds - the deadtime period is 0.  Then every 15 seconds the application will toggle the deadtime period between 5 seconds and 0 seconds, resulting in a reduction in tuples being printed during the 5 second deadtime period.</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.util.Date</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.concurrent.TimeUnit</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.concurrent.atomic.AtomicInteger</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">com.google.gson.JsonObject</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">quarks.analytics.sensors.Deadtime</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">quarks.console.server.HttpServer</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">quarks.providers.development.DevelopmentProvider</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">quarks.providers.direct.DirectProvider</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">quarks.samples.utils.sensor.SimulatedTemperatureSensor</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">quarks.topology.TStream</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">quarks.topology.Topology</span><span class="o">;</span>
 
 <span class="cm">/**
- * Detect a sensor value out of expected range.
- * Simulate an adaptable range changed by external commands.
+ * A recipe for using an Adaptable Deadtime Filter.
  */</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AdaptableFilterRange</span> <span class="o">{</span>
-    <span class="cm">/**
-     * Optimal temperatures (in Fahrenheit)
-     */</span>
-    <span class="kd">static</span> <span class="n">Range</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">DEFAULT_TEMP_RANGE</span> <span class="o">=</span> <span class="n">Ranges</span><span class="o">.</span><span class="na">valueOfDouble</span><span class="o">(</span><span class="s">"[77.0..91.0]"</span><span class="o">);</span>
-    <span class="kd">static</span> <span class="n">AtomicReference</span><span class="o">&lt;</span><span class="n">Range</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;&gt;</span> <span class="n">optimalTempRangeRef</span> <span class="o">=</span>
-            <span class="k">new</span> <span class="n">AtomicReference</span><span class="o">&lt;&gt;(</span><span class="n">DEFAULT_TEMP_RANGE</span><span class="o">);</span>
-
-    <span class="kd">static</span> <span class="kt">void</span> <span class="n">setOptimalTempRange</span><span class="o">(</span><span class="n">Range</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">range</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Using optimal temperature range: "</span> <span class="o">+</span> <span class="n">range</span><span class="o">);</span>
-        <span class="n">optimalTempRangeRef</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">range</span><span class="o">);</span>
-    <span class="o">}</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AdaptableDeadtimeFilterRecipe</span> <span class="o">{</span>
 
     <span class="cm">/**
-     * Polls a simulated temperature sensor to periodically obtain
-     * temperature readings (in Fahrenheit). Use a simple filter
-     * to determine when the temperature is out of the optimal range.
+     * Poll a temperature sensor to periodically obtain temperature readings.
+     * Create a "deadtime" filtered stream: after passing a tuple,
+     * any tuples received during the "deadtime" are filtered out.
+     * Then the next tuple is passed through and a new deadtime period begun.
+     * 
+     * Respond to a simulated command stream to change the deadtime window
+     * duration.
      */</span>
     <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
 
-        <span class="n">DirectProvider</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DirectProvider</span><span class="o">();</span>
+        <span class="n">DirectProvider</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DevelopmentProvider</span><span class="o">();</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"development console url: "</span>
+                <span class="o">+</span> <span class="n">dp</span><span class="o">.</span><span class="na">getServices</span><span class="o">().</span><span class="na">getService</span><span class="o">(</span><span class="n">HttpServer</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">getConsoleUrl</span><span class="o">());</span>
 
         <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="na">newTopology</span><span class="o">(</span><span class="s">"TemperatureSensor"</span><span class="o">);</span>
 
-        <span class="c1">// Generate a stream of temperature sensor readings</span>
+        <span class="c1">// Generate a polled temperature sensor stream and set it alias</span>
         <span class="n">SimulatedTemperatureSensor</span> <span class="n">tempSensor</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SimulatedTemperatureSensor</span><span class="o">();</span>
-        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">poll</span><span class="o">(</span><span class="n">tempSensor</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">);</span>
+        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">engineTemp</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">poll</span><span class="o">(</span><span class="n">tempSensor</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">)</span>
+                                      <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"engineTemp"</span><span class="o">);</span>
 
-        <span class="c1">// Simple filter: Perform analytics on sensor readings to detect when</span>
-        <span class="c1">// the temperature is out of the optimal range and generate warnings</span>
-        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">simpleFiltered</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span>
-                <span class="o">!</span><span class="n">optimalTempRangeRef</span><span class="o">.</span><span class="na">get</span><span class="o">().</span><span class="na">contains</span><span class="o">(</span><span class="n">tuple</span><span class="o">));</span>
-        <span class="n">simpleFiltered</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Temperature is out of range! "</span>
-                <span class="o">+</span> <span class="s">"It is "</span> <span class="o">+</span> <span class="n">tuple</span> <span class="o">+</span> <span class="s">"\u00b0F!"</span><span class="o">));</span>
+        <span class="c1">// Filter out tuples during the specified "deadtime window"</span>
+        <span class="c1">// Initially no filtering.</span>
+        <span class="n">Deadtime</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">deadtime</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Deadtime</span><span class="o">&lt;&gt;();</span>
+        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">deadtimeFilteredEngineTemp</span> <span class="o">=</span>
+                <span class="n">engineTemp</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">deadtime</span><span class="o">)</span>
+                    <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"deadtimeFilteredEngineTemp"</span><span class="o">);</span>
 
-        <span class="c1">// See what the temperatures look like</span>
-        <span class="n">temp</span><span class="o">.</span><span class="na">print</span><span class="o">();</span>
+        <span class="c1">// Report the time each temperature reading arrives and the value</span>
+        <span class="n">deadtimeFilteredEngineTemp</span><span class="o">.</span><span class="na">peek</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="k">new</span> <span class="n">Date</span><span class="o">()</span> <span class="o">+</span> <span class="s">" temp="</span> <span class="o">+</span> <span class="n">tuple</span><span class="o">));</span>
 
-        <span class="c1">// Simulate a command stream to change the optimal range.</span>
-        <span class="c1">// Such a stream might be from an IotDevice command.</span>
-        <span class="n">String</span><span class="o">[]</span> <span class="n">ranges</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">[]</span> <span class="o">{</span>
-            <span class="s">"[70.0..120.0]"</span><span class="o">,</span> <span class="s">"[80.0..130.0]"</span><span class="o">,</span> <span class="s">"[90.0..140.0]"</span><span class="o">,</span>
-        <span class="o">};</span>
-        <span class="n">AtomicInteger</span> <span class="n">count</span> <span class="o">=</span> <span class="k">new</span> <span class="n">AtomicInteger</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
-        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Range</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;&gt;</span> <span class="n">setRangeCmds</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">poll</span><span class="o">(</span>
-                <span class="o">()</span> <span class="o">-&gt;</span> <span class="n">Ranges</span><span class="o">.</span><span class="na">valueOfDouble</span><span class="o">(</span><span class="n">ranges</span><span class="o">[</span><span class="n">count</span><span class="o">.</span><span class="na">incrementAndGet</span><span class="o">()</span> <span class="o">%</span> <span class="n">ranges</span><span class="o">.</span><span class="na">length</span><span class="o">]),</span>
-                <span class="mi">10</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">);</span>
+        <span class="c1">// Generate a simulated "set deadtime period" command stream</span>
+        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">JsonObject</span><span class="o">&gt;</span> <span class="n">cmds</span> <span class="o">=</span> <span class="n">simulatedSetDeadtimePeriodCmds</span><span class="o">(</span><span class="n">top</span><span class="o">);</span>
 
-        <span class="n">setRangeCmds</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">setOptimalTempRange</span><span class="o">(</span><span class="n">tuple</span><span class="o">));</span>
+        <span class="c1">// Process the commands to change the deadtime window period</span>
+        <span class="n">cmds</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">json</span> <span class="o">-&gt;</span> <span class="n">setDeadtimePeriod</span><span class="o">(</span><span class="n">deadtime</span><span class="o">,</span>
+            <span class="n">json</span><span class="o">.</span><span class="na">getAsJsonPrimitive</span><span class="o">(</span><span class="s">"period"</span><span class="o">).</span><span class="na">getAsLong</span><span class="o">(),</span>
+            <span class="n">TimeUnit</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">json</span><span class="o">.</span><span class="na">getAsJsonPrimitive</span><span class="o">(</span><span class="s">"unit"</span><span class="o">).</span><span class="na">getAsString</span><span class="o">())));</span>
 
         <span class="n">dp</span><span class="o">.</span><span class="na">submit</span><span class="o">(</span><span class="n">top</span><span class="o">);</span>
     <span class="o">}</span>
+
+    <span class="kd">static</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="kt">void</span> <span class="n">setDeadtimePeriod</span><span class="o">(</span><span class="n">Deadtime</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">deadtime</span><span class="o">,</span> <span class="kt">long</span> <span class="n">period</span><span class="o">,</span> <span class="n">TimeUnit</span> <span class="n">unit</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Setting deadtime period="</span><span class="o">+</span><span class="n">period</span><span class="o">+</span><span class="s">" "</span><span class="o">+</span><span class="n">unit</span><span class="o">);</span>
+        <span class="n">deadtime</span><span class="o">.</span><span class="na">setPeriod</span><span class="o">(</span><span class="n">period</span><span class="o">,</span> <span class="n">unit</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">static</span> <span class="n">TStream</span><span class="o">&lt;</span><span class="n">JsonObject</span><span class="o">&gt;</span> <span class="n">simulatedSetDeadtimePeriodCmds</span><span class="o">(</span><span class="n">Topology</span> <span class="n">top</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">AtomicInteger</span> <span class="n">lastPeriod</span> <span class="o">=</span> <span class="k">new</span> <span class="n">AtomicInteger</span><span class="o">(-</span><span class="mi">1</span><span class="o">);</span>
+        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">JsonObject</span><span class="o">&gt;</span> <span class="n">cmds</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">poll</span><span class="o">(()</span> <span class="o">-&gt;</span> <span class="o">{</span>
+                <span class="c1">// don't change on first invocation</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">lastPeriod</span><span class="o">.</span><span class="na">get</span><span class="o">()</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">lastPeriod</span><span class="o">.</span><span class="na">incrementAndGet</span><span class="o">();</span>
+                    <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="c1">// toggle between 0 and 5 sec deadtime period</span>
+                <span class="kt">int</span> <span class="n">newPeriod</span> <span class="o">=</span> <span class="n">lastPeriod</span><span class="o">.</span><span class="na">get</span><span class="o">()</span> <span class="o">==</span> <span class="mi">5</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="mi">5</span><span class="o">;</span>
+                <span class="n">lastPeriod</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">newPeriod</span><span class="o">);</span>
+                <span class="n">JsonObject</span> <span class="n">jo</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JsonObject</span><span class="o">();</span>
+                <span class="n">jo</span><span class="o">.</span><span class="na">addProperty</span><span class="o">(</span><span class="s">"period"</span><span class="o">,</span> <span class="n">newPeriod</span><span class="o">);</span>
+                <span class="n">jo</span><span class="o">.</span><span class="na">addProperty</span><span class="o">(</span><span class="s">"unit"</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+                <span class="k">return</span> <span class="n">jo</span><span class="o">;</span>
+            <span class="o">},</span> <span class="mi">15</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"cmds"</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">cmds</span><span class="o">;</span>
+    <span class="o">}</span>
+
 <span class="o">}</span>
+
 </code></pre></div>
 
 <div class="tags">

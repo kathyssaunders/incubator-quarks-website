@@ -98,6 +98,20 @@
   link: "<a href='../recipes/recipe_adaptable_filter_range.html'>Adaptable filter behavior</a>"
 
 
+ 
+/recipes/recipe_dynamic_analytic_control:
+  title: "Dynamically Enabling Analytic Flows"
+  url: "../recipes/recipe_dynamic_analytic_control.html"
+  link: "<a href='../recipes/recipe_dynamic_analytic_control.html'>Dynamically Enabling Analytic Flows</a>"
+
+
+ 
+/recipes/recipe_adaptable_deadtime_filter:
+  title: "Using an Adaptable Deadtime Filter"
+  url: "../recipes/recipe_adaptable_deadtime_filter.html"
+  link: "<a href='../recipes/recipe_adaptable_deadtime_filter.html'>Using an Adaptable Deadtime Filter</a>"
+
+
 
 
  
