@@ -1,14 +1,14 @@
 ---
-title: Adaptable Polling Source Frequency
+title: Changing a Polled Source Stream's Period
 ---
 
 The [Writing a Source Function](recipe_source_function.html) recipe introduced the basics of creating a source stream by polling a data source periodically.
 
-Oftentimes, a user wants the polling frequency to be adaptable rather than static.  For example, an event such a sudden rise in a temperature sensor may motivate more frequent polling of the sensor and analysis of the data until the condition subsides.  A change in the polling frequency may be a result of locally performed analytics or via a command from an external source.
+Oftentimes, a user wants the poll frequency to be adaptable rather than static.  For example, an event such a sudden rise in a temperature sensor may motivate more frequent polling of the sensor and analysis of the data until the condition subsides.  A change in the poll frequency may be driven by locally performed analytics or via a command from an external source.
 
-A Quarks IotProvider and IoTDevice with its command streams would be a natural way to control the application.  In this recipe we will just simulate a "set polling frequency" command stream.
+A Quarks IotProvider and IoTDevice with its command streams would be a natural way to control the application.  In this recipe we will just simulate a "set poll period" command stream.
 
-The ``Topology.poll()`` documentation describes how the polling frequency may be changed at runtime.
+The ``Topology.poll()`` documentation describes how the poll period may be changed at runtime.
 
 The mechanism is based on a more general Quarks runtime ``quarks.execution.services.ControlService`` service.  The runtime registers "control beans" for entities that are controllable.  These controls can be retrieved at runtime via the service.
 
@@ -26,10 +26,10 @@ At runtime, ``Topology.poll()`` registers a ``quarks.execution.mbeans.PeriodicMX
 
 It's also a good practice to add tags to streams to improve the usability of the development mode Quarks console.
 
-## Define a set polling frequency method
+## Define a "set poll period" method
 
 ```java
-    static <T> void setPollFrequency(TStream<T> pollStream, long period, TimeUnit unit) {
+    static <T> void setPollPeriod(TStream<T> pollStream, long period, TimeUnit unit) {
         // get the topology's runtime ControlService service
         ControlService cs = pollStream.topology().getRuntimeServiceSupplier()
                                     .get().getService(ControlService.class);
@@ -37,18 +37,18 @@ It's also a good practice to add tags to streams to improve the usability of the
         // using the the stream's alias, get its PeriodicMXBean control
         PeriodicMXBean control = cs.getControl("periodic", pollStream.getAlias(), PeriodicMXBean.class);
 
-        // change the polling frequency using the control
+        // change the poll period using the control
         System.out.println("Setting period="+period+" "+unit+" stream="+pollStream);
         control.setPeriod(period, unit);
     }
 ```
 
-## Process the "set polling frequency" command stream
+## Process the "set poll period" command stream
 
 Our commands are on the "TStream&lt;JsonObject&gt; cmds" stream.  Each JsonObject tuple is a command with the properties "period" and "unit".
 
 ```java
-        cmds.sink(json -> setPollFrequency(engineTemp,
+        cmds.sink(json -> setPollPeriod(engineTemp,
             json.getAsJsonPrimitive("period").getAsLong(),
             TimeUnit.valueOf(json.getAsJsonPrimitive("unit").getAsString())));
 ```
@@ -71,13 +71,13 @@ import quarks.topology.TStream;
 import quarks.topology.Topology;
 
 /**
- * A recipe for a polling source stream with an adaptable polling frequency.
+ * A recipe for a polled source stream with an adaptable poll period.
  */
-public class AdaptablePollingSource {
+public class AdaptablePolledSource {
 
     /**
      * Poll a temperature sensor to periodically obtain temperature readings.
-     * Respond to a simulated command stream to change the polling frequency.
+     * Respond to a simulated command stream to change the poll period.
      */
     public static void main(String[] args) throws Exception {
 
@@ -94,18 +94,18 @@ public class AdaptablePollingSource {
         // Report the time each temperature reading arrives and the value
         engineTemp.peek(tuple -> System.out.println(new Date() + " temp=" + tuple));
         
-        // Generate a simulated "set polling frequency" command stream
-        TStream<JsonObject> cmds = simulatedSetPollingFrequencyCmds(top);
+        // Generate a simulated "set poll period" command stream
+        TStream<JsonObject> cmds = simulatedSetPollPeriodCmds(top);
         
-        // Process the commands to change the polling frequency
-        cmds.sink(json -> setPollFrequency(engineTemp,
+        // Process the commands to change the poll period
+        cmds.sink(json -> setPollPeriod(engineTemp,
             json.getAsJsonPrimitive("period").getAsLong(),
             TimeUnit.valueOf(json.getAsJsonPrimitive("unit").getAsString())));
 
         dp.submit(top);
     }
     
-    static <T> void setPollFrequency(TStream<T> pollStream, long period, TimeUnit unit) {
+    static <T> void setPollPeriod(TStream<T> pollStream, long period, TimeUnit unit) {
         // get the topology's runtime ControlService service
         ControlService cs = pollStream.topology().getRuntimeServiceSupplier()
                                     .get().getService(ControlService.class);
@@ -113,12 +113,12 @@ public class AdaptablePollingSource {
         // using the the stream's alias, get its PeriodicMXBean control
         PeriodicMXBean control = cs.getControl("periodic", pollStream.getAlias(), PeriodicMXBean.class);
 
-        // change the polling frequency using the control
+        // change the poll period using the control
         System.out.println("Setting period="+period+" "+unit+" stream="+pollStream);
         control.setPeriod(period, unit);
     }
     
-    static TStream<JsonObject> simulatedSetPollingFrequencyCmds(Topology top) {
+    static TStream<JsonObject> simulatedSetPollPeriodCmds(Topology top) {
         AtomicInteger lastPeriod = new AtomicInteger(1);
         TStream<JsonObject> cmds = top.poll(() -> {
                 // toggle between 1 and 2 sec period

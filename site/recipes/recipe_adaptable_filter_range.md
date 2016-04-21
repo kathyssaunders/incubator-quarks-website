@@ -1,5 +1,5 @@
 ---
-title: Adaptable filter behavior
+title: Changing a Filter's Range
 ---
 
 The [Detecting a sensor value out of range](recipe_value_out_of_range.html) recipe introduced the basics of filtering as well as the use of a [Range](http://quarks-edge.github.io/quarks/docs/javadoc/quarks/analytics/sensors/Range.html).

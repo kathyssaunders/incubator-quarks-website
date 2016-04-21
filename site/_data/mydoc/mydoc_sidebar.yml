@@ -130,7 +130,7 @@ entries:
       version: all
       output: web, pdf
 
-    - title: Adaptable filter behavior
+    - title: Changing a filter's range
       url: /recipes/recipe_adaptable_filter_range.html
       audience: writers, designers
       platform: all
@@ -138,15 +138,15 @@ entries:
       version: all
       output: web, pdf
 
-    - title: Dynamically Enabling Analytic Flows
-      url: /recipes/recipe_dynamic_analytic_control.html
+    - title: Changing a polled source stream's period
+      url: /recipes/recipe_adaptable_polling_source.html
       audience: writers, designers
       platform: all
       product: all
       version: all
       output: web, pdf
 
-    - title: Using an Adaptable Deadtime Filter
+    - title: Using an adaptable deadtime filter
       url: /recipes/recipe_adaptable_deadtime_filter.html
       audience: writers, designers
       platform: all
@@ -154,8 +154,8 @@ entries:
       version: all
       output: web, pdf
 
-    - title: Adaptable Polling Source Frequency
-      url: /recipes/recipe_adaptable_polling_source.html
+    - title: Dynamically enabling analytic flows
+      url: /recipes/recipe_dynamic_analytic_control.html
       audience: writers, designers
       platform: all
       product: all
