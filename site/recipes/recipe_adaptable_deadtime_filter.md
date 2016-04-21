@@ -1,5 +1,5 @@
 ---
-title: Using an Adaptable Deadtime Filter
+title: Using an adaptable deadtime filter
 ---
 
 Oftentimes, an application wants to control the frequency that continuously generated analytic results are made available to other parts of the application or published to other applications or an event hub.
@@ -12,11 +12,11 @@ Note this is a different case than simply changing the polling frequency for the
 
 This case needs a *deadtime filter* and Quarks provides one for your use!  In contrast to a *deadband filter*, which skips tuples based on a deadband value range, a deadtime filter skips tuples based on a *deadtime period* following a tuple that is allowed to pass through.  E.g., if the deadtime period is 30 minutes, after allowing a tuple to pass, the filter skips any tuples received for the next 30 minutes.  The next tuple received after that is allowed to pass through, and a new deadtime period is begun.
 
-See quarks.analytics.sensors.Filters.deadtime() and quarks.analytics.sensors.Deadtime.
+See ``quarks.analytics.sensors.Filters.deadtime()`` and ``quarks.analytics.sensors.Deadtime``.
 
 This recipe demonstrates how to use an adaptable deadtime filter.
 
-A Quarks IotProvider and IoTDevice with its command streams would be a natural way to control the application.  In this recipe we will just simulate a "set deadtime period" command stream.
+A Quarks ``IotProvider`` and ``IoTDevice`` with its command streams would be a natural way to control the application.  In this recipe we will just simulate a "set deadtime period" command stream.
 
 ## Create a polled sensor readings stream
 
@@ -31,7 +31,7 @@ It's also a good practice to add tags to streams to improve the usability of the
 
 ## Create a deadtime filtered stream - initially no deadtime
 
-In this recipe we'll just filter the direct engineTemp sensor reading stream.  In practice this filtering would be performed after some analytics stages and used as the input to ``IotDevice.event()`` or some other connector publish operation.
+In this recipe we'll just filter the direct ``engineTemp`` sensor reading stream.  In practice this filtering would be performed after some analytics stages and used as the input to ``IotDevice.event()`` or some other connector publish operation.
 
 ```java
         Deadtime<Double> deadtime = new Deadtime<>();
@@ -50,7 +50,7 @@ In this recipe we'll just filter the direct engineTemp sensor reading stream.  I
 
 ## Process the "set deadtime period" command stream
 
-Our commands are on the "TStream&lt;JsonObject&gt; cmds" stream.  Each JsonObject tuple is a command with the properties "period" and "unit".
+Our commands are on the ``TStream<JsonObject> cmds`` stream.  Each ``JsonObject`` tuple is a command with the properties "period" and "unit".
 
 ```java
         cmds.sink(json -> setDeadtimePeriod(deadtimeFilteredEngineTemp,

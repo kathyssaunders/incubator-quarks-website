@@ -1,18 +1,18 @@
 ---
-title: Changing a Polled Source Stream's Period
+title: Changing a polled source stream's period
 ---
 
 The [Writing a Source Function](recipe_source_function.html) recipe introduced the basics of creating a source stream by polling a data source periodically.
 
-Oftentimes, a user wants the poll frequency to be adaptable rather than static.  For example, an event such a sudden rise in a temperature sensor may motivate more frequent polling of the sensor and analysis of the data until the condition subsides.  A change in the poll frequency may be driven by locally performed analytics or via a command from an external source.
+Oftentimes, a user wants the poll frequency to be adaptable rather than static.  For example, an event such as a sudden rise in a temperature sensor may motivate more frequent polling of the sensor and analysis of the data until the condition subsides.  A change in the poll frequency may be driven by locally performed analytics or via a command from an external source.
 
-A Quarks IotProvider and IoTDevice with its command streams would be a natural way to control the application.  In this recipe we will just simulate a "set poll period" command stream.
+A Quarks ``IotProvider`` and ``IoTDevice`` with its command streams would be a natural way to control the application.  In this recipe we will just simulate a "set poll period" command stream.
 
 The ``Topology.poll()`` documentation describes how the poll period may be changed at runtime.
 
 The mechanism is based on a more general Quarks runtime ``quarks.execution.services.ControlService`` service.  The runtime registers "control beans" for entities that are controllable.  These controls can be retrieved at runtime via the service.
 
-At runtime, ``Topology.poll()`` registers a ``quarks.execution.mbeans.PeriodicMXBean`` control. Retrieving the control at runtime requires setting an alias on the poll generated stream using ``TStream.alias()``.
+At runtime, ``Topology.poll()`` registers a ``quarks.execution.mbeans.PeriodicMXBean`` control. __Retrieving the control at runtime requires setting an alias on the poll generated stream using ``TStream.alias()``.__
 
 ## Create the polled stream and set its alias
 
@@ -45,7 +45,7 @@ It's also a good practice to add tags to streams to improve the usability of the
 
 ## Process the "set poll period" command stream
 
-Our commands are on the "TStream&lt;JsonObject&gt; cmds" stream.  Each JsonObject tuple is a command with the properties "period" and "unit".
+Our commands are on the ``TStream<JsonObject> cmds`` stream.  Each ``JsonObject`` tuple is a command with the properties "period" and "unit".
 
 ```java
         cmds.sink(json -> setPollPeriod(engineTemp,
