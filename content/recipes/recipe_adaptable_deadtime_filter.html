@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="keywords" content=" ">
-<title>Using an Adaptable Deadtime Filter  | Apache Quarks Documentation</title>
+<title>Using an adaptable deadtime filter  | Apache Quarks Documentation</title>
 <link rel="stylesheet" type="text/css" href="../css/syntax.css">
 <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">
 <!--<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">-->
@@ -157,7 +157,7 @@
 <script>
 function SendLinkByMail(href) {
 var subject= "Apache Quarks Documentation feedback";
-var body = "I have some feedback about the Using an Adaptable Deadtime Filter page: ";
+var body = "I have some feedback about the Using an adaptable deadtime filter page: ";
 body += window.location.href;
 body += "";
 var uri = "mailto:?subject=";
@@ -184,7 +184,7 @@ window.location.href = uri;
                             searchInput: document.getElementById('search-input'),
                             resultsContainer: document.getElementById('results-container'),
                             dataSource: '../search.json',
-                            searchResultTemplate: '<li><a href="{url}" title="Using an Adaptable Deadtime Filter">{title}</a></li>',
+                            searchResultTemplate: '<li><a href="{url}" title="Using an adaptable deadtime filter">{title}</a></li>',
                         noResultsText: 'No results found.',
                                 limit: 10,
                                 fuzzy: true,
@@ -374,7 +374,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../recipes/recipe_adaptable_filter_range.html">Adaptable filter behavior</a></li>
+                    <li><a href="../recipes/recipe_adaptable_filter_range.html">Changing a filter's range</a></li>
                     
 
                     
@@ -383,7 +383,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../recipes/recipe_dynamic_analytic_control.html">Dynamically Enabling Analytic Flows</a></li>
+                    <li><a href="../recipes/recipe_adaptable_polling_source.html">Changing a polled source stream's period</a></li>
                     
 
                     
@@ -392,7 +392,16 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../recipes/recipe_adaptable_deadtime_filter.html">Using an Adaptable Deadtime Filter</a></li>
+                    <li><a href="../recipes/recipe_adaptable_deadtime_filter.html">Using an adaptable deadtime filter</a></li>
+                    
+
+                    
+
+                    
+                    
+                    
+                    
+                    <li><a href="../recipes/recipe_dynamic_analytic_control.html">Dynamically enabling analytic flows</a></li>
                     
 
                     
@@ -517,7 +526,7 @@ $('#toc').on('click', 'a', function() {
             <div class="col-md-9">
                 
                 <div class="post-header">
-   <h1 class="post-title-main">Using an Adaptable Deadtime Filter</h1>
+   <h1 class="post-title-main">Using an adaptable deadtime filter</h1>
 </div>
 
 <div class="post-content">
@@ -561,11 +570,11 @@ $('#toc').on('click', 'a', function() {
 
 <p>This case needs a <em>deadtime filter</em> and Quarks provides one for your use!  In contrast to a <em>deadband filter</em>, which skips tuples based on a deadband value range, a deadtime filter skips tuples based on a <em>deadtime period</em> following a tuple that is allowed to pass through.  E.g., if the deadtime period is 30 minutes, after allowing a tuple to pass, the filter skips any tuples received for the next 30 minutes.  The next tuple received after that is allowed to pass through, and a new deadtime period is begun.</p>
 
-<p>See quarks.analytics.sensors.Filters.deadtime() and quarks.analytics.sensors.Deadtime.</p>
+<p>See <code>quarks.analytics.sensors.Filters.deadtime()</code> and <code>quarks.analytics.sensors.Deadtime</code>.</p>
 
 <p>This recipe demonstrates how to use an adaptable deadtime filter.</p>
 
-<p>A Quarks IotProvider and IoTDevice with its command streams would be a natural way to control the application.  In this recipe we will just simulate a &quot;set deadtime period&quot; command stream.</p>
+<p>A Quarks <code>IotProvider</code> and <code>IoTDevice</code> with its command streams would be a natural way to control the application.  In this recipe we will just simulate a &quot;set deadtime period&quot; command stream.</p>
 
 <h2 id="create-a-polled-sensor-readings-stream">Create a polled sensor readings stream</h2>
 <div class="highlight"><pre><code class="language-java" data-lang="java">        <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="o">...;</span>
@@ -577,7 +586,7 @@ $('#toc').on('click', 'a', function() {
 
 <h2 id="create-a-deadtime-filtered-stream-initially-no-deadtime">Create a deadtime filtered stream - initially no deadtime</h2>
 
-<p>In this recipe we&#39;ll just filter the direct engineTemp sensor reading stream.  In practice this filtering would be performed after some analytics stages and used as the input to <code>IotDevice.event()</code> or some other connector publish operation.</p>
+<p>In this recipe we&#39;ll just filter the direct <code>engineTemp</code> sensor reading stream.  In practice this filtering would be performed after some analytics stages and used as the input to <code>IotDevice.event()</code> or some other connector publish operation.</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java">        <span class="n">Deadtime</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">deadtime</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Deadtime</span><span class="o">&lt;&gt;();</span>
         <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">deadtimeFilteredEngineTemp</span> <span class="o">=</span> <span class="n">engineTemp</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">deadtime</span><span class="o">)</span>
                                       <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"deadtimeFilteredEngineTemp"</span><span class="o">);</span>
@@ -590,7 +599,7 @@ $('#toc').on('click', 'a', function() {
 </code></pre></div>
 <h2 id="process-the-quot-set-deadtime-period-quot-command-stream">Process the &quot;set deadtime period&quot; command stream</h2>
 
-<p>Our commands are on the &quot;TStream&lt;JsonObject&gt; cmds&quot; stream.  Each JsonObject tuple is a command with the properties &quot;period&quot; and &quot;unit&quot;.</p>
+<p>Our commands are on the <code>TStream&lt;JsonObject&gt; cmds</code> stream.  Each <code>JsonObject</code> tuple is a command with the properties &quot;period&quot; and &quot;unit&quot;.</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java">        <span class="n">cmds</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">json</span> <span class="o">-&gt;</span> <span class="n">setDeadtimePeriod</span><span class="o">(</span><span class="n">deadtimeFilteredEngineTemp</span><span class="o">,</span>
             <span class="n">json</span><span class="o">.</span><span class="na">getAsJsonPrimitive</span><span class="o">(</span><span class="s">"period"</span><span class="o">).</span><span class="na">getAsLong</span><span class="o">(),</span>
             <span class="n">TimeUnit</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">json</span><span class="o">.</span><span class="na">getAsJsonPrimitive</span><span class="o">(</span><span class="s">"unit"</span><span class="o">).</span><span class="na">getAsString</span><span class="o">())));</span>
@@ -719,7 +728,7 @@ $('#toc').on('click', 'a', function() {
         <div class="col-lg-12 footer">
 
              Site last
-            generated: Apr 21, 2016 <br/>
+            generated: Apr 26, 2016 <br/>
 
         </div>
     </div>

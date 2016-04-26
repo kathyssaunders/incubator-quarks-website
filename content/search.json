@@ -132,7 +132,7 @@
 
 
 {
-"title": "Using an Adaptable Deadtime Filter",
+"title": "Using an adaptable deadtime filter",
 "tags": "",
 "keywords": "",
 "url": "../recipes/recipe_adaptable_deadtime_filter",
@@ -143,10 +143,21 @@
 
 
 {
-"title": "Adaptable filter behavior",
+"title": "Changing a filter&#39;s range",
 "tags": "",
 "keywords": "",
 "url": "../recipes/recipe_adaptable_filter_range",
+"summary": ""
+},
+
+
+
+
+{
+"title": "Changing a polled source stream&#39;s period",
+"tags": "",
+"keywords": "",
+"url": "../recipes/recipe_adaptable_polling_source",
 "summary": ""
 },
 

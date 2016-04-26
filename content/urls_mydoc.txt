@@ -93,23 +93,30 @@
 
  
 /recipes/recipe_adaptable_filter_range:
-  title: "Adaptable filter behavior"
+  title: "Changing a filter's range"
   url: "../recipes/recipe_adaptable_filter_range.html"
-  link: "<a href='../recipes/recipe_adaptable_filter_range.html'>Adaptable filter behavior</a>"
+  link: "<a href='../recipes/recipe_adaptable_filter_range.html'>Changing a filter's range</a>"
 
 
  
-/recipes/recipe_dynamic_analytic_control:
-  title: "Dynamically Enabling Analytic Flows"
-  url: "../recipes/recipe_dynamic_analytic_control.html"
-  link: "<a href='../recipes/recipe_dynamic_analytic_control.html'>Dynamically Enabling Analytic Flows</a>"
+/recipes/recipe_adaptable_polling_source:
+  title: "Changing a polled source stream's period"
+  url: "../recipes/recipe_adaptable_polling_source.html"
+  link: "<a href='../recipes/recipe_adaptable_polling_source.html'>Changing a polled source stream's period</a>"
 
 
  
 /recipes/recipe_adaptable_deadtime_filter:
-  title: "Using an Adaptable Deadtime Filter"
+  title: "Using an adaptable deadtime filter"
   url: "../recipes/recipe_adaptable_deadtime_filter.html"
-  link: "<a href='../recipes/recipe_adaptable_deadtime_filter.html'>Using an Adaptable Deadtime Filter</a>"
+  link: "<a href='../recipes/recipe_adaptable_deadtime_filter.html'>Using an adaptable deadtime filter</a>"
+
+
+ 
+/recipes/recipe_dynamic_analytic_control:
+  title: "Dynamically enabling analytic flows"
+  url: "../recipes/recipe_dynamic_analytic_control.html"
+  link: "<a href='../recipes/recipe_dynamic_analytic_control.html'>Dynamically enabling analytic flows</a>"
 
 
 
