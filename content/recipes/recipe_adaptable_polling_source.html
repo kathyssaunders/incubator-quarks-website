@@ -570,7 +570,7 @@ $('#toc').on('click', 'a', function() {
 
 <p>The mechanism is based on a more general Quarks runtime <code>quarks.execution.services.ControlService</code> service.  The runtime registers &quot;control beans&quot; for entities that are controllable.  These controls can be retrieved at runtime via the service.</p>
 
-<p>At runtime, <code>Topology.poll()</code> registers a <code>quarks.execution.mbeans.PeriodicMXBean</code> control. <strong>Retrieving the control at runtime requires setting an alias on the poll generated stream using <code>TStream.alias()</code>.</strong></p>
+<p>At runtime, <code>Topology.poll()</code> registers a <code>quarks.execution.mbeans.PeriodMXBean</code> control. <strong>Retrieving the control at runtime requires setting an alias on the poll generated stream using <code>TStream.alias()</code>.</strong></p>
 
 <h2 id="create-the-polled-stream-and-set-its-alias">Create the polled stream and set its alias</h2>
 <div class="highlight"><pre><code class="language-java" data-lang="java">        <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="o">...;</span>
@@ -587,8 +587,8 @@ $('#toc').on('click', 'a', function() {
         <span class="n">ControlService</span> <span class="n">cs</span> <span class="o">=</span> <span class="n">pollStream</span><span class="o">.</span><span class="na">topology</span><span class="o">().</span><span class="na">getRuntimeServiceSupplier</span><span class="o">()</span>
                                     <span class="o">.</span><span class="na">get</span><span class="o">().</span><span class="na">getService</span><span class="o">(</span><span class="n">ControlService</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
 
-        <span class="c1">// using the the stream's alias, get its PeriodicMXBean control</span>
-        <span class="n">PeriodicMXBean</span> <span class="n">control</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="na">getControl</span><span class="o">(</span><span class="s">"periodic"</span><span class="o">,</span> <span class="n">pollStream</span><span class="o">.</span><span class="na">getAlias</span><span class="o">(),</span> <span class="n">PeriodicMXBean</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="c1">// using the the stream's alias, get its PeriodMXBean control</span>
+        <span class="n">PeriodMXBean</span> <span class="n">control</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="na">getControl</span><span class="o">(</span><span class="n">TStream</span><span class="o">.</span><span class="na">TYPE</span><span class="o">,</span> <span class="n">pollStream</span><span class="o">.</span><span class="na">getAlias</span><span class="o">(),</span> <span class="n">PeriodMXBean</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
 
         <span class="c1">// change the poll period using the control</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Setting period="</span><span class="o">+</span><span class="n">period</span><span class="o">+</span><span class="s">" "</span><span class="o">+</span><span class="n">unit</span><span class="o">+</span><span class="s">" stream="</span><span class="o">+</span><span class="n">pollStream</span><span class="o">);</span>
@@ -609,7 +609,7 @@ $('#toc').on('click', 'a', function() {
 
 <span class="kn">import</span> <span class="nn">com.google.gson.JsonObject</span><span class="o">;</span>
 
-<span class="kn">import</span> <span class="nn">quarks.execution.mbeans.PeriodicMXBean</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">quarks.execution.mbeans.PeriodMXBean</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">quarks.execution.services.ControlService</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">quarks.providers.development.DevelopmentProvider</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">quarks.providers.direct.DirectProvider</span><span class="o">;</span>
@@ -657,8 +657,8 @@ $('#toc').on('click', 'a', function() {
         <span class="n">ControlService</span> <span class="n">cs</span> <span class="o">=</span> <span class="n">pollStream</span><span class="o">.</span><span class="na">topology</span><span class="o">().</span><span class="na">getRuntimeServiceSupplier</span><span class="o">()</span>
                                     <span class="o">.</span><span class="na">get</span><span class="o">().</span><span class="na">getService</span><span class="o">(</span><span class="n">ControlService</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
 
-        <span class="c1">// using the the stream's alias, get its PeriodicMXBean control</span>
-        <span class="n">PeriodicMXBean</span> <span class="n">control</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="na">getControl</span><span class="o">(</span><span class="s">"periodic"</span><span class="o">,</span> <span class="n">pollStream</span><span class="o">.</span><span class="na">getAlias</span><span class="o">(),</span> <span class="n">PeriodicMXBean</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="c1">// using the the stream's alias, get its PeriodMXBean control</span>
+        <span class="n">PeriodMXBean</span> <span class="n">control</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="na">getControl</span><span class="o">(</span><span class="n">TStream</span><span class="o">.</span><span class="na">TYPE</span><span class="o">,</span> <span class="n">pollStream</span><span class="o">.</span><span class="na">getAlias</span><span class="o">(),</span> <span class="n">PeriodMXBean</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
 
         <span class="c1">// change the poll period using the control</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Setting period="</span><span class="o">+</span><span class="n">period</span><span class="o">+</span><span class="s">" "</span><span class="o">+</span><span class="n">unit</span><span class="o">+</span><span class="s">" stream="</span><span class="o">+</span><span class="n">pollStream</span><span class="o">);</span>
