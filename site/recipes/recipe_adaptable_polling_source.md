@@ -12,7 +12,7 @@ The ``Topology.poll()`` documentation describes how the poll period may be chang
 
 The mechanism is based on a more general Quarks runtime ``quarks.execution.services.ControlService`` service.  The runtime registers "control beans" for entities that are controllable.  These controls can be retrieved at runtime via the service.
 
-At runtime, ``Topology.poll()`` registers a ``quarks.execution.mbeans.PeriodicMXBean`` control. __Retrieving the control at runtime requires setting an alias on the poll generated stream using ``TStream.alias()``.__
+At runtime, ``Topology.poll()`` registers a ``quarks.execution.mbeans.PeriodMXBean`` control. __Retrieving the control at runtime requires setting an alias on the poll generated stream using ``TStream.alias()``.__
 
 ## Create the polled stream and set its alias
 
@@ -34,8 +34,8 @@ It's also a good practice to add tags to streams to improve the usability of the
         ControlService cs = pollStream.topology().getRuntimeServiceSupplier()
                                     .get().getService(ControlService.class);
 
-        // using the the stream's alias, get its PeriodicMXBean control
-        PeriodicMXBean control = cs.getControl("periodic", pollStream.getAlias(), PeriodicMXBean.class);
+        // using the the stream's alias, get its PeriodMXBean control
+        PeriodMXBean control = cs.getControl(TStream.TYPE, pollStream.getAlias(), PeriodMXBean.class);
 
         // change the poll period using the control
         System.out.println("Setting period="+period+" "+unit+" stream="+pollStream);
@@ -62,7 +62,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.google.gson.JsonObject;
 
-import quarks.execution.mbeans.PeriodicMXBean;
+import quarks.execution.mbeans.PeriodMXBean;
 import quarks.execution.services.ControlService;
 import quarks.providers.development.DevelopmentProvider;
 import quarks.providers.direct.DirectProvider;
@@ -110,8 +110,8 @@ public class AdaptablePolledSource {
         ControlService cs = pollStream.topology().getRuntimeServiceSupplier()
                                     .get().getService(ControlService.class);
 
-        // using the the stream's alias, get its PeriodicMXBean control
-        PeriodicMXBean control = cs.getControl("periodic", pollStream.getAlias(), PeriodicMXBean.class);
+        // using the the stream's alias, get its PeriodMXBean control
+        PeriodMXBean control = cs.getControl(TStream.TYPE, pollStream.getAlias(), PeriodMXBean.class);
 
         // change the poll period using the control
         System.out.println("Setting period="+period+" "+unit+" stream="+pollStream);
