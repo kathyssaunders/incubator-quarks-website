@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="keywords" content=" ">
-<title>Getting started with Quarks  | Apache Quarks Documentation</title>
+<title>Getting started with Apache Quarks  | Apache Quarks Documentation</title>
 <link rel="stylesheet" type="text/css" href="../css/syntax.css">
 <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">
 <!--<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">-->
@@ -157,7 +157,7 @@
 <script>
 function SendLinkByMail(href) {
 var subject= "Apache Quarks Documentation feedback";
-var body = "I have some feedback about the Getting started with Quarks page: ";
+var body = "I have some feedback about the Getting started with Apache Quarks page: ";
 body += window.location.href;
 body += "";
 var uri = "mailto:?subject=";
@@ -184,7 +184,7 @@ window.location.href = uri;
                             searchInput: document.getElementById('search-input'),
                             resultsContainer: document.getElementById('results-container'),
                             dataSource: '../search.json',
-                            searchResultTemplate: '<li><a href="{url}" title="Getting started with Quarks">{title}</a></li>',
+                            searchResultTemplate: '<li><a href="{url}" title="Getting started with Apache Quarks">{title}</a></li>',
                         noResultsText: 'No results found.',
                                 limit: 10,
                                 fuzzy: true,
@@ -526,7 +526,7 @@ $('#toc').on('click', 'a', function() {
             <div class="col-md-9">
                 
                 <div class="post-header">
-   <h1 class="post-title-main">Getting started with Quarks</h1>
+   <h1 class="post-title-main">Getting started with Apache Quarks</h1>
 </div>
 
 <div class="post-content">
@@ -560,7 +560,7 @@ $('#toc').on('click', 'a', function() {
 
     <a target="_blank" href="https://github.com/apache/incubator-quarks-website/blob/master/site/docs/quarks-getting-started.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
     
-  <h2 id="what-is-quarks">What is Quarks?</h2>
+  <h2 id="what-is-apache-quarks">What is Apache Quarks?</h2>
 
 <p>Quarks is an open source programming model and runtime for edge devices that enables you to analyze streaming data on your edge devices. When you analyze on the edge, you can:</p>
 
@@ -571,7 +571,7 @@ $('#toc').on('click', 'a', function() {
 
 <p>For more information, see the <a href="home">Quarks overview</a>.</p>
 
-<h3 id="quarks-and-streaming-analytics">Quarks and streaming analytics</h3>
+<h3 id="apache-quarks-and-streaming-analytics">Apache Quarks and streaming analytics</h3>
 
 <p>The fundamental building block of a Quarks application is a <strong>stream</strong>: a continuous sequence of tuples (messages, events, sensor readings, and so on).</p>
 
@@ -583,11 +583,11 @@ $('#toc').on('click', 'a', function() {
 
 <p>Quarks&#39; primary API is functional where streams are sourced, transformed, analyzed or sinked though functions, typically represented as lambda expressions, such as <code>reading -&gt; reading &lt; 50 || reading &gt; 80</code> to filter temperature readings in Fahrenheit.</p>
 
-<h3 id="downloading-quarks">Downloading Quarks</h3>
+<h3 id="downloading-apache-quarks">Downloading Apache Quarks</h3>
 
-<p>To access Quarks, download a release from GitHub. We recommend downloading the <a href="https://github.com/quarks-edge/quarks/releases/latest">latest release</a>.</p>
+<p>To use Quarks, access the source code and build it. You can read more about building Quarks <a href="https://github.com/apache/incubator-quarks/blob/master/DEVELOPMENT.md">here</a>.</p>
 
-<p>After you download and extract the Quarks package, you can set up your environment.</p>
+<p>After you build the Quarks package, you can set up your environment.</p>
 
 <h3 id="setting-up-your-environment">Setting up your environment</h3>
 
