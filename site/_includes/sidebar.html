@@ -11,7 +11,7 @@
                     caretHtml: '',
                     accordion: true,
                     openClass: 'active', // open
-                    save: false, // leave false or nav highlighting doesn't work right
+                    save: true,
                     cookie: {
                         name: 'navgoco',
                         expires: false,
@@ -51,10 +51,11 @@
             <li><a href="#">{{ subcategory.title }}</a>
                 <ul>
                     {% for item in subcategory.items %}
+                    {% capture new_page_url %}{{page.url | append:'.html'}}{% endcapture %}
                     {% if item.audience contains audience and item.product contains product and item.platform contains platform and item.version contains version and item.output contains "web" %}
                     {% if item.external_url %}
                     <li><a href="{{item.external_url}}" target="_blank">{{subcategory.title}}</a></li>
-                    {% elsif page.url == item.url %}
+                    {% elsif new_page_url == item.url %}
                     <li class="active"><a href="{{item.url | prepend: ".."}}">{{item.title}}</a></li>
                     {% else %}
                     <li><a href="{{item.url | prepend: ".."}}">{{item.title}}</a></li>
