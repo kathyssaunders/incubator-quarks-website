@@ -6,14 +6,13 @@ The [Detecting a sensor value out of range](recipe_value_out_of_range.html) reci
 
 Oftentimes, a user wants to initialize a range specification from an external configuration file so the application code is more easily configured and reusable.
 
-The string form of a ``Range`` is natural, consise, and easy to use.  As such it's a convenient form to use in configuration files or for users to enter.  The range string can easily be converted back into a ``Range``.
+The string form of a `Range` is natural, consise, and easy to use. As such it's a convenient form to use in configuration files or for users to enter. The range string can easily be converted back into a `Range`.
 
 We're going to assume familiarity with that earlier recipe and those concepts and focus on just the "external range specification" aspect of this recipe.
 
 ## Create a configuration file
 
-The file's syntax is that for a ``java.util.Properties`` object.
-See the ``Range`` documentation for its string syntax.
+The file's syntax is that for a `java.util.Properties` object. See the `Range` [documentation](https://github.com/apache/incubator-quarks/blob/master/analytics/sensors/src/main/java/quarks/analytics/sensors/Range.java) for its string syntax.
 
 Put this into a file:
 
@@ -26,23 +25,22 @@ Supply the pathname to this file as an argument to the application when you run 
 
 ## Loading the configuration file
 
-A ``java.util.Properties`` object is often used for configuration parameters
-and it is easy to load the properties from a file.
+A `java.util.Properties` object is often used for configuration parameters and it is easy to load the properties from a file.
 
 ```java
-    // Load the configuration file with the path string in configFilePath
-    Properties props = new Properties();
-    props.load(Files.newBufferedReader(new File(configFilePath).toPath()));
+// Load the configuration file with the path string in configFilePath
+Properties props = new Properties();
+props.load(Files.newBufferedReader(new File(configFilePath).toPath()));
 ```
 
-## Initializing the Range
+## Initializing the `Range`
 
 ```java
-    // initialize the range from a Range string in the properties.
-    // Use a default value if a range isn't present.
-    static String DEFAULT_TEMP_RANGE_STR = "[60.0..100.0]";                                                                                
-    static Range<Double> optimalTempRange = Ranges.valueOfDouble(
-            props.getProperty("optimalTempRange", defaultRange));
+// initialize the range from a Range string in the properties.
+// Use a default value if a range isn't present.
+static String DEFAULT_TEMP_RANGE_STR = "[60.0..100.0]";
+static Range<Double> optimalTempRange = Ranges.valueOfDouble(
+        props.getProperty("optimalTempRange", defaultRange));
 ```
 
 ## The final application
@@ -58,12 +56,12 @@ import quarks.analytics.sensors.Ranges;
 import quarks.providers.direct.DirectProvider;
 import quarks.samples.utils.sensor.SimulatedTemperatureSensor;
 import quarks.topology.TStream;
-import quarks.topology.Topology;                                                                                                           
-                                                                                                                                        
+import quarks.topology.Topology;
+
 /**
  * Detect a sensor value out of expected range.
  * Get the range specification from a configuration file.
- */                                                                                                                                        
+ */
 public class ExternalFilterRange {
     /**
      * Optimal temperatures (in Fahrenheit)
@@ -94,13 +92,13 @@ public class ExternalFilterRange {
             throw new Exception("missing pathname to configuration file");
         String configFilePath = args[0];
 
-        DirectProvider dp = new DirectProvider();                                                                                          
+        DirectProvider dp = new DirectProvider();
 
         Topology top = dp.newTopology("TemperatureSensor");
 
         // Initialize the configuration
         initializeConfiguration(configFilePath);
-                                                                                           
+
         // Generate a stream of temperature sensor readings
         SimulatedTemperatureSensor tempSensor = new SimulatedTemperatureSensor();
         TStream<Double> temp = top.poll(tempSensor, 1, TimeUnit.SECONDS);

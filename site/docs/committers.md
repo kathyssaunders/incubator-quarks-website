@@ -1,6 +1,5 @@
 ---
-title: Committers  
-description: Commit activity and how to become a committer
+title: Committers
 ---
 
 ## Commit activity
@@ -11,7 +10,7 @@ To see commit activity for Quarks, click [here](https://github.com/apache/incuba
 
 You can become a committer by contributing to Quarks. Qualifications for a new committer include:
 
-* **Sustained Contributions**: Potential committers should have a history of contributions to Quarks. They will create pull requests over a period of time.  
+* **Sustained Contributions**: Potential committers should have a history of contributions to Quarks. They will create pull requests over a period of time.
 
 * **Quality of Contributions**: Potential committers should submit code that adds value to Quarks, including tests and documentation as needed. They should comment in a positive way on issues and pull requests, providing guidance and input to improve Quarks.
 
