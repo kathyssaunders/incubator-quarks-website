@@ -218,7 +218,7 @@ window.location.href = uri;
                     caretHtml: '',
                     accordion: true,
                     openClass: 'active', // open
-                    save: false, // leave false or nav highlighting doesn't work right
+                    save: true,
                     cookie: {
                         name: 'navgoco',
                         expires: false,
@@ -270,11 +270,13 @@ window.location.href = uri;
                     
                     
                     
+                    
                     <li><a href="../docs/quarks_index.html">Introduction</a></li>
                     
 
                     
 
+                    
                     
                     
                     
@@ -295,11 +297,13 @@ window.location.href = uri;
                     
                     
                     
+                    
                     <li><a href="../docs/quarks-getting-started.html">Getting started guide</a></li>
                     
 
                     
 
+                    
                     
                     
                     
@@ -320,11 +324,13 @@ window.location.href = uri;
                     
                     
                     
+                    
                     <li><a href="../recipes/recipe_hello_quarks.html">Hello Quarks!</a></li>
                     
 
                     
 
+                    
                     
                     
                     
@@ -338,6 +344,7 @@ window.location.href = uri;
                     
                     
                     
+                    
                     <li><a href="../recipes/recipe_value_out_of_range.html">Detecting a sensor value out of expected range</a></li>
                     
 
@@ -347,11 +354,13 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../recipes/recipe_different_processing_against_stream.html">Applying different processing against a single stream</a></li>
+                    
+                    <li class="active"><a href="../recipes/recipe_different_processing_against_stream.html">Applying different processing against a single stream</a></li>
                     
 
                     
 
+                    
                     
                     
                     
@@ -365,6 +374,7 @@ window.location.href = uri;
                     
                     
                     
+                    
                     <li><a href="../recipes/recipe_external_filter_range.html">Using an external configuration file for filter ranges</a></li>
                     
 
@@ -374,7 +384,38 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../recipes/recipe_adaptable_filter_range.html">Adaptable filter behavior</a></li>
+                    
+                    <li><a href="../recipes/recipe_adaptable_filter_range.html">Changing a filter's range</a></li>
+                    
+
+                    
+
+                    
+                    
+                    
+                    
+                    
+                    <li><a href="../recipes/recipe_adaptable_polling_source.html">Changing a polled source stream's period</a></li>
+                    
+
+                    
+
+                    
+                    
+                    
+                    
+                    
+                    <li><a href="../recipes/recipe_adaptable_deadtime_filter.html">Using an adaptable deadtime filter</a></li>
+                    
+
+                    
+
+                    
+                    
+                    
+                    
+                    
+                    <li><a href="../recipes/recipe_dynamic_analytic_control.html">Dynamically enabling analytic flows</a></li>
                     
 
                     
@@ -390,11 +431,13 @@ window.location.href = uri;
                     
                     
                     
+                    
                     <li><a href="../docs/samples.html">Samples</a></li>
                     
 
                     
 
+                    
                     
                     
                     
@@ -415,6 +458,7 @@ window.location.href = uri;
                     
                     
                     
+                    
                     <li><a href="../docs/console.html">Using the console</a></li>
                     
 
@@ -431,11 +475,13 @@ window.location.href = uri;
                     
                     
                     
+                    
                     <li><a href="../docs/community.html">How to participate</a></li>
                     
 
                     
 
+                    
                     
                     
                     
@@ -535,31 +581,39 @@ $('#toc').on('click', 'a', function() {
     
   <p>In the previous <a href="recipe_value_out_of_range">recipe</a>, we learned how to filter a stream to obtain the interesting sensor readings and ignore the mundane data. Typically, a user scenario is more involved, where data is processed using different stream operations. Consider the following scenario, for example.</p>
 
-<p>Suppose a package delivery company would like to monitor the gas mileage of their delivery trucks using embedded sensors. They would like to apply different analytics to the sensor data that can be used to make more informed business decisions. For instance, if a truck is reporting consistently poor mileage readings, the company might want to consider replacing that truck to save on gas costs. Perhaps the company also wants to convert the sensor readings to JSON format in order to easily display the data on a web page. It may also be interested in determining the expected gallons of gas used based on the current mileage.</p>
+<p>Suppose a package delivery company would like to monitor the gas mileage of their delivery trucks using embedded sensors. They would like to apply different analytics to the sensor data that can be used to make more informed business decisions. For instance, if a truck is reporting consistently poor gas mileage readings, the company might want to consider replacing that truck to save on gas costs. Perhaps the company also wants to convert the sensor readings to JSON format in order to easily display the data on a web page. It may also be interested in determining the expected gallons of gas used based on the current gas mileage.</p>
 
-<p>In this instance, we can take the stream of mileage sensor readings and apply multiple types of processing against it so that we end up with streams that serve different purposes.</p>
+<p>In this instance, we can take the stream of gas mileage sensor readings and apply multiple types of processing against it so that we end up with streams that serve different purposes.</p>
 
 <h2 id="setting-up-the-application">Setting up the application</h2>
 
-<p>We assume that the environment has been set up following the steps outlined in the <a href="../docs/quarks-getting-started">Getting started guide</a>. Let&#39;s begin by creating a <code>DirectProvider</code> and <code>Topology</code>. We choose a <code>DevelopmentProvider</code> so that we can view the topology graph using the console URL (refer to the <a href="../docs/console">Application console</a> page for a more detailed explanation of this provider). The initial mileage value and the number of miles in a typical delivery route have also been defined.</p>
+<p>We assume that the environment has been set up following the steps outlined in the <a href="../docs/quarks-getting-started">Getting started guide</a>. Let&#39;s begin by creating a <code>DirectProvider</code> and <code>Topology</code>. We choose a <code>DevelopmentProvider</code> so that we can view the topology graph using the console URL (refer to the <a href="../docs/console">Application console</a> page for a more detailed explanation of this provider). The gas mileage bounds, initial gas mileage value, and the number of miles in a typical delivery route have also been defined.</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kn">import</span> <span class="nn">java.text.DecimalFormat</span><span class="o">;</span>
-    <span class="kn">import</span> <span class="nn">java.util.Random</span><span class="o">;</span>
     <span class="kn">import</span> <span class="nn">java.util.concurrent.TimeUnit</span><span class="o">;</span>
 
     <span class="kn">import</span> <span class="nn">com.google.gson.JsonObject</span><span class="o">;</span>
 
+    <span class="kn">import</span> <span class="nn">quarks.analytics.sensors.Ranges</span><span class="o">;</span>
     <span class="kn">import</span> <span class="nn">quarks.console.server.HttpServer</span><span class="o">;</span>
     <span class="kn">import</span> <span class="nn">quarks.providers.development.DevelopmentProvider</span><span class="o">;</span>
     <span class="kn">import</span> <span class="nn">quarks.providers.direct.DirectProvider</span><span class="o">;</span>
+    <span class="kn">import</span> <span class="nn">quarks.samples.utils.sensor.SimpleSimulatedSensor</span><span class="o">;</span>
     <span class="kn">import</span> <span class="nn">quarks.topology.TStream</span><span class="o">;</span>
     <span class="kn">import</span> <span class="nn">quarks.topology.Topology</span><span class="o">;</span>
 
     <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ApplyDifferentProcessingAgainstStream</span> <span class="o">{</span>
         <span class="cm">/**
-         * Hypothetical values for the initial gas mileage and the
-         * number of miles in a typical delivery route
+         * Gas mileage (in miles per gallon, or mpg) value bounds
          */</span>
-        <span class="kd">static</span> <span class="kt">double</span> <span class="n">currentMileage</span> <span class="o">=</span> <span class="mf">10.5</span><span class="o">;</span>
+        <span class="kd">static</span> <span class="kt">double</span> <span class="n">MPG_LOW</span> <span class="o">=</span> <span class="mf">7.0</span><span class="o">;</span>
+        <span class="kd">static</span> <span class="kt">double</span> <span class="n">MPG_HIGH</span> <span class="o">=</span> <span class="mf">14.0</span><span class="o">;</span>
+        <span class="cm">/**
+         * Initial gas mileage sensor value
+         */</span>
+        <span class="kd">static</span> <span class="kt">double</span> <span class="n">INITIAL_MPG</span> <span class="o">=</span> <span class="mf">10.5</span><span class="o">;</span>
+        <span class="cm">/**
+         * Hypothetical value for the number of miles in a typical delivery route
+         */</span>
         <span class="kd">static</span> <span class="kt">double</span> <span class="n">ROUTE_MILES</span> <span class="o">=</span> <span class="mi">80</span><span class="o">;</span>
 
         <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
@@ -568,61 +622,49 @@ $('#toc').on('click', 'a', function() {
 
             <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">dp</span><span class="o">.</span><span class="na">getServices</span><span class="o">().</span><span class="na">getService</span><span class="o">(</span><span class="n">HttpServer</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">getConsoleUrl</span><span class="o">());</span>
 
-            <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="na">newTopology</span><span class="o">(</span><span class="s">"TruckSensor"</span><span class="o">);</span>
+            <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="na">newTopology</span><span class="o">(</span><span class="s">"GasMileageSensor"</span><span class="o">);</span>
 
             <span class="c1">// The rest of the code pieces belong here</span>
         <span class="o">}</span>
     <span class="o">}</span>
 </code></pre></div>
-<h2 id="generating-mileage-sensor-readings">Generating mileage sensor readings</h2>
+<h2 id="generating-gas-mileage-sensor-readings">Generating gas mileage sensor readings</h2>
 
-<p>The next step is to simulate a stream of gas mileage readings. In our <code>main()</code>, we use the <code>poll()</code> method to generate a flow of tuples (readings), where each tuple arrives every second. We ensure that the generated reading is between 7.0 mpg and 14.0 mpg.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="c1">// Generate a stream of mileage sensor readings</span>
-    <span class="n">DecimalFormat</span> <span class="n">df</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DecimalFormat</span><span class="o">(</span><span class="s">"#.#"</span><span class="o">);</span>
-    <span class="n">Random</span> <span class="n">r</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Random</span><span class="o">();</span>
-    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">mileage</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">poll</span><span class="o">(()</span> <span class="o">-&gt;</span> <span class="o">{</span>
-        <span class="c1">// Change current mileage by some random amount between -0.4 and 0.4</span>
-        <span class="k">while</span> <span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
-            <span class="kt">double</span> <span class="n">newMileage</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.4</span> <span class="o">+</span> <span class="o">(</span><span class="mf">0.4</span> <span class="o">+</span> <span class="mf">0.4</span><span class="o">)</span> <span class="o">*</span> <span class="n">r</span><span class="o">.</span><span class="na">nextDouble</span><span class="o">()</span> <span class="o">+</span> <span class="n">currentMileage</span><span class="o">;</span>
-            <span class="c1">// Ensure that new temperature is within [7.0, 14.0]</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">newMileage</span> <span class="o">&gt;=</span> <span class="mf">7.0</span> <span class="o">&amp;&amp;</span> <span class="n">newMileage</span> <span class="o">&lt;=</span> <span class="mf">14.0</span><span class="o">)</span> <span class="o">{</span>
-                <span class="n">currentMileage</span> <span class="o">=</span> <span class="n">Double</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">df</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="n">newMileage</span><span class="o">));</span>
-                <span class="k">break</span><span class="o">;</span>
-            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                <span class="k">continue</span><span class="o">;</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">currentMileage</span><span class="o">;</span>
-    <span class="o">},</span> <span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">);</span>
+<p>The next step is to simulate a stream of gas mileage readings using <a href="https://github.com/apache/incubator-quarks/blob/master/samples/utils/src/main/java/quarks/samples/utils/sensor/SimpleSimulatedSensor.java"><code>SimpleSimulatedSensor</code></a>. We set the initial gas mileage and delta factor in the first two arguments. The last argument ensures that the sensor reading falls in an acceptable range (between 7.0 mpg and 14.0 mpg). In our <code>main()</code>, we use the <code>poll()</code> method to generate a flow of tuples (readings), where each tuple arrives every second.</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="c1">// Generate a stream of gas mileage sensor readings</span>
+    <span class="n">SimpleSimulatedSensor</span> <span class="n">mpgSensor</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SimpleSimulatedSensor</span><span class="o">(</span><span class="n">INITIAL_MPG</span><span class="o">,</span>
+            <span class="mf">0.4</span><span class="o">,</span> <span class="n">Ranges</span><span class="o">.</span><span class="na">closed</span><span class="o">(</span><span class="n">MPG_LOW</span><span class="o">,</span> <span class="n">MPG_HIGH</span><span class="o">));</span>
+    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">mpgReadings</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">poll</span><span class="o">(</span><span class="n">mpgSensor</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">);</span>
 </code></pre></div>
 <h2 id="applying-different-processing-to-the-stream">Applying different processing to the stream</h2>
 
-<p>The company can now perform analytics on the <code>mileage</code> stream and feed it to different functions. </p>
+<p>The company can now perform analytics on the <code>mpgReadings</code> stream and feed it to different functions.</p>
 
-<p>First, we can filter out mileage values that are considered poor and tag the resulting stream for easier viewing in the console.</p>
+<p>First, we can filter out gas mileage values that are considered poor and tag the resulting stream for easier viewing in the console.</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="c1">// Filter out the poor gas mileage readings</span>
-    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">poorMileage</span> <span class="o">=</span> <span class="n">mileage</span>
-            <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">mpg</span> <span class="o">-&gt;</span> <span class="n">mpg</span> <span class="o">&lt;=</span> <span class="mi">9</span><span class="o">).</span><span class="na">tag</span><span class="o">(</span><span class="s">"filtered"</span><span class="o">);</span>
+    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">poorMpg</span> <span class="o">=</span> <span class="n">mpgReadings</span>
+            <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">mpg</span> <span class="o">-&gt;</span> <span class="n">mpg</span> <span class="o">&lt;=</span> <span class="mf">9.0</span><span class="o">).</span><span class="na">tag</span><span class="o">(</span><span class="s">"filtered"</span><span class="o">);</span>
 </code></pre></div>
 <p>If the company also wants the readings to be in JSON, we can easily create a new stream and convert from type <code>Double</code> to <code>JsonObject</code>.</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="c1">// Map Double to JsonObject</span>
-    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">JsonObject</span><span class="o">&gt;</span> <span class="n">json</span> <span class="o">=</span> <span class="n">mileage</span>
+     <span class="n">TStream</span><span class="o">&lt;</span><span class="n">JsonObject</span><span class="o">&gt;</span> <span class="n">json</span> <span class="o">=</span> <span class="n">mpgReadings</span>
             <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">mpg</span> <span class="o">-&gt;</span> <span class="o">{</span>
                 <span class="n">JsonObject</span> <span class="n">jObj</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JsonObject</span><span class="o">();</span>
-                <span class="n">jObj</span><span class="o">.</span><span class="na">addProperty</span><span class="o">(</span><span class="s">"mileage"</span><span class="o">,</span> <span class="n">mpg</span><span class="o">);</span>
+                <span class="n">jObj</span><span class="o">.</span><span class="na">addProperty</span><span class="o">(</span><span class="s">"gasMileage"</span><span class="o">,</span> <span class="n">mpg</span><span class="o">);</span>
                 <span class="k">return</span> <span class="n">jObj</span><span class="o">;</span>
             <span class="o">}).</span><span class="na">tag</span><span class="o">(</span><span class="s">"mapped"</span><span class="o">);</span>
 </code></pre></div>
-<p>In addition, we can calculate the estimated gallons of gas used based on the current mileage using <code>modify</code>.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="c1">// Modify mileage stream to obtain a stream containing the estimated gallons of gas used</span>
-    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">gallonsUsed</span> <span class="o">=</span> <span class="n">mileage</span>
+<p>In addition, we can calculate the estimated gallons of gas used based on the current gas mileage using <code>modify</code>.</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="c1">// Modify gas mileage stream to obtain a stream containing the estimated gallons of gas used</span>
+    <span class="n">DecimalFormat</span> <span class="n">df</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DecimalFormat</span><span class="o">(</span><span class="s">"#.#"</span><span class="o">);</span>
+    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">gallonsUsed</span> <span class="o">=</span> <span class="n">mpgReadings</span>
             <span class="o">.</span><span class="na">modify</span><span class="o">(</span><span class="n">mpg</span> <span class="o">-&gt;</span> <span class="n">Double</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">df</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="n">ROUTE_MILES</span> <span class="o">/</span> <span class="n">mpg</span><span class="o">))).</span><span class="na">tag</span><span class="o">(</span><span class="s">"modified"</span><span class="o">);</span>
 </code></pre></div>
 <p>The three examples demonstrated here are a small subset of the many other possibilities of stream processing.</p>
 
 <p>With each of these resulting streams, the company can perform further analytics, but at this point, we terminate the streams by printing out the tuples on each stream.</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="c1">// Terminate the streams</span>
-    <span class="n">poorMileage</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">mpg</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Poor mileage! "</span> <span class="o">+</span> <span class="n">mpg</span> <span class="o">+</span> <span class="s">" mpg"</span><span class="o">));</span>
+    <span class="n">poorMpg</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">mpg</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Poor gas mileage! "</span> <span class="o">+</span> <span class="n">mpg</span> <span class="o">+</span> <span class="s">" mpg"</span><span class="o">));</span>
     <span class="n">json</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">mpg</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"JSON: "</span> <span class="o">+</span> <span class="n">mpg</span><span class="o">));</span>
     <span class="n">gallonsUsed</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">gas</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Gallons of gas: "</span> <span class="o">+</span> <span class="n">gas</span> <span class="o">+</span> <span class="s">"\n"</span><span class="o">));</span>
 </code></pre></div>
@@ -631,18 +673,18 @@ $('#toc').on('click', 'a', function() {
 <h2 id="observing-the-output">Observing the output</h2>
 
 <p>When the final application is run, the output looks something like the following:</p>
-<div class="highlight"><pre><code class="language-" data-lang="">    JSON: {"mileage":9.5}
+<div class="highlight"><pre><code class="language-" data-lang="">    JSON: {"gasMileage":9.5}
     Gallons of gas: 8.4
 
-    JSON: {"mileage":9.2}
+    JSON: {"gasMileage":9.2}
     Gallons of gas: 8.7
 
-    Poor mileage! 9.0 mpg
-    JSON: {"mileage":9.0}
+    Poor gas mileage! 9.0 mpg
+    JSON: {"gasMileage":9.0}
     Gallons of gas: 8.9
 
-    Poor mileage! 8.8 mpg
-    JSON: {"mileage":8.8}
+    Poor gas mileage! 8.8 mpg
+    JSON: {"gasMileage":8.8}
     Gallons of gas: 9.1
 </code></pre></div>
 <h2 id="a-look-at-the-topology-graph">A look at the topology graph</h2>
@@ -653,31 +695,39 @@ $('#toc').on('click', 'a', function() {
 
 <h2 id="the-final-application">The final application</h2>
 <div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kn">import</span> <span class="nn">java.text.DecimalFormat</span><span class="o">;</span>
-    <span class="kn">import</span> <span class="nn">java.util.Random</span><span class="o">;</span>
     <span class="kn">import</span> <span class="nn">java.util.concurrent.TimeUnit</span><span class="o">;</span>
 
     <span class="kn">import</span> <span class="nn">com.google.gson.JsonObject</span><span class="o">;</span>
 
+    <span class="kn">import</span> <span class="nn">quarks.analytics.sensors.Ranges</span><span class="o">;</span>
     <span class="kn">import</span> <span class="nn">quarks.console.server.HttpServer</span><span class="o">;</span>
     <span class="kn">import</span> <span class="nn">quarks.providers.development.DevelopmentProvider</span><span class="o">;</span>
     <span class="kn">import</span> <span class="nn">quarks.providers.direct.DirectProvider</span><span class="o">;</span>
+    <span class="kn">import</span> <span class="nn">quarks.samples.utils.sensor.SimpleSimulatedSensor</span><span class="o">;</span>
     <span class="kn">import</span> <span class="nn">quarks.topology.TStream</span><span class="o">;</span>
     <span class="kn">import</span> <span class="nn">quarks.topology.Topology</span><span class="o">;</span>
 
-    <span class="cm">/**
+     <span class="cm">/**
      * Fan out stream and perform different analytics on the resulting streams.
      */</span>
     <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ApplyDifferentProcessingAgainstStream</span> <span class="o">{</span>
         <span class="cm">/**
-         * Hypothetical values for the initial gas mileage and the
-         * number of miles in a typical delivery route
+         * Gas mileage (in miles per gallon, or mpg) value bounds
          */</span>
-        <span class="kd">static</span> <span class="kt">double</span> <span class="n">currentMileage</span> <span class="o">=</span> <span class="mf">10.5</span><span class="o">;</span>
+        <span class="kd">static</span> <span class="kt">double</span> <span class="n">MPG_LOW</span> <span class="o">=</span> <span class="mf">7.0</span><span class="o">;</span>
+        <span class="kd">static</span> <span class="kt">double</span> <span class="n">MPG_HIGH</span> <span class="o">=</span> <span class="mf">14.0</span><span class="o">;</span>
+        <span class="cm">/**
+         * Initial gas mileage sensor value
+         */</span>
+        <span class="kd">static</span> <span class="kt">double</span> <span class="n">INITIAL_MPG</span> <span class="o">=</span> <span class="mf">10.5</span><span class="o">;</span>
+        <span class="cm">/**
+         * Hypothetical value for the number of miles in a typical delivery route
+         */</span>
         <span class="kd">static</span> <span class="kt">double</span> <span class="n">ROUTE_MILES</span> <span class="o">=</span> <span class="mi">80</span><span class="o">;</span>
 
         <span class="cm">/**
          * Polls a simulated delivery truck sensor to periodically obtain
-         * mileage readings (in miles/gallon). Feed the stream of sensor
+         * gas mileage readings (in miles/gallon). Feed the stream of sensor
          * readings to different functions (filter, map, and modify).
          */</span>
         <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
@@ -686,44 +736,32 @@ $('#toc').on('click', 'a', function() {
 
             <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">dp</span><span class="o">.</span><span class="na">getServices</span><span class="o">().</span><span class="na">getService</span><span class="o">(</span><span class="n">HttpServer</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">getConsoleUrl</span><span class="o">());</span>
 
-            <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="na">newTopology</span><span class="o">(</span><span class="s">"TruckSensor"</span><span class="o">);</span>
+            <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="na">newTopology</span><span class="o">(</span><span class="s">"GasMileageSensor"</span><span class="o">);</span>
 
-            <span class="c1">// Generate a stream of mileage sensor readings</span>
-            <span class="n">DecimalFormat</span> <span class="n">df</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DecimalFormat</span><span class="o">(</span><span class="s">"#.#"</span><span class="o">);</span>
-            <span class="n">Random</span> <span class="n">r</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Random</span><span class="o">();</span>
-            <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">mileage</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">poll</span><span class="o">(()</span> <span class="o">-&gt;</span> <span class="o">{</span>
-                <span class="c1">// Change current mileage by some random amount between -0.4 and 0.4</span>
-                <span class="k">while</span> <span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="kt">double</span> <span class="n">newMileage</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.4</span> <span class="o">+</span> <span class="o">(</span><span class="mf">0.4</span> <span class="o">+</span> <span class="mf">0.4</span><span class="o">)</span> <span class="o">*</span> <span class="n">r</span><span class="o">.</span><span class="na">nextDouble</span><span class="o">()</span> <span class="o">+</span> <span class="n">currentMileage</span><span class="o">;</span>
-                    <span class="c1">// Ensure that new temperature is within [7.0, 14.0]</span>
-                    <span class="k">if</span> <span class="o">(</span><span class="n">newMileage</span> <span class="o">&gt;=</span> <span class="mf">7.0</span> <span class="o">&amp;&amp;</span> <span class="n">newMileage</span> <span class="o">&lt;=</span> <span class="mf">14.0</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="n">currentMileage</span> <span class="o">=</span> <span class="n">Double</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">df</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="n">newMileage</span><span class="o">));</span>
-                        <span class="k">break</span><span class="o">;</span>
-                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                        <span class="k">continue</span><span class="o">;</span>
-                    <span class="o">}</span>
-                <span class="o">}</span>
-                <span class="k">return</span> <span class="n">currentMileage</span><span class="o">;</span>
-            <span class="o">},</span> <span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">);</span>
+            <span class="c1">// Generate a stream of gas mileage sensor readings</span>
+            <span class="n">SimpleSimulatedSensor</span> <span class="n">mpgSensor</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SimpleSimulatedSensor</span><span class="o">(</span><span class="n">INITIAL_MPG</span><span class="o">,</span>
+                    <span class="mf">0.4</span><span class="o">,</span> <span class="n">Ranges</span><span class="o">.</span><span class="na">closed</span><span class="o">(</span><span class="n">MPG_LOW</span><span class="o">,</span> <span class="n">MPG_HIGH</span><span class="o">));</span>
+            <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">mpgReadings</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">poll</span><span class="o">(</span><span class="n">mpgSensor</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">);</span>
 
             <span class="c1">// Filter out the poor gas mileage readings</span>
-            <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">poorMileage</span> <span class="o">=</span> <span class="n">mileage</span>
-                    <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">mpg</span> <span class="o">-&gt;</span> <span class="n">mpg</span> <span class="o">&lt;=</span> <span class="mi">9</span><span class="o">).</span><span class="na">tag</span><span class="o">(</span><span class="s">"filtered"</span><span class="o">);</span>
+            <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">poorMpg</span> <span class="o">=</span> <span class="n">mpgReadings</span>
+                    <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">mpg</span> <span class="o">-&gt;</span> <span class="n">mpg</span> <span class="o">&lt;=</span> <span class="mf">9.0</span><span class="o">).</span><span class="na">tag</span><span class="o">(</span><span class="s">"filtered"</span><span class="o">);</span>
 
             <span class="c1">// Map Double to JsonObject</span>
-            <span class="n">TStream</span><span class="o">&lt;</span><span class="n">JsonObject</span><span class="o">&gt;</span> <span class="n">json</span> <span class="o">=</span> <span class="n">mileage</span>
+            <span class="n">TStream</span><span class="o">&lt;</span><span class="n">JsonObject</span><span class="o">&gt;</span> <span class="n">json</span> <span class="o">=</span> <span class="n">mpgReadings</span>
                     <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">mpg</span> <span class="o">-&gt;</span> <span class="o">{</span>
                         <span class="n">JsonObject</span> <span class="n">jObj</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JsonObject</span><span class="o">();</span>
-                        <span class="n">jObj</span><span class="o">.</span><span class="na">addProperty</span><span class="o">(</span><span class="s">"mileage"</span><span class="o">,</span> <span class="n">mpg</span><span class="o">);</span>
+                        <span class="n">jObj</span><span class="o">.</span><span class="na">addProperty</span><span class="o">(</span><span class="s">"gasMileage"</span><span class="o">,</span> <span class="n">mpg</span><span class="o">);</span>
                         <span class="k">return</span> <span class="n">jObj</span><span class="o">;</span>
                     <span class="o">}).</span><span class="na">tag</span><span class="o">(</span><span class="s">"mapped"</span><span class="o">);</span>
 
-            <span class="c1">// Modify mileage stream to obtain a stream containing the estimated gallons of gas used</span>
-            <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">gallonsUsed</span> <span class="o">=</span> <span class="n">mileage</span>
+            <span class="c1">// Modify gas mileage stream to obtain a stream containing the estimated gallons of gas used</span>
+            <span class="n">DecimalFormat</span> <span class="n">df</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DecimalFormat</span><span class="o">(</span><span class="s">"#.#"</span><span class="o">);</span>
+            <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">gallonsUsed</span> <span class="o">=</span> <span class="n">mpgReadings</span>
                     <span class="o">.</span><span class="na">modify</span><span class="o">(</span><span class="n">mpg</span> <span class="o">-&gt;</span> <span class="n">Double</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">df</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="n">ROUTE_MILES</span> <span class="o">/</span> <span class="n">mpg</span><span class="o">))).</span><span class="na">tag</span><span class="o">(</span><span class="s">"modified"</span><span class="o">);</span>
 
             <span class="c1">// Terminate the streams</span>
-            <span class="n">poorMileage</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">mpg</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Poor mileage! "</span> <span class="o">+</span> <span class="n">mpg</span> <span class="o">+</span> <span class="s">" mpg"</span><span class="o">));</span>
+            <span class="n">poorMpg</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">mpg</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Poor gas mileage! "</span> <span class="o">+</span> <span class="n">mpg</span> <span class="o">+</span> <span class="s">" mpg"</span><span class="o">));</span>
             <span class="n">json</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">mpg</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"JSON: "</span> <span class="o">+</span> <span class="n">mpg</span><span class="o">));</span>
             <span class="n">gallonsUsed</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">gas</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Gallons of gas: "</span> <span class="o">+</span> <span class="n">gas</span> <span class="o">+</span> <span class="s">"\n"</span><span class="o">));</span>
 
@@ -762,7 +800,7 @@ $('#toc').on('click', 'a', function() {
         <div class="col-lg-12 footer">
 
              Site last
-            generated: Apr 14, 2016 <br/>
+            generated: Apr 28, 2016 <br/>
 
         </div>
     </div>

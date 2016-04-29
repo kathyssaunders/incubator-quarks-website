@@ -89,6 +89,21 @@
                                   
                         
                      
+                         
+                            http://quarks.incubator.apache.org/recipes/recipe_adaptable_polling_source.html
+                                  
+                        
+                     
+                         
+                            http://quarks.incubator.apache.org/recipes/recipe_adaptable_deadtime_filter.html
+                                  
+                        
+                     
+                         
+                            http://quarks.incubator.apache.org/recipes/recipe_dynamic_analytic_control.html
+                                  
+                        
+                     
               
           
               
