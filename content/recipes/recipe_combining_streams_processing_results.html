@@ -590,177 +590,177 @@ $('#toc').on('click', 'a', function() {
 <p>We assume that the environment has been set up following the steps outlined in the <a href="../docs/quarks-getting-started">Getting started guide</a>.</p>
 
 <p>First, we need to define a class for a heart monitor. We generate random blood pressure readings, each consisting of the systolic pressure (the top number) and the diastolic pressure (the bottom number). For example, with a blood pressure of 115/75 (read as &quot;115 over 75&quot;), the systolic pressure is 115 and the diastolic pressure is 75. These two pressures are stored in a <code>map</code>, and each call to <code>get()</code> returns new values.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kn">import</span> <span class="nn">java.util.HashMap</span><span class="o">;</span>
-    <span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
-    <span class="kn">import</span> <span class="nn">java.util.Random</span><span class="o">;</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.util.HashMap</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Random</span><span class="o">;</span>
 
-    <span class="kn">import</span> <span class="nn">quarks.function.Supplier</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">quarks.function.Supplier</span><span class="o">;</span>
 
-    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">HeartMonitorSensor</span> <span class="kd">implements</span> <span class="n">Supplier</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">Integer</span><span class="o">&gt;&gt;</span> <span class="o">{</span>
-        <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="mi">1L</span><span class="o">;</span>
-        <span class="c1">// Initial blood pressure</span>
-        <span class="kd">public</span> <span class="n">Integer</span> <span class="n">currentSystolic</span> <span class="o">=</span> <span class="mi">115</span><span class="o">;</span>
-        <span class="kd">public</span> <span class="n">Integer</span> <span class="n">currentDiastolic</span> <span class="o">=</span> <span class="mi">75</span><span class="o">;</span>
-        <span class="n">Random</span> <span class="n">rand</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">HeartMonitorSensor</span> <span class="kd">implements</span> <span class="n">Supplier</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">Integer</span><span class="o">&gt;&gt;</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="mi">1L</span><span class="o">;</span>
+    <span class="c1">// Initial blood pressure</span>
+    <span class="kd">public</span> <span class="n">Integer</span> <span class="n">currentSystolic</span> <span class="o">=</span> <span class="mi">115</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="n">Integer</span> <span class="n">currentDiastolic</span> <span class="o">=</span> <span class="mi">75</span><span class="o">;</span>
+    <span class="n">Random</span> <span class="n">rand</span><span class="o">;</span>
 
-        <span class="kd">public</span> <span class="n">HeartMonitorSensor</span><span class="o">()</span> <span class="o">{</span>
-            <span class="n">rand</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Random</span><span class="o">();</span>
-        <span class="o">}</span>
-
-        <span class="cm">/**
-         * Every call to this method returns a map containing a random systolic
-         * pressure and a random diastolic pressure.
-         */</span>
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="n">get</span><span class="o">()</span> <span class="o">{</span>
-            <span class="c1">// Change the current pressure by some random amount between -2 and 2</span>
-            <span class="n">Integer</span> <span class="n">newSystolic</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span><span class="o">)</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">currentSystolic</span><span class="o">;</span>
-            <span class="n">currentSystolic</span> <span class="o">=</span> <span class="n">newSystolic</span><span class="o">;</span>
-
-            <span class="n">Integer</span> <span class="n">newDiastolic</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span><span class="o">)</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">currentDiastolic</span><span class="o">;</span>
-            <span class="n">currentDiastolic</span> <span class="o">=</span> <span class="n">newDiastolic</span><span class="o">;</span>
-
-            <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="n">pressures</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;();</span>
-            <span class="n">pressures</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"Systolic"</span><span class="o">,</span> <span class="n">currentSystolic</span><span class="o">);</span>
-            <span class="n">pressures</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"Diastolic"</span><span class="o">,</span> <span class="n">currentDiastolic</span><span class="o">);</span>
-            <span class="k">return</span> <span class="n">pressures</span><span class="o">;</span>
-        <span class="o">}</span>
+    <span class="kd">public</span> <span class="n">HeartMonitorSensor</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">rand</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Random</span><span class="o">();</span>
     <span class="o">}</span>
+
+    <span class="cm">/**
+     * Every call to this method returns a map containing a random systolic
+     * pressure and a random diastolic pressure.
+     */</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="n">get</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// Change the current pressure by some random amount between -2 and 2</span>
+        <span class="n">Integer</span> <span class="n">newSystolic</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span><span class="o">)</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">currentSystolic</span><span class="o">;</span>
+        <span class="n">currentSystolic</span> <span class="o">=</span> <span class="n">newSystolic</span><span class="o">;</span>
+
+        <span class="n">Integer</span> <span class="n">newDiastolic</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span><span class="o">)</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">currentDiastolic</span><span class="o">;</span>
+        <span class="n">currentDiastolic</span> <span class="o">=</span> <span class="n">newDiastolic</span><span class="o">;</span>
+
+        <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="n">pressures</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;();</span>
+        <span class="n">pressures</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"Systolic"</span><span class="o">,</span> <span class="n">currentSystolic</span><span class="o">);</span>
+        <span class="n">pressures</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"Diastolic"</span><span class="o">,</span> <span class="n">currentDiastolic</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">pressures</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 </code></pre></div>
 <p>Now, let&#39;s start our application by creating a <code>DirectProvider</code> and <code>Topology</code>. We choose a <code>DevelopmentProvider</code> so that we can view the topology graph using the console URL. We have also created a <code>HeartMonitor</code>.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kn">import</span> <span class="nn">java.util.HashSet</span><span class="o">;</span>
-    <span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
-    <span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
-    <span class="kn">import</span> <span class="nn">java.util.Set</span><span class="o">;</span>
-    <span class="kn">import</span> <span class="nn">java.util.concurrent.TimeUnit</span><span class="o">;</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.util.HashSet</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Set</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.concurrent.TimeUnit</span><span class="o">;</span>
 
-    <span class="kn">import</span> <span class="nn">quarks.console.server.HttpServer</span><span class="o">;</span>
-    <span class="kn">import</span> <span class="nn">quarks.function.ToIntFunction</span><span class="o">;</span>
-    <span class="kn">import</span> <span class="nn">quarks.providers.development.DevelopmentProvider</span><span class="o">;</span>
-    <span class="kn">import</span> <span class="nn">quarks.providers.direct.DirectProvider</span><span class="o">;</span>
-    <span class="kn">import</span> <span class="nn">quarks.samples.utils.sensor.HeartMonitorSensor</span><span class="o">;</span>
-    <span class="kn">import</span> <span class="nn">quarks.topology.TStream</span><span class="o">;</span>
-    <span class="kn">import</span> <span class="nn">quarks.topology.Topology</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">quarks.console.server.HttpServer</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">quarks.function.ToIntFunction</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">quarks.providers.development.DevelopmentProvider</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">quarks.providers.direct.DirectProvider</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">quarks.samples.utils.sensor.HeartMonitorSensor</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">quarks.topology.TStream</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">quarks.topology.Topology</span><span class="o">;</span>
 
-    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">CombiningStreamsProcessingResults</span> <span class="o">{</span>
-        <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">HeartMonitorSensor</span> <span class="n">monitor</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HeartMonitorSensor</span><span class="o">();</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CombiningStreamsProcessingResults</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">HeartMonitorSensor</span> <span class="n">monitor</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HeartMonitorSensor</span><span class="o">();</span>
 
-            <span class="n">DirectProvider</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DevelopmentProvider</span><span class="o">();</span>
+        <span class="n">DirectProvider</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DevelopmentProvider</span><span class="o">();</span>
 
-            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">dp</span><span class="o">.</span><span class="na">getServices</span><span class="o">().</span><span class="na">getService</span><span class="o">(</span><span class="n">HttpServer</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">getConsoleUrl</span><span class="o">());</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">dp</span><span class="o">.</span><span class="na">getServices</span><span class="o">().</span><span class="na">getService</span><span class="o">(</span><span class="n">HttpServer</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">getConsoleUrl</span><span class="o">());</span>
 
-            <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="na">newTopology</span><span class="o">(</span><span class="s">"heartMonitor"</span><span class="o">);</span>
+        <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="na">newTopology</span><span class="o">(</span><span class="s">"heartMonitor"</span><span class="o">);</span>
 
-            <span class="c1">// The rest of the code pieces belong here</span>
-        <span class="o">}</span>
+        <span class="c1">// The rest of the code pieces belong here</span>
     <span class="o">}</span>
+<span class="o">}</span>
 </code></pre></div>
 <h2 id="generating-heart-monitor-sensor-readings">Generating heart monitor sensor readings</h2>
 
 <p>The next step is to simulate a stream of readings. In our <code>main()</code>, we use the <code>poll()</code> method to generate a flow of tuples (readings), where each tuple arrives every millisecond. Unlikely readings are filtered out.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="c1">// Generate a stream of heart monitor readings</span>
-    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;&gt;</span> <span class="n">readings</span> <span class="o">=</span> <span class="n">top</span>
-            <span class="o">.</span><span class="na">poll</span><span class="o">(</span><span class="n">monitor</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">)</span>
-            <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Systolic"</span><span class="o">)</span> <span class="o">&gt;</span> <span class="mi">50</span> <span class="o">&amp;&amp;</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Diastolic"</span><span class="o">)</span> <span class="o">&gt;</span> <span class="mi">30</span><span class="o">)</span>
-            <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Systolic"</span><span class="o">)</span> <span class="o">&lt;</span> <span class="mi">200</span> <span class="o">&amp;&amp;</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Diastolic"</span><span class="o">)</span> <span class="o">&lt;</span> <span class="mi">130</span><span class="o">);</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// Generate a stream of heart monitor readings</span>
+<span class="n">TStream</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;&gt;</span> <span class="n">readings</span> <span class="o">=</span> <span class="n">top</span>
+        <span class="o">.</span><span class="na">poll</span><span class="o">(</span><span class="n">monitor</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Systolic"</span><span class="o">)</span> <span class="o">&gt;</span> <span class="mi">50</span> <span class="o">&amp;&amp;</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Diastolic"</span><span class="o">)</span> <span class="o">&gt;</span> <span class="mi">30</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Systolic"</span><span class="o">)</span> <span class="o">&lt;</span> <span class="mi">200</span> <span class="o">&amp;&amp;</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Diastolic"</span><span class="o">)</span> <span class="o">&lt;</span> <span class="mi">130</span><span class="o">);</span>
 </code></pre></div>
 <h2 id="splitting-the-readings">Splitting the readings</h2>
 
 <p>We are now ready to split the <code>readings</code> stream by the blood pressure category. Let&#39;s look more closely at the method declaration of <code>split</code> below. For more details about <code>split</code>, refer to the <a href="http://quarks-edge.github.io/quarks/docs/javadoc/quarks/topology/TStream.html#split-int-quarks.function.ToIntFunction-">Javadoc</a>.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">List</span><span class="o">&lt;</span><span class="n">TStream</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;</span> <span class="n">split</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">,</span> <span class="n">ToIntFunction</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">splitter</span><span class="o">)</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">List</span><span class="o">&lt;</span><span class="n">TStream</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;</span> <span class="n">split</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">,</span> <span class="n">ToIntFunction</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">splitter</span><span class="o">)</span>
 </code></pre></div>
 <p><code>split</code> returns a <code>List</code> of <code>TStream</code> objects, where each item in the list is one of the resulting output streams. In this case, one stream in the list will contain a flow of tuples where the blood pressure reading belongs to one of the five blood pressure categories. Another stream will contain a flow of tuples where the blood pressure reading belongs to a different blood pressure category, and so on.</p>
 
 <p>There are two input parameters. You must specify <code>n</code>, the number of output streams, as well as a <code>splitter</code> method. <code>splitter</code> processes each incoming tuple individually and determines on which of the output streams the tuple will be placed. In this method, you can break down your placement rules into different branches, where each branch returns an integer indicating the index of the output stream in the list.</p>
 
 <p>Going back to our example, let&#39;s see how we can use <code>split</code> to achieve our goal. We pass in <code>6</code> as the first argument, as we want five output streams (i.e., a stream for each of the five different blood pressure categories) in addition one stream for invalid values. Our <code>splitter</code> method should then define how tuples will be placed on each of the five streams. We define a rule for each category, such that if the systolic and diastolic pressures of a reading fall in a certain range, then that reading belongs to a specific category. For example, if we are processing a tuple with a blood pressure reading of 150/95 (<em>High Blood Pressure (Hypertension) Stage 1</em> category), then we return <code>2</code>, meaning that the tuple will be placed in the stream at index <code>2</code> in the <code>categories</code> list. We follow a similar process for the other 4 categories, ordering the streams from lowest to highest severity.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="n">List</span><span class="o">&lt;</span><span class="n">TStream</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;&gt;&gt;</span> <span class="n">categories</span> <span class="o">=</span> <span class="n">readings</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="mi">6</span><span class="o">,</span> <span class="n">tuple</span> <span class="o">-&gt;</span> <span class="o">{</span>
-        <span class="kt">int</span> <span class="n">s</span> <span class="o">=</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Systolic"</span><span class="o">);</span>
-        <span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Diastolic"</span><span class="o">);</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">s</span> <span class="o">&lt;</span> <span class="mi">120</span> <span class="o">&amp;&amp;</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="mi">80</span><span class="o">)</span> <span class="o">{</span>
-            <span class="c1">// Normal</span>
-            <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">((</span><span class="n">s</span> <span class="o">&gt;=</span> <span class="mi">120</span> <span class="o">&amp;&amp;</span> <span class="n">s</span> <span class="o">&lt;=</span> <span class="mi">139</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="n">d</span> <span class="o">&gt;=</span> <span class="mi">80</span> <span class="o">&amp;&amp;</span> <span class="n">d</span> <span class="o">&lt;=</span> <span class="mi">89</span><span class="o">))</span> <span class="o">{</span>
-            <span class="c1">// Prehypertension</span>
-            <span class="k">return</span> <span class="mi">1</span><span class="o">;</span>
-        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">((</span><span class="n">s</span> <span class="o">&gt;=</span> <span class="mi">140</span> <span class="o">&amp;&amp;</span> <span class="n">s</span> <span class="o">&lt;=</span> <span class="mi">159</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="n">d</span> <span class="o">&gt;=</span> <span class="mi">90</span> <span class="o">&amp;&amp;</span> <span class="n">d</span> <span class="o">&lt;=</span> <span class="mi">99</span><span class="o">))</span> <span class="o">{</span>
-            <span class="c1">// High Blood Pressure (Hypertension) Stage 1</span>
-            <span class="k">return</span> <span class="mi">2</span><span class="o">;</span>
-        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">((</span><span class="n">s</span> <span class="o">&gt;=</span> <span class="mi">160</span> <span class="o">&amp;&amp;</span> <span class="n">s</span> <span class="o">&lt;=</span> <span class="mi">179</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="n">d</span> <span class="o">&gt;=</span> <span class="mi">100</span> <span class="o">&amp;&amp;</span> <span class="n">d</span> <span class="o">&lt;=</span> <span class="mi">109</span><span class="o">))</span> <span class="o">{</span>
-            <span class="c1">// High Blood Pressure (Hypertension) Stage 2</span>
-            <span class="k">return</span> <span class="mi">3</span><span class="o">;</span>
-        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">s</span> <span class="o">&gt;=</span> <span class="mi">180</span> <span class="o">&amp;&amp;</span> <span class="n">d</span> <span class="o">&gt;=</span> <span class="mi">110</span><span class="o">)</span>  <span class="o">{</span>
-            <span class="c1">// Hypertensive Crisis</span>
-            <span class="k">return</span> <span class="mi">4</span><span class="o">;</span>
-        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-            <span class="c1">// Invalid</span>
-            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
-        <span class="o">}</span>
-    <span class="o">});</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">List</span><span class="o">&lt;</span><span class="n">TStream</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;&gt;&gt;</span> <span class="n">categories</span> <span class="o">=</span> <span class="n">readings</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="mi">6</span><span class="o">,</span> <span class="n">tuple</span> <span class="o">-&gt;</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="n">s</span> <span class="o">=</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Systolic"</span><span class="o">);</span>
+    <span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Diastolic"</span><span class="o">);</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">s</span> <span class="o">&lt;</span> <span class="mi">120</span> <span class="o">&amp;&amp;</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="mi">80</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// Normal</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">((</span><span class="n">s</span> <span class="o">&gt;=</span> <span class="mi">120</span> <span class="o">&amp;&amp;</span> <span class="n">s</span> <span class="o">&lt;=</span> <span class="mi">139</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="n">d</span> <span class="o">&gt;=</span> <span class="mi">80</span> <span class="o">&amp;&amp;</span> <span class="n">d</span> <span class="o">&lt;=</span> <span class="mi">89</span><span class="o">))</span> <span class="o">{</span>
+        <span class="c1">// Prehypertension</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="o">;</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">((</span><span class="n">s</span> <span class="o">&gt;=</span> <span class="mi">140</span> <span class="o">&amp;&amp;</span> <span class="n">s</span> <span class="o">&lt;=</span> <span class="mi">159</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="n">d</span> <span class="o">&gt;=</span> <span class="mi">90</span> <span class="o">&amp;&amp;</span> <span class="n">d</span> <span class="o">&lt;=</span> <span class="mi">99</span><span class="o">))</span> <span class="o">{</span>
+        <span class="c1">// High Blood Pressure (Hypertension) Stage 1</span>
+        <span class="k">return</span> <span class="mi">2</span><span class="o">;</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">((</span><span class="n">s</span> <span class="o">&gt;=</span> <span class="mi">160</span> <span class="o">&amp;&amp;</span> <span class="n">s</span> <span class="o">&lt;=</span> <span class="mi">179</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="n">d</span> <span class="o">&gt;=</span> <span class="mi">100</span> <span class="o">&amp;&amp;</span> <span class="n">d</span> <span class="o">&lt;=</span> <span class="mi">109</span><span class="o">))</span> <span class="o">{</span>
+        <span class="c1">// High Blood Pressure (Hypertension) Stage 2</span>
+        <span class="k">return</span> <span class="mi">3</span><span class="o">;</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">s</span> <span class="o">&gt;=</span> <span class="mi">180</span> <span class="o">&amp;&amp;</span> <span class="n">d</span> <span class="o">&gt;=</span> <span class="mi">110</span><span class="o">)</span>  <span class="o">{</span>
+        <span class="c1">// Hypertensive Crisis</span>
+        <span class="k">return</span> <span class="mi">4</span><span class="o">;</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+        <span class="c1">// Invalid</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">});</span>
 </code></pre></div>
 <p>Note that instead of <code>split</code>, we could have performed five different <code>filter</code> operations. However, <code>split</code> is favored for cleaner code and more efficient processing as each tuple is only analyzed once.</p>
 
 <h2 id="applying-different-processing-against-the-streams-to-generate-alerts">Applying different processing against the streams to generate alerts</h2>
 
 <p>At this point, we have 6 output streams, one for each blood pressure category and one for invalid values (which we will ignore). We can easily retrieve a stream by using the standard <code>List</code> operation <code>get()</code>. For instance, we can retrieve all heart monitor readings with a blood pressure reading in the <em>Normal</em> category by retrieving the <code>TStream</code> at index <code>0</code> as we defined previously. Similarly, we can retrieve the other streams associated with the other four categories. The streams are tagged so that we can easily locate them in the topology graph.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="c1">// Get each individual stream</span>
-    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;&gt;</span> <span class="n">normal</span> <span class="o">=</span> <span class="n">categories</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">).</span><span class="na">tag</span><span class="o">(</span><span class="s">"normal"</span><span class="o">);</span>
-    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;&gt;</span> <span class="n">prehypertension</span> <span class="o">=</span> <span class="n">categories</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="na">tag</span><span class="o">(</span><span class="s">"prehypertension"</span><span class="o">);</span>
-    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;&gt;</span> <span class="n">hypertension_stage1</span> <span class="o">=</span> <span class="n">categories</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">2</span><span class="o">).</span><span class="na">tag</span><span class="o">(</span><span class="s">"hypertension_stage1"</span><span class="o">);</span>
-    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;&gt;</span> <span class="n">hypertension_stage2</span> <span class="o">=</span> <span class="n">categories</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">3</span><span class="o">).</span><span class="na">tag</span><span class="o">(</span><span class="s">"hypertension_stage2"</span><span class="o">);</span>
-    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;&gt;</span> <span class="n">hypertensive</span> <span class="o">=</span> <span class="n">categories</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">4</span><span class="o">).</span><span class="na">tag</span><span class="o">(</span><span class="s">"hypertensive"</span><span class="o">);</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// Get each individual stream</span>
+<span class="n">TStream</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;&gt;</span> <span class="n">normal</span> <span class="o">=</span> <span class="n">categories</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">).</span><span class="na">tag</span><span class="o">(</span><span class="s">"normal"</span><span class="o">);</span>
+<span class="n">TStream</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;&gt;</span> <span class="n">prehypertension</span> <span class="o">=</span> <span class="n">categories</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="na">tag</span><span class="o">(</span><span class="s">"prehypertension"</span><span class="o">);</span>
+<span class="n">TStream</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;&gt;</span> <span class="n">hypertension_stage1</span> <span class="o">=</span> <span class="n">categories</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">2</span><span class="o">).</span><span class="na">tag</span><span class="o">(</span><span class="s">"hypertension_stage1"</span><span class="o">);</span>
+<span class="n">TStream</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;&gt;</span> <span class="n">hypertension_stage2</span> <span class="o">=</span> <span class="n">categories</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">3</span><span class="o">).</span><span class="na">tag</span><span class="o">(</span><span class="s">"hypertension_stage2"</span><span class="o">);</span>
+<span class="n">TStream</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;&gt;</span> <span class="n">hypertensive</span> <span class="o">=</span> <span class="n">categories</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">4</span><span class="o">).</span><span class="na">tag</span><span class="o">(</span><span class="s">"hypertensive"</span><span class="o">);</span>
 </code></pre></div>
 <p>The hospital can then use these streams to perform analytics on each stream and generate alerts based on the blood pressure category. For this simple example, a different number of transformations/filters is applied to each stream (known as a processing pipeline) to illustrate that very different processing can be achieved that is specific to the category at hand.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="c1">// Category: Normal</span>
-    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">normalAlerts</span> <span class="o">=</span> <span class="n">normal</span>
-            <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Systolic"</span><span class="o">)</span> <span class="o">&gt;</span> <span class="mi">80</span> <span class="o">&amp;&amp;</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Diastolic"</span><span class="o">)</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="o">)</span>
-            <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"normal"</span><span class="o">)</span>
-            <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="o">{</span>
-                <span class="k">return</span> <span class="s">"All is normal. BP is "</span> <span class="o">+</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Systolic"</span><span class="o">)</span> <span class="o">+</span> <span class="s">"/"</span> <span class="o">+</span>
-                        <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Diastolic"</span><span class="o">)</span> <span class="o">+</span> <span class="s">".\n"</span><span class="o">;</span> <span class="o">})</span>
-            <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"normal"</span><span class="o">);</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// Category: Normal</span>
+<span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">normalAlerts</span> <span class="o">=</span> <span class="n">normal</span>
+        <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Systolic"</span><span class="o">)</span> <span class="o">&gt;</span> <span class="mi">80</span> <span class="o">&amp;&amp;</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Diastolic"</span><span class="o">)</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"normal"</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="s">"All is normal. BP is "</span> <span class="o">+</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Systolic"</span><span class="o">)</span> <span class="o">+</span> <span class="s">"/"</span> <span class="o">+</span>
+                    <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Diastolic"</span><span class="o">)</span> <span class="o">+</span> <span class="s">".\n"</span><span class="o">;</span> <span class="o">})</span>
+        <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"normal"</span><span class="o">);</span>
 
-    <span class="c1">// Category: Prehypertension category</span>
-    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">prehypertensionAlerts</span> <span class="o">=</span> <span class="n">prehypertension</span>
-            <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="o">{</span>
-                <span class="k">return</span> <span class="s">"At high risk for developing hypertension. BP is "</span> <span class="o">+</span>
-                        <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Systolic"</span><span class="o">)</span> <span class="o">+</span> <span class="s">"/"</span> <span class="o">+</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Diastolic"</span><span class="o">)</span> <span class="o">+</span> <span class="s">".\n"</span><span class="o">;</span> <span class="o">})</span>
-            <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"prehypertension"</span><span class="o">);</span>
+<span class="c1">// Category: Prehypertension category</span>
+<span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">prehypertensionAlerts</span> <span class="o">=</span> <span class="n">prehypertension</span>
+        <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="s">"At high risk for developing hypertension. BP is "</span> <span class="o">+</span>
+                    <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Systolic"</span><span class="o">)</span> <span class="o">+</span> <span class="s">"/"</span> <span class="o">+</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Diastolic"</span><span class="o">)</span> <span class="o">+</span> <span class="s">".\n"</span><span class="o">;</span> <span class="o">})</span>
+        <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"prehypertension"</span><span class="o">);</span>
 
-    <span class="c1">// Category: High Blood Pressure (Hypertension) Stage 1</span>
-    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">hypertension_stage1Alerts</span> <span class="o">=</span> <span class="n">hypertension_stage1</span>
-            <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="o">{</span>
-                <span class="k">return</span> <span class="s">"Monitor closely, patient has high blood pressure. "</span> <span class="o">+</span>
-                       <span class="s">"BP is "</span> <span class="o">+</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Systolic"</span><span class="o">)</span> <span class="o">+</span> <span class="s">"/"</span> <span class="o">+</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Diastolic"</span><span class="o">)</span> <span class="o">+</span> <span class="s">".\n"</span><span class="o">;</span> <span class="o">})</span>
-            <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"hypertension_stage1"</span><span class="o">)</span>
-            <span class="o">.</span><span class="na">modify</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="s">"High Blood Pressure (Hypertension) Stage 1\n"</span> <span class="o">+</span> <span class="n">tuple</span><span class="o">)</span>
-            <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"hypertension_stage1"</span><span class="o">);</span>
+<span class="c1">// Category: High Blood Pressure (Hypertension) Stage 1</span>
+<span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">hypertension_stage1Alerts</span> <span class="o">=</span> <span class="n">hypertension_stage1</span>
+        <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="s">"Monitor closely, patient has high blood pressure. "</span> <span class="o">+</span>
+                   <span class="s">"BP is "</span> <span class="o">+</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Systolic"</span><span class="o">)</span> <span class="o">+</span> <span class="s">"/"</span> <span class="o">+</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Diastolic"</span><span class="o">)</span> <span class="o">+</span> <span class="s">".\n"</span><span class="o">;</span> <span class="o">})</span>
+        <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"hypertension_stage1"</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">modify</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="s">"High Blood Pressure (Hypertension) Stage 1\n"</span> <span class="o">+</span> <span class="n">tuple</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"hypertension_stage1"</span><span class="o">);</span>
 
-    <span class="c1">// Category: High Blood Pressure (Hypertension) Stage 2</span>
-    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">hypertension_stage2Alerts</span> <span class="o">=</span> <span class="n">hypertension_stage2</span>
-            <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Systolic"</span><span class="o">)</span> <span class="o">&gt;=</span> <span class="mi">170</span> <span class="o">&amp;&amp;</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Diastolic"</span><span class="o">)</span> <span class="o">&gt;=</span> <span class="mi">105</span><span class="o">)</span>
-            <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"hypertension_stage2"</span><span class="o">)</span>
-            <span class="o">.</span><span class="na">peek</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span>
-                <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"BP: "</span> <span class="o">+</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Systolic"</span><span class="o">)</span> <span class="o">+</span> <span class="s">"/"</span> <span class="o">+</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Diastolic"</span><span class="o">)))</span>
-            <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="o">{</span>
-                <span class="k">return</span> <span class="s">"Warning! Monitor closely, patient is at risk of a hypertensive crisis!\n"</span><span class="o">;</span> <span class="o">})</span>
-            <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"hypertension_stage2"</span><span class="o">)</span>
-            <span class="o">.</span><span class="na">modify</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="s">"High Blood Pressure (Hypertension) Stage 2\n"</span> <span class="o">+</span> <span class="n">tuple</span><span class="o">)</span>
-            <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"hypertension_stage2"</span><span class="o">);</span>
+<span class="c1">// Category: High Blood Pressure (Hypertension) Stage 2</span>
+<span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">hypertension_stage2Alerts</span> <span class="o">=</span> <span class="n">hypertension_stage2</span>
+        <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Systolic"</span><span class="o">)</span> <span class="o">&gt;=</span> <span class="mi">170</span> <span class="o">&amp;&amp;</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Diastolic"</span><span class="o">)</span> <span class="o">&gt;=</span> <span class="mi">105</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"hypertension_stage2"</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">peek</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"BP: "</span> <span class="o">+</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Systolic"</span><span class="o">)</span> <span class="o">+</span> <span class="s">"/"</span> <span class="o">+</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Diastolic"</span><span class="o">)))</span>
+        <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="s">"Warning! Monitor closely, patient is at risk of a hypertensive crisis!\n"</span><span class="o">;</span> <span class="o">})</span>
+        <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"hypertension_stage2"</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">modify</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="s">"High Blood Pressure (Hypertension) Stage 2\n"</span> <span class="o">+</span> <span class="n">tuple</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"hypertension_stage2"</span><span class="o">);</span>
 
-    <span class="c1">// Category: Hypertensive Crisis</span>
-    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">hypertensiveAlerts</span> <span class="o">=</span> <span class="n">hypertensive</span>
-            <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Systolic"</span><span class="o">)</span> <span class="o">&gt;=</span> <span class="mi">180</span><span class="o">)</span>
-            <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"hypertensive"</span><span class="o">)</span>
-            <span class="o">.</span><span class="na">peek</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span>
-                <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"BP: "</span> <span class="o">+</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Systolic"</span><span class="o">)</span> <span class="o">+</span> <span class="s">"/"</span> <span class="o">+</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Diastolic"</span><span class="o">)))</span>
-            <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="o">{</span> <span class="k">return</span> <span class="s">"Emergency! See to patient immediately!\n"</span><span class="o">;</span> <span class="o">})</span>
-            <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"hypertensive"</span><span class="o">)</span>
-            <span class="o">.</span><span class="na">modify</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">tuple</span><span class="o">.</span><span class="na">toUpperCase</span><span class="o">())</span>
-            <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"hypertensive"</span><span class="o">)</span>
-            <span class="o">.</span><span class="na">modify</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="s">"Hypertensive Crisis!!!\n"</span> <span class="o">+</span> <span class="n">tuple</span><span class="o">)</span>
-            <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"hypertensive"</span><span class="o">);</span>
+<span class="c1">// Category: Hypertensive Crisis</span>
+<span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">hypertensiveAlerts</span> <span class="o">=</span> <span class="n">hypertensive</span>
+        <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Systolic"</span><span class="o">)</span> <span class="o">&gt;=</span> <span class="mi">180</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"hypertensive"</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">peek</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"BP: "</span> <span class="o">+</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Systolic"</span><span class="o">)</span> <span class="o">+</span> <span class="s">"/"</span> <span class="o">+</span> <span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Diastolic"</span><span class="o">)))</span>
+        <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="o">{</span> <span class="k">return</span> <span class="s">"Emergency! See to patient immediately!\n"</span><span class="o">;</span> <span class="o">})</span>
+        <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"hypertensive"</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">modify</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">tuple</span><span class="o">.</span><span class="na">toUpperCase</span><span class="o">())</span>
+        <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"hypertensive"</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">modify</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="s">"Hypertensive Crisis!!!\n"</span> <span class="o">+</span> <span class="n">tuple</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"hypertensive"</span><span class="o">);</span>
 </code></pre></div>
 <h2 id="combining-the-alert-streams">Combining the alert streams</h2>
 
@@ -769,16 +769,16 @@ $('#toc').on('click', 'a', function() {
 <p>There are two ways to define a union. You can either union a <code>TStream</code> with another <code>TStream</code>, or with a set of streams (<code>Set&lt;TStream&lt;T&gt;&gt;</code>). In both cases, a single <code>TStream</code> is returned containing the tuples that flow on the input stream(s).</p>
 
 <p>Let&#39;s look at the first case, unioning a stream with a single stream. We can create a stream containing <em>Normal</em> alerts and <em>Prehypertension</em> alerts by unioning <code>normalAlerts</code> with <code>prehypertensionAlerts</code>.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="c1">// Additional processing for these streams could go here. In this case, union two streams</span>
-    <span class="c1">// to obtain a single stream containing alerts from the normal and prehypertension alert streams.</span>
-    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">normalAndPrehypertensionAlerts</span> <span class="o">=</span> <span class="n">normalAlerts</span><span class="o">.</span><span class="na">union</span><span class="o">(</span><span class="n">prehypertensionAlerts</span><span class="o">);</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// Additional processing for these streams could go here. In this case, union two streams</span>
+<span class="c1">// to obtain a single stream containing alerts from the normal and prehypertension alert streams.</span>
+<span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">normalAndPrehypertensionAlerts</span> <span class="o">=</span> <span class="n">normalAlerts</span><span class="o">.</span><span class="na">union</span><span class="o">(</span><span class="n">prehypertensionAlerts</span><span class="o">);</span>
 </code></pre></div>
 <p>We can also create a stream containing alerts from all categories by looking at the other case, unioning a stream with a set of streams. We&#39;ll first create a set of <code>TStream</code> objects containing the alerts from the other three categories.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="c1">// Set of streams containing alerts from the other categories</span>
-    <span class="n">Set</span><span class="o">&lt;</span><span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="n">otherAlerts</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="o">&lt;&gt;();</span>
-    <span class="n">otherAlerts</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">hypertension_stage1Alerts</span><span class="o">);</span>
-    <span class="n">otherAlerts</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">hypertension_stage2Alerts</span><span class="o">);</span>
-    <span class="n">otherAlerts</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">hypertensiveAlerts</span><span class="o">);</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// Set of streams containing alerts from the other categories</span>
+<span class="n">Set</span><span class="o">&lt;</span><span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="n">otherAlerts</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="o">&lt;&gt;();</span>
+<span class="n">otherAlerts</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">hypertension_stage1Alerts</span><span class="o">);</span>
+<span class="n">otherAlerts</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">hypertension_stage2Alerts</span><span class="o">);</span>
+<span class="n">otherAlerts</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">hypertensiveAlerts</span><span class="o">);</span>
 </code></pre></div>
 <p>We can then create an <code>allAlerts</code> stream by calling <code>union</code> on <code>normalAndPrehypertensionAlerts</code> and <code>otherAlerts</code>. <code>allAlerts</code> will contain all of the tuples from:</p>
 
@@ -789,36 +789,36 @@ $('#toc').on('click', 'a', function() {
 <li><code>hypertension_stage2Alerts</code></li>
 <li><code>hypertensiveAlerts</code></li>
 </ol>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="c1">// Union a stream with a set of streams to obtain a single stream containing alerts from</span>
-    <span class="c1">// all alert streams</span>
-    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">allAlerts</span> <span class="o">=</span> <span class="n">normalAndPrehypertensionAlerts</span><span class="o">.</span><span class="na">union</span><span class="o">(</span><span class="n">otherAlerts</span><span class="o">);</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// Union a stream with a set of streams to obtain a single stream containing alerts from</span>
+<span class="c1">// all alert streams</span>
+<span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">allAlerts</span> <span class="o">=</span> <span class="n">normalAndPrehypertensionAlerts</span><span class="o">.</span><span class="na">union</span><span class="o">(</span><span class="n">otherAlerts</span><span class="o">);</span>
 </code></pre></div>
 <p>Finally, we can terminate the stream and print out all alerts.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="c1">// Terminate the stream by printing out alerts from all categories</span>
-    <span class="n">allAlerts</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">tuple</span><span class="o">));</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// Terminate the stream by printing out alerts from all categories</span>
+<span class="n">allAlerts</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">tuple</span><span class="o">));</span>
 </code></pre></div>
-<p>We end our application by submitting the <code>Topology</code>. Note that this application is available as a <a href="http://quarks-edge.github.io/quarks/docs/javadoc/quarks/samples/topology/package-summary.html">sample</a>.</p>
+<p>We end our application by submitting the <code>Topology</code>. Note that this application is available as a <a href="https://github.com/apache/incubator-quarks/blob/master/samples/topology/src/main/java/quarks/samples/topology/CombiningStreamsProcessingResults.java">sample</a>.</p>
 
 <h2 id="observing-the-output">Observing the output</h2>
 
 <p>When the final application is run, the output looks something like the following:</p>
-<div class="highlight"><pre><code class="language-" data-lang="">    BP: 176/111
-    High Blood Pressure (Hypertension) Stage 2
-    Warning! Monitor closely, patient is at risk of a hypertensive crisis!
+<div class="highlight"><pre><code class="language-" data-lang="">BP: 176/111
+High Blood Pressure (Hypertension) Stage 2
+Warning! Monitor closely, patient is at risk of a hypertensive crisis!
 
-    BP: 178/111
-    High Blood Pressure (Hypertension) Stage 2
-    Warning! Monitor closely, patient is at risk of a hypertensive crisis!
+BP: 178/111
+High Blood Pressure (Hypertension) Stage 2
+Warning! Monitor closely, patient is at risk of a hypertensive crisis!
 
-    BP: 180/110
-    Hypertensive Crisis!!!
-    EMERGENCY! SEE TO PATIENT IMMEDIATELY!
+BP: 180/110
+Hypertensive Crisis!!!
+EMERGENCY! SEE TO PATIENT IMMEDIATELY!
 </code></pre></div>
 <h2 id="a-look-at-the-topology-graph">A look at the topology graph</h2>
 
 <p>Let&#39;s see what the topology graph looks like. We can view it using the console URL that was printed to standard output at the start of the application. Notice how the graph makes it easier to visualize the resulting flow of the application.</p>
 
-<p><img src="images/combining_streams_processing_results_topology_graph.jpg"></p>
+<p><img src="images/combining_streams_processing_results_topology_graph.jpg" alt="Image of the topology graph"></p>
 
 
 <div class="tags">
@@ -851,7 +851,7 @@ $('#toc').on('click', 'a', function() {
         <div class="col-lg-12 footer">
 
              Site last
-            generated: Apr 29, 2016 <br/>
+            generated: May 2, 2016 <br/>
 
         </div>
     </div>

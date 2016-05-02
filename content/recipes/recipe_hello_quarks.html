@@ -579,59 +579,59 @@ $('#toc').on('click', 'a', function() {
 
     <a target="_blank" href="https://github.com/apache/incubator-quarks-website/blob/master/site/recipes/recipe_hello_quarks.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
     
-  <p>Quarks&#39; pure Java implementation is a powerful feature which allows it to be run on the majority of JVM-compatible systems. It also has the added benefit of enabling the developer to develop applications entirely within the Eclipse and Intellij ecosystems. For the purposes of this recipe, it will be assumed that the developer is using Eclipse. To begin the Hello World recipe, create a new project and import the necessary libraries as outlined in the <a href="../docs/quarks-getting-started">Getting started guide</a>. Next, write the following template application:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+  <p>Quarks&#39; pure Java implementation is a powerful feature which allows it to be run on the majority of JVM-compatible systems. It also has the added benefit of enabling the developer to develop applications entirely within the Eclipse and IntelliJ ecosystems. For the purposes of this recipe, it will be assumed that the developer is using Eclipse. To begin the Hello Quarks recipe, create a new project and import the necessary libraries as outlined in the <a href="../docs/quarks-getting-started">Getting started guide</a>. Next, write the following template application:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
 
-        <span class="n">DirectProvider</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DirectProvider</span><span class="o">();</span>
+    <span class="n">DirectProvider</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DirectProvider</span><span class="o">();</span>
 
-        <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="na">newTopology</span><span class="o">();</span>
-    <span class="o">}</span>
+    <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="na">newTopology</span><span class="o">();</span>
+<span class="o">}</span>
 </code></pre></div>
-<p>The <em>DirectProvider</em> is an object which allows the user to submit and run the final application. It also creates the <em>Topology</em> object, which gives the developer the ability to define a stream of strings.</p>
+<p>The <em><code>DirectProvider</code></em> is an object which allows the user to submit and run the final application. It also creates the <em><code>Topology</code></em> object, which gives the developer the ability to define a stream of strings.</p>
 
-<h2 id="using-topology-strings">Using Topology.strings</h2>
+<h2 id="using-topology-strings">Using <code>Topology.strings()</code></h2>
 
-<p>The primary abstraction in Quarks is the <code>TStream</code>. A <em>TStream</em> represents the flow of data in a Quarks application; for example, the periodic floating point readings from a temperature sensor. The data items which are sent through a <code>TStream</code> are Java objects -- in the &quot;Hello Quarks!&quot; example, we are sending two strings. There are a number of ways to create a <code>TStream</code>, and <code>Topology.strings</code> is the simplest. The user specifies a number of strings which will be used as the stream&#39;s data items.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+<p>The primary abstraction in Quarks is the <code>TStream</code>. A <em><code>TStream</code></em> represents the flow of data in a Quarks application; for example, the periodic floating point readings from a temperature sensor. The data items which are sent through a <code>TStream</code> are Java objects &mdash; in the &quot;Hello Quarks!&quot; example, we are sending two strings. There are a number of ways to create a <code>TStream</code>, and <code>Topology.strings()</code> is the simplest. The user specifies a number of strings which will be used as the stream&#39;s data items.</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
 
-        <span class="n">DirectProvider</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DirectProvider</span><span class="o">();</span>
+    <span class="n">DirectProvider</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DirectProvider</span><span class="o">();</span>
 
-        <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="na">newTopology</span><span class="o">();</span>
+    <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="na">newTopology</span><span class="o">();</span>
 
-        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">helloStream</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">strings</span><span class="o">(</span><span class="s">"Hello"</span><span class="o">,</span> <span class="s">"Quarks!"</span><span class="o">);</span>
-    <span class="o">}</span>
+    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">helloStream</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">strings</span><span class="o">(</span><span class="s">"Hello"</span><span class="o">,</span> <span class="s">"Quarks!"</span><span class="o">);</span>
+<span class="o">}</span>
 </code></pre></div>
 <p>The <code>helloStream</code> stream is created, and the &quot;Hello&quot; and &quot;Quarks!&quot; strings will be sent as its two data items.</p>
 
 <h2 id="printing-to-output">Printing to output</h2>
 
-<p><code>TStream.print</code> can be used to print the data items of a stream to standard output by invoking the <code>toString</code> method of each data item. In this case the data items are already strings, but in principle <code>TStream.print</code> can be called on any stream, regardless of the datatype carried by the stream.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+<p><code>TStream.print()</code> can be used to print the data items of a stream to standard output by invoking the <code>toString()</code> method of each data item. In this case the data items are already strings, but in principle <code>TStream.print()</code> can be called on any stream, regardless of the datatype carried by the stream.</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
 
-        <span class="n">DirectProvider</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DirectProvider</span><span class="o">();</span>
+    <span class="n">DirectProvider</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DirectProvider</span><span class="o">();</span>
 
-        <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="na">newTopology</span><span class="o">();</span>
+    <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="na">newTopology</span><span class="o">();</span>
 
-        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">helloStream</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">strings</span><span class="o">(</span><span class="s">"Hello"</span><span class="o">,</span> <span class="s">"Quarks!"</span><span class="o">);</span>
+    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">helloStream</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">strings</span><span class="o">(</span><span class="s">"Hello"</span><span class="o">,</span> <span class="s">"Quarks!"</span><span class="o">);</span>
 
-        <span class="n">helloStream</span><span class="o">.</span><span class="na">print</span><span class="o">();</span>
-    <span class="o">}</span>
+    <span class="n">helloStream</span><span class="o">.</span><span class="na">print</span><span class="o">();</span>
+<span class="o">}</span>
 </code></pre></div>
 <h2 id="submitting-the-application">Submitting the application</h2>
 
 <p>The only remaining step is to submit the application, which is performed by the <code>DirectProvider</code>. Submitting a Quarks application initializes the threads which execute the <code>Topology</code>, and begins processing its data sources.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
 
-        <span class="n">DirectProvider</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DirectProvider</span><span class="o">();</span>
+    <span class="n">DirectProvider</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DirectProvider</span><span class="o">();</span>
 
-        <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="na">newTopology</span><span class="o">();</span>
+    <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="na">newTopology</span><span class="o">();</span>
 
-        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">helloStream</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">strings</span><span class="o">(</span><span class="s">"Hello"</span><span class="o">,</span> <span class="s">"Quarks!"</span><span class="o">);</span>
+    <span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">helloStream</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">strings</span><span class="o">(</span><span class="s">"Hello"</span><span class="o">,</span> <span class="s">"Quarks!"</span><span class="o">);</span>
 
-        <span class="n">helloStream</span><span class="o">.</span><span class="na">print</span><span class="o">();</span>
+    <span class="n">helloStream</span><span class="o">.</span><span class="na">print</span><span class="o">();</span>
 
-        <span class="n">dp</span><span class="o">.</span><span class="na">submit</span><span class="o">(</span><span class="n">top</span><span class="o">);</span>
-    <span class="o">}</span>
+    <span class="n">dp</span><span class="o">.</span><span class="na">submit</span><span class="o">(</span><span class="n">top</span><span class="o">);</span>
+<span class="o">}</span>
 </code></pre></div>
 <p>After running the application, the output is &quot;Hello Quarks!&quot;:</p>
 <div class="highlight"><pre><code class="language-" data-lang="">Hello
@@ -668,7 +668,7 @@ Quarks!
         <div class="col-lg-12 footer">
 
              Site last
-            generated: Apr 29, 2016 <br/>
+            generated: May 2, 2016 <br/>
 
         </div>
     </div>

@@ -581,51 +581,51 @@ $('#toc').on('click', 'a', function() {
     
   <p>Oftentimes, an application wants to control the frequency that continuously generated analytic results are made available to other parts of the application or published to other applications or an event hub.</p>
 
-<p>For example, an application polls an engine temperature sensor every second and performs various analytics on each reading - an analytic result is generated every second.  By default, the application only wants to publish a (healthy) analytic result every 30 minutes.  However, under certain conditions, the desire is to publish every per-second analytic result.</p>
+<p>For example, an application polls an engine temperature sensor every second and performs various analytics on each reading &mdash; an analytic result is generated every second. By default, the application only wants to publish a (healthy) analytic result every 30 minutes. However, under certain conditions, the desire is to publish every per-second analytic result.</p>
 
 <p>Such a condition may be locally detected, such as detecting a sudden rise in the engine temperature or it may be as a result of receiving some external command to change the publishing frequency.</p>
 
 <p>Note this is a different case than simply changing the polling frequency for the sensor as doing that would disable local continuous monitoring and analysis of the engine temperature.</p>
 
-<p>This case needs a <em>deadtime filter</em> and Quarks provides one for your use!  In contrast to a <em>deadband filter</em>, which skips tuples based on a deadband value range, a deadtime filter skips tuples based on a <em>deadtime period</em> following a tuple that is allowed to pass through.  E.g., if the deadtime period is 30 minutes, after allowing a tuple to pass, the filter skips any tuples received for the next 30 minutes.  The next tuple received after that is allowed to pass through, and a new deadtime period is begun.</p>
+<p>This case needs a <em>deadtime filter</em> and Quarks provides one for your use! In contrast to a <em>deadband filter</em>, which skips tuples based on a deadband value range, a deadtime filter skips tuples based on a <em>deadtime period</em> following a tuple that is allowed to pass through. For example, if the deadtime period is 30 minutes, after allowing a tuple to pass, the filter skips any tuples received for the next 30 minutes. The next tuple received after that is allowed to pass through, and a new deadtime period is begun.</p>
 
-<p>See <code>quarks.analytics.sensors.Filters.deadtime()</code> and <code>quarks.analytics.sensors.Deadtime</code>.</p>
+<p>See <code>quarks.analytics.sensors.Filters.deadtime()</code> (on <a href="https://github.com/apache/incubator-quarks/blob/master/analytics/sensors/src/main/java/quarks/analytics/sensors/Filters.java">GitHub</a>) and <code>quarks.analytics.sensors.Deadtime</code> (on <a href="https://github.com/apache/incubator-quarks/blob/master/analytics/sensors/src/main/java/quarks/analytics/sensors/Deadtime.java">GitHub</a>).</p>
 
 <p>This recipe demonstrates how to use an adaptable deadtime filter.</p>
 
-<p>A Quarks <code>IotProvider</code> and <code>IoTDevice</code> with its command streams would be a natural way to control the application.  In this recipe we will just simulate a &quot;set deadtime period&quot; command stream.</p>
+<p>A Quarks <code>IotProvider</code> ad <code>IoTDevice</code> with its command streams would be a natural way to control the application. In this recipe we will just simulate a &quot;set deadtime period&quot; command stream.</p>
 
 <h2 id="create-a-polled-sensor-readings-stream">Create a polled sensor readings stream</h2>
-<div class="highlight"><pre><code class="language-java" data-lang="java">        <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="o">...;</span>
-        <span class="n">SimulatedTemperatureSensor</span> <span class="n">tempSensor</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SimulatedTemperatureSensor</span><span class="o">();</span>
-        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">engineTemp</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">poll</span><span class="o">(</span><span class="n">tempSensor</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">)</span>
-                                      <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"engineTemp"</span><span class="o">);</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="o">...;</span>
+<span class="n">SimulatedTemperatureSensor</span> <span class="n">tempSensor</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SimulatedTemperatureSensor</span><span class="o">();</span>
+<span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">engineTemp</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">poll</span><span class="o">(</span><span class="n">tempSensor</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">)</span>
+                              <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"engineTemp"</span><span class="o">);</span>
 </code></pre></div>
 <p>It&#39;s also a good practice to add tags to streams to improve the usability of the development mode Quarks console.</p>
 
-<h2 id="create-a-deadtime-filtered-stream-initially-no-deadtime">Create a deadtime filtered stream - initially no deadtime</h2>
+<h2 id="create-a-deadtime-filtered-stream-mdash-initially-no-deadtime">Create a deadtime filtered stream&mdash;initially no deadtime</h2>
 
-<p>In this recipe we&#39;ll just filter the direct <code>engineTemp</code> sensor reading stream.  In practice this filtering would be performed after some analytics stages and used as the input to <code>IotDevice.event()</code> or some other connector publish operation.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">        <span class="n">Deadtime</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">deadtime</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Deadtime</span><span class="o">&lt;&gt;();</span>
-        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">deadtimeFilteredEngineTemp</span> <span class="o">=</span> <span class="n">engineTemp</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">deadtime</span><span class="o">)</span>
-                                      <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"deadtimeFilteredEngineTemp"</span><span class="o">);</span>
+<p>In this recipe we&#39;ll just filter the direct <code>engineTemp</code> sensor reading stream. In practice this filtering would be performed after some analytics stages and used as the input to <code>IotDevice.event()</code> or some other connector publish operation.</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Deadtime</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">deadtime</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Deadtime</span><span class="o">&lt;&gt;();</span>
+<span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">deadtimeFilteredEngineTemp</span> <span class="o">=</span> <span class="n">engineTemp</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">deadtime</span><span class="o">)</span>
+                              <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"deadtimeFilteredEngineTemp"</span><span class="o">);</span>
 </code></pre></div>
 <h2 id="define-a-quot-set-deadtime-period-quot-method">Define a &quot;set deadtime period&quot; method</h2>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">static</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="kt">void</span> <span class="n">setDeadtimePeriod</span><span class="o">(</span><span class="n">Deadtime</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">deadtime</span><span class="o">,</span> <span class="kt">long</span> <span class="n">period</span><span class="o">,</span> <span class="n">TimeUnit</span> <span class="n">unit</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Setting deadtime period="</span><span class="o">+</span><span class="n">period</span><span class="o">+</span><span class="s">" "</span><span class="o">+</span><span class="n">unit</span><span class="o">);</span>
-        <span class="n">deadtime</span><span class="o">.</span><span class="na">setPeriod</span><span class="o">(</span><span class="n">period</span><span class="o">,</span> <span class="n">unit</span><span class="o">);</span>
-    <span class="o">}</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="kt">void</span> <span class="n">setDeadtimePeriod</span><span class="o">(</span><span class="n">Deadtime</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">deadtime</span><span class="o">,</span> <span class="kt">long</span> <span class="n">period</span><span class="o">,</span> <span class="n">TimeUnit</span> <span class="n">unit</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Setting deadtime period="</span><span class="o">+</span><span class="n">period</span><span class="o">+</span><span class="s">" "</span><span class="o">+</span><span class="n">unit</span><span class="o">);</span>
+    <span class="n">deadtime</span><span class="o">.</span><span class="na">setPeriod</span><span class="o">(</span><span class="n">period</span><span class="o">,</span> <span class="n">unit</span><span class="o">);</span>
+<span class="o">}</span>
 </code></pre></div>
 <h2 id="process-the-quot-set-deadtime-period-quot-command-stream">Process the &quot;set deadtime period&quot; command stream</h2>
 
-<p>Our commands are on the <code>TStream&lt;JsonObject&gt; cmds</code> stream.  Each <code>JsonObject</code> tuple is a command with the properties &quot;period&quot; and &quot;unit&quot;.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">        <span class="n">cmds</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">json</span> <span class="o">-&gt;</span> <span class="n">setDeadtimePeriod</span><span class="o">(</span><span class="n">deadtimeFilteredEngineTemp</span><span class="o">,</span>
-            <span class="n">json</span><span class="o">.</span><span class="na">getAsJsonPrimitive</span><span class="o">(</span><span class="s">"period"</span><span class="o">).</span><span class="na">getAsLong</span><span class="o">(),</span>
-            <span class="n">TimeUnit</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">json</span><span class="o">.</span><span class="na">getAsJsonPrimitive</span><span class="o">(</span><span class="s">"unit"</span><span class="o">).</span><span class="na">getAsString</span><span class="o">())));</span>
+<p>Our commands are on the <code>TStream&lt;JsonObject&gt; cmds</code> stream. Each <code>JsonObject</code> tuple is a command with the properties &quot;period&quot; and &quot;unit&quot;.</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">cmds</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">json</span> <span class="o">-&gt;</span> <span class="n">setDeadtimePeriod</span><span class="o">(</span><span class="n">deadtimeFilteredEngineTemp</span><span class="o">,</span>
+    <span class="n">json</span><span class="o">.</span><span class="na">getAsJsonPrimitive</span><span class="o">(</span><span class="s">"period"</span><span class="o">).</span><span class="na">getAsLong</span><span class="o">(),</span>
+    <span class="n">TimeUnit</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">json</span><span class="o">.</span><span class="na">getAsJsonPrimitive</span><span class="o">(</span><span class="s">"unit"</span><span class="o">).</span><span class="na">getAsString</span><span class="o">())));</span>
 </code></pre></div>
 <h2 id="the-final-application">The final application</h2>
 
-<p>When the application is run it will initially print out temperature sensor readings every second for 15 seconds - the deadtime period is 0.  Then every 15 seconds the application will toggle the deadtime period between 5 seconds and 0 seconds, resulting in a reduction in tuples being printed during the 5 second deadtime period.</p>
+<p>When the application is run it will initially print out temperature sensor readings every second for 15 seconds&mdash;the deadtime period is 0. Then every 15 seconds the application will toggle the deadtime period between 5 seconds and 0 seconds, resulting in a reduction in tuples being printed during the 5 second deadtime period.</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.util.Date</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">java.util.concurrent.TimeUnit</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">java.util.concurrent.atomic.AtomicInteger</span><span class="o">;</span>
@@ -650,7 +650,7 @@ $('#toc').on('click', 'a', function() {
      * Create a "deadtime" filtered stream: after passing a tuple,
      * any tuples received during the "deadtime" are filtered out.
      * Then the next tuple is passed through and a new deadtime period begun.
-     * 
+     *
      * Respond to a simulated command stream to change the deadtime window
      * duration.
      */</span>
@@ -714,7 +714,6 @@ $('#toc').on('click', 'a', function() {
     <span class="o">}</span>
 
 <span class="o">}</span>
-
 </code></pre></div>
 
 <div class="tags">
@@ -747,7 +746,7 @@ $('#toc').on('click', 'a', function() {
         <div class="col-lg-12 footer">
 
              Site last
-            generated: Apr 29, 2016 <br/>
+            generated: May 2, 2016 <br/>
 
         </div>
     </div>
