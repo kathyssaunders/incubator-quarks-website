@@ -33,6 +33,9 @@
     <mailing-list rdf:resource="http://quarks.incubator.apache.org/docs/community#mailing-list" />
     <programming-language>Java</programming-language>
     <programming-language>JavaScript</programming-language>
+    <category rdf:resource="http://projects.apache.org/category/big-data" />
+    <category rdf:resource="http://projects.apache.org/category/library" />
+    <category rdf:resource="http://projects.apache.org/category/mobile" />
     <category rdf:resource="http://projects.apache.org/category/network-client" />
     <repository>
       <GitRepository>
