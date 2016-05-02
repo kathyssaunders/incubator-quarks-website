@@ -142,7 +142,7 @@ Calling `topology.poll()` to define a source stream creates a `TStream<Double>` 
 
 A streaming application can run indefinitely, so the `TStream` might see an arbitrarily large number of readings pass through it. Because a `TStream` represents the flow of your data, it supports a number of operations which allow you to modify your data.
 
-## Filtering a `TStream`
+### Filtering a `TStream`
 
 In our example, we want to filter the stream of temperature readings, and remove any "uninteresting" or expected readings&mdash;specifically readings which are above 50 degrees and below 80 degrees. To do this, we call the `TStream`'s `filter` method and pass in a function that returns *true* if the data is interesting and *false* if the data is uninteresting:
 

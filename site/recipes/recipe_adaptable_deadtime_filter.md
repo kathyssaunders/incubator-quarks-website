@@ -60,7 +60,7 @@ cmds.sink(json -> setDeadtimePeriod(deadtimeFilteredEngineTemp,
 
 ## The final application
 
-When the application is run it will initially print out temperature sensor readings every second for 15 seconds&mdash;the deadtime period is 0. `Then every 15 seconds the application will toggle the deadtime period between 5 seconds and 0 seconds, resulting in a reduction in tuples being printed during the 5 second deadtime period.
+When the application is run it will initially print out temperature sensor readings every second for 15 seconds&mdash;the deadtime period is 0. Then every 15 seconds the application will toggle the deadtime period between 5 seconds and 0 seconds, resulting in a reduction in tuples being printed during the 5 second deadtime period.
 
 ```java
 import java.util.Date;
