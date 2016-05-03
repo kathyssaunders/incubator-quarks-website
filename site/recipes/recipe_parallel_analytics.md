@@ -2,7 +2,7 @@
 title: How can I run analytics on several tuples in parallel?
 ---
 
-If the duration of your per-tuple analytic processing makes your application unable to keep up with the tuple injest rate or result generation rate, you can often run analytics on several tuples in parallel to improve performance.
+If the duration of your per-tuple analytic processing makes your application unable to keep up with the tuple ingest rate or result generation rate, you can often run analytics on several tuples in parallel to improve performance.
 
 The overall proessing time for a single tuple is still the same but the processing for each tuple is overlapped. In the extreme your application may be able to process N tuples in the same time that it would have processed one.
 
@@ -25,9 +25,9 @@ sensorReadings<T> -> A1 -> |-> A2-channel1 ->| -> A3 -> results<R>
                                   ...
 ```
 
-The key to the above flow is to use a _splitter_ to distribute the tuples among the parallel channels.  Each of the parallel channels also needs a thread to run its analytic pipeline.
+The key to the above flow is to use a _splitter_ to distribute the tuples among the parallel channels. Each of the parallel channels also needs a thread to run its analytic pipeline.
 
-`PlumbingStreams.parallel()` builds a parallel flow graph for you.  Alternatively, you can use `TStream.split()`, `PlumbingStreams.isolate()`, and `TStream.union()` and build a parallel flow graph yourself.
+`PlumbingStreams.parallel()` builds a parallel flow graph for you. Alternatively, you can use `TStream.split()`, `PlumbingStreams.isolate()`, and `TStream.union()` and build a parallel flow graph yourself.
 
 More specifically `parallel()` generates a flow like:
 
@@ -42,7 +42,7 @@ It's easy to use `parallel()`!
 
 ## Define the splitter
 
-The splitter function partitions the tuples among the parallel channels.  `PlumbingStreams.roundRobinSplitter()` is a commonly used splitter that simply cycles among each channel in succession.  The round robin strategy works great when the processing time of tuples is uniform.  Other splitter functions may use information in the tuple to decide how to partition them.
+The splitter function partitions the tuples among the parallel channels. `PlumbingStreams.roundRobinSplitter()` is a commonly used splitter that simply cycles among each channel in succession. The round robin strategy works great when the processing time of tuples is uniform. Other splitter functions may use information in the tuple to decide how to partition them.
 
 This recipe just uses the round robin splitter for a `TStream<Double>`.
 
@@ -54,7 +54,7 @@ ToIntFunction<Double> splitter = PlumbingStreams.roundRobinSplitter(width);
 
 ## Define the pipeline to run in parallel
 
-Define a `BiFunction<TStream<T>, Integer, TStream<R>>` that builds the pipeline. That is, define a function that receives a `TStream<T>` and an integer `channel` and creates a pipeline for that channel that returns a `TStream<R>`.  
+Define a `BiFunction<TStream<T>, Integer, TStream<R>>` that builds the pipeline. That is, define a function that receives a `TStream<T>` and an integer `channel` and creates a pipeline for that channel that returns a `TStream<R>`.
 
 Many pipelines don't care what channel they're being constructed for. While the pipeline function typically yields the same pipeline processing for each channel there is no requirement for it to do so.
 
