@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="keywords" content=" ">
-<title>Changing a polled source stream's period  | Apache Quarks Documentation</title>
+<title>How can I run analytics on several tuples in parallel?  | Apache Quarks Documentation</title>
 <link rel="stylesheet" type="text/css" href="../css/syntax.css">
 <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css">
 <!--<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">-->
@@ -157,7 +157,7 @@
 <script>
 function SendLinkByMail(href) {
 var subject= "Apache Quarks Documentation feedback";
-var body = "I have some feedback about the Changing a polled source stream's period page: ";
+var body = "I have some feedback about the How can I run analytics on several tuples in parallel? page: ";
 body += window.location.href;
 body += "";
 var uri = "mailto:?subject=";
@@ -184,7 +184,7 @@ window.location.href = uri;
                             searchInput: document.getElementById('search-input'),
                             resultsContainer: document.getElementById('results-container'),
                             dataSource: '../search.json',
-                            searchResultTemplate: '<li><a href="{url}" title="Changing a polled source stream\s period">{title}</a></li>',
+                            searchResultTemplate: '<li><a href="{url}" title="How can I run analytics on several tuples in parallel?">{title}</a></li>',
                         noResultsText: 'No results found.',
                                 limit: 10,
                                 fuzzy: true,
@@ -395,7 +395,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li class="active"><a href="../recipes/recipe_adaptable_polling_source.html">Changing a polled source stream's period</a></li>
+                    <li><a href="../recipes/recipe_adaptable_polling_source.html">Changing a polled source stream's period</a></li>
                     
 
                     
@@ -425,7 +425,7 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../recipes/recipe_parallel_analytics.html">How can I run analytics on several tuples in parallel?</a></li>
+                    <li class="active"><a href="../recipes/recipe_parallel_analytics.html">How can I run analytics on several tuples in parallel?</a></li>
                     
 
                     
@@ -565,7 +565,7 @@ $('#toc').on('click', 'a', function() {
             <div class="col-md-9">
                 
                 <div class="post-header">
-   <h1 class="post-title-main">Changing a polled source stream's period</h1>
+   <h1 class="post-title-main">How can I run analytics on several tuples in parallel?</h1>
 </div>
 
 <div class="post-content">
@@ -597,126 +597,152 @@ $('#toc').on('click', 'a', function() {
 
     
 
-    <a target="_blank" href="https://github.com/apache/incubator-quarks-website/blob/master/site/recipes/recipe_adaptable_polling_source.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
+    <a target="_blank" href="https://github.com/apache/incubator-quarks-website/blob/master/site/recipes/recipe_parallel_analytics.md" class="btn btn-default githubEditButton" role="button"><i class="fa fa-github fa-lg"></i> Edit me</a>
     
-  <p>The <a href="recipe_source_function.html">Writing a source function</a> recipe introduced the basics of creating a source stream by polling a data source periodically.</p>
+  <p>If the duration of your per-tuple analytic processing makes your application unable to keep up with the tuple ingest rate or result generation rate, you can often run analytics on several tuples in parallel to improve performance.</p>
 
-<p>Oftentimes, a user wants the poll frequency to be adaptable rather than static. For example, an event such as a sudden rise in a temperature sensor may motivate more frequent polling of the sensor and analysis of the data until the condition subsides. A change in the poll frequency may be driven by locally performed analytics or via a command from an external source.</p>
+<p>The overall proessing time for a single tuple is still the same but the processing for each tuple is overlapped. In the extreme your application may be able to process N tuples in the same time that it would have processed one.</p>
 
-<p>A Quarks <code>IotProvider</code> and <code>IoTDevice</code> with its command streams would be a natural way to control the application. In this recipe we will just simulate a &quot;set poll period&quot; command stream.</p>
+<p>This usage model is in contrast to what&#39;s been called <em>concurrent analytics</em>, where multiple different independent analytics for a single tuple are performed concurrently, as when using <code>PlumbingStreams.concurrent()</code>.</p>
 
-<p>The <code>Topology.poll()</code> <a href="http://quarks-edge.github.io/quarks/docs/javadoc/quarks/topology/Topology.html#poll-quarks.function.Supplier-long-java.util.concurrent.TimeUnit-">documentation</a> describes how the poll period may be changed at runtime.</p>
-
-<p>The mechanism is based on a more general Quarks runtime <code>quarks.execution.services.ControlService</code> service. The runtime registers &quot;control beans&quot; for entities that are controllable. These controls can be retrieved at runtime via the service.</p>
-
-<p>At runtime, <code>Topology.poll()</code> registers a <code>quarks.execution.mbeans.PeriodMXBean</code> control. <strong>Retrieving the control at runtime requires setting an alias on the poll generated stream using <code>TStream.alias()</code>.</strong></p>
-
-<h2 id="create-the-polled-stream-and-set-its-alias">Create the polled stream and set its alias</h2>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="o">...;</span>
-<span class="n">SimulatedTemperatureSensor</span> <span class="n">tempSensor</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SimulatedTemperatureSensor</span><span class="o">();</span>
-<span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">engineTemp</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">poll</span><span class="o">(</span><span class="n">tempSensor</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">)</span>
-                              <span class="o">.</span><span class="na">alias</span><span class="o">(</span><span class="s">"engineTemp"</span><span class="o">)</span>
-                              <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"engineTemp"</span><span class="o">);</span>
+<p>e.g., imagine your analytic pipeline has three stages to it: A1, A2, A3, and that A2 dominates the processing time. You want to change the serial processing flow graph from:</p>
+<div class="highlight"><pre><code class="language-" data-lang="">sensorReadings&lt;T&gt; -&gt; A1 -&gt; A2 -&gt; A3 -&gt; results&lt;R&gt;
 </code></pre></div>
-<p>It&#39;s also a good practice to add tags to streams to improve the usability of the development mode Quarks console.</p>
+<p>to a flow where the A2 analytics run on several tuples in parallel in a flow like:</p>
+<div class="highlight"><pre><code class="language-" data-lang="">                           |-&gt; A2-channel0 -&gt;|
+sensorReadings&lt;T&gt; -&gt; A1 -&gt; |-&gt; A2-channel1 -&gt;| -&gt; A3 -&gt; results&lt;R&gt;
+                           |-&gt; A2-channel2 -&gt;|
+                           |-&gt; A2-channel3 -&gt;|
+                           |-&gt; A2-channel4 -&gt;|
+                                  ...
+</code></pre></div>
+<p>The key to the above flow is to use a <em>splitter</em> to distribute the tuples among the parallel channels. Each of the parallel channels also needs a thread to run its analytic pipeline.</p>
 
-<h2 id="define-a-quot-set-poll-period-quot-method">Define a &quot;set poll period&quot; method</h2>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="kt">void</span> <span class="n">setPollPeriod</span><span class="o">(</span><span class="n">TStream</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">pollStream</span><span class="o">,</span> <span class="kt">long</span> <span class="n">period</span><span class="o">,</span> <span class="n">TimeUnit</span> <span class="n">unit</span><span class="o">)</span> <span class="o">{</span>
-    <span class="c1">// get the topology's runtime ControlService service</span>
-    <span class="n">ControlService</span> <span class="n">cs</span> <span class="o">=</span> <span class="n">pollStream</span><span class="o">.</span><span class="na">topology</span><span class="o">().</span><span class="na">getRuntimeServiceSupplier</span><span class="o">()</span>
-                                <span class="o">.</span><span class="na">get</span><span class="o">().</span><span class="na">getService</span><span class="o">(</span><span class="n">ControlService</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+<p><code>PlumbingStreams.parallel()</code> builds a parallel flow graph for you. Alternatively, you can use <code>TStream.split()</code>, <code>PlumbingStreams.isolate()</code>, and <code>TStream.union()</code> and build a parallel flow graph yourself.</p>
 
-    <span class="c1">// using the the stream's alias, get its PeriodMXBean control</span>
-    <span class="n">PeriodMXBean</span> <span class="n">control</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="na">getControl</span><span class="o">(</span><span class="n">TStream</span><span class="o">.</span><span class="na">TYPE</span><span class="o">,</span> <span class="n">pollStream</span><span class="o">.</span><span class="na">getAlias</span><span class="o">(),</span> <span class="n">PeriodMXBean</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+<p>More specifically <code>parallel()</code> generates a flow like:</p>
+<div class="highlight"><pre><code class="language-" data-lang="">                                   |-&gt; isolate(10) -&gt; pipeline-ch0 -&gt; |
+stream -&gt; split(width,splitter) -&gt; |-&gt; isolate(10) -&gt; pipeline-ch1 -&gt; |-&gt; union -&gt; isolate(width) 
+                                   |-&gt; isolate(10) -&gt; pipeline-ch2 -&gt; |
+                                       ...
+</code></pre></div>
+<p>It&#39;s easy to use <code>parallel()</code>!</p>
 
-    <span class="c1">// change the poll period using the control</span>
-    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Setting period="</span><span class="o">+</span><span class="n">period</span><span class="o">+</span><span class="s">" "</span><span class="o">+</span><span class="n">unit</span><span class="o">+</span><span class="s">" stream="</span><span class="o">+</span><span class="n">pollStream</span><span class="o">);</span>
-    <span class="n">control</span><span class="o">.</span><span class="na">setPeriod</span><span class="o">(</span><span class="n">period</span><span class="o">,</span> <span class="n">unit</span><span class="o">);</span>
+<h2 id="define-the-splitter">Define the splitter</h2>
+
+<p>The splitter function partitions the tuples among the parallel channels. <code>PlumbingStreams.roundRobinSplitter()</code> is a commonly used splitter that simply cycles among each channel in succession. The round robin strategy works great when the processing time of tuples is uniform. Other splitter functions may use information in the tuple to decide how to partition them.</p>
+
+<p>This recipe just uses the round robin splitter for a <code>TStream&lt;Double&gt;</code>.</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kt">int</span> <span class="n">width</span> <span class="o">=</span> <span class="mi">5</span><span class="o">;</span>  <span class="c1">// number of parallel channels</span>
+
+<span class="n">ToIntFunction</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">splitter</span> <span class="o">=</span> <span class="n">PlumbingStreams</span><span class="o">.</span><span class="na">roundRobinSplitter</span><span class="o">(</span><span class="n">width</span><span class="o">);</span>
+</code></pre></div>
+<h2 id="define-the-pipeline-to-run-in-parallel">Define the pipeline to run in parallel</h2>
+
+<p>Define a <code>BiFunction&lt;TStream&lt;T&gt;, Integer, TStream&lt;R&gt;&gt;</code> that builds the pipeline. That is, define a function that receives a <code>TStream&lt;T&gt;</code> and an integer <code>channel</code> and creates a pipeline for that channel that returns a <code>TStream&lt;R&gt;</code>.</p>
+
+<p>Many pipelines don&#39;t care what channel they&#39;re being constructed for. While the pipeline function typically yields the same pipeline processing for each channel there is no requirement for it to do so.</p>
+
+<p>In this simple recipe the pipeline receives a <code>TStream&lt;Double&gt;</code> as input and generates a <code>TStream&lt;String&gt;</code> as output.</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="n">BiFunction</span><span class="o">&lt;</span><span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;,</span> <span class="n">Integer</span><span class="o">,</span> <span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="n">pipeline</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c1">// a simple 4 stage pipeline simulating some amount of work by sleeping</span>
+    <span class="k">return</span> <span class="o">(</span><span class="n">stream</span><span class="o">,</span> <span class="n">channel</span><span class="o">)</span> <span class="o">-&gt;</span> 
+      <span class="o">{</span> 
+        <span class="n">String</span> <span class="n">tagPrefix</span> <span class="o">=</span> <span class="s">"pipeline-ch"</span><span class="o">+</span><span class="n">channel</span><span class="o">;</span>
+        <span class="k">return</span> <span class="n">stream</span><span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="o">{</span>
+            <span class="n">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">);</span>
+            <span class="k">return</span> <span class="s">"This is the "</span><span class="o">+</span><span class="n">tagPrefix</span><span class="o">+</span><span class="s">" result for tuple "</span><span class="o">+</span><span class="n">tuple</span><span class="o">;</span>
+          <span class="o">}).</span><span class="na">tag</span><span class="o">(</span><span class="n">tagPrefix</span><span class="o">+</span><span class="s">".stage1"</span><span class="o">)</span>
+          <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">Functions</span><span class="o">.</span><span class="na">identity</span><span class="o">()).</span><span class="na">tag</span><span class="o">(</span><span class="n">tagPrefix</span><span class="o">+</span><span class="s">".stage2"</span><span class="o">)</span>
+          <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">Functions</span><span class="o">.</span><span class="na">identity</span><span class="o">()).</span><span class="na">tag</span><span class="o">(</span><span class="n">tagPrefix</span><span class="o">+</span><span class="s">".stage3"</span><span class="o">);</span>
+          <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">Functions</span><span class="o">.</span><span class="na">identity</span><span class="o">()).</span><span class="na">tag</span><span class="o">(</span><span class="n">tagPrefix</span><span class="o">+</span><span class="s">".stage4"</span><span class="o">);</span>
+      <span class="o">};</span>
 <span class="o">}</span>
 </code></pre></div>
-<h2 id="process-the-quot-set-poll-period-quot-command-stream">Process the &quot;set poll period&quot; command stream</h2>
+<h2 id="build-the-parallel-flow">Build the parallel flow</h2>
 
-<p>Our commands are on the <code>TStream&lt;JsonObject&gt; cmds</code> stream. Each <code>JsonObject</code> tuple is a command with the properties &quot;period&quot; and &quot;unit&quot;.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">cmds</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">json</span> <span class="o">-&gt;</span> <span class="n">setPollPeriod</span><span class="o">(</span><span class="n">engineTemp</span><span class="o">,</span>
-    <span class="n">json</span><span class="o">.</span><span class="na">getAsJsonPrimitive</span><span class="o">(</span><span class="s">"period"</span><span class="o">).</span><span class="na">getAsLong</span><span class="o">(),</span>
-    <span class="n">TimeUnit</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">json</span><span class="o">.</span><span class="na">getAsJsonPrimitive</span><span class="o">(</span><span class="s">"unit"</span><span class="o">).</span><span class="na">getAsString</span><span class="o">())));</span>
+<p>Given a width, splitter and pipeline function it just takes a single call:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">results</span> <span class="o">=</span> <span class="n">PlumbingStreams</span><span class="o">.</span><span class="na">parallel</span><span class="o">(</span><span class="n">readings</span><span class="o">,</span> <span class="n">width</span><span class="o">,</span> <span class="n">splitter</span><span class="o">,</span> <span class="n">pipeline</span><span class="o">());</span>
 </code></pre></div>
 <h2 id="the-final-application">The final application</h2>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.util.Date</span><span class="o">;</span>
+
+<p>When the application is run it prints out 5 (width) tuples every second. Without the parallel channels, it would only print one tuple each second.</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="n">quarks</span><span class="o">.</span><span class="na">samples</span><span class="o">.</span><span class="na">topology</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.Date</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">java.util.concurrent.TimeUnit</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.concurrent.atomic.AtomicInteger</span><span class="o">;</span>
 
-<span class="kn">import</span> <span class="nn">com.google.gson.JsonObject</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">quarks.execution.mbeans.PeriodMXBean</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">quarks.execution.services.ControlService</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">quarks.console.server.HttpServer</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">quarks.function.BiFunction</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">quarks.function.Functions</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">quarks.providers.development.DevelopmentProvider</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">quarks.providers.direct.DirectProvider</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">quarks.samples.utils.sensor.SimulatedTemperatureSensor</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">quarks.samples.utils.sensor.SimpleSimulatedSensor</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">quarks.topology.TStream</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">quarks.topology.Topology</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">quarks.topology.plumbing.PlumbingStreams</span><span class="o">;</span>
 
 <span class="cm">/**
- * A recipe for a polled source stream with an adaptable poll period.
+ * A recipe for parallel analytics.
  */</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AdaptablePolledSource</span> <span class="o">{</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ParallelRecipe</span> <span class="o">{</span>
 
     <span class="cm">/**
-     * Poll a temperature sensor to periodically obtain temperature readings.
-     * Respond to a simulated command stream to change the poll period.
+     * Process several tuples in parallel in a replicated pipeline.
      */</span>
     <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
 
-        <span class="n">DirectProvider</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DirectProvider</span><span class="o">();</span>
+        <span class="n">DirectProvider</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DevelopmentProvider</span><span class="o">();</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"development console url: "</span>
+                <span class="o">+</span> <span class="n">dp</span><span class="o">.</span><span class="na">getServices</span><span class="o">().</span><span class="na">getService</span><span class="o">(</span><span class="n">HttpServer</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">getConsoleUrl</span><span class="o">());</span>
 
-        <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="na">newTopology</span><span class="o">(</span><span class="s">"TemperatureSensor"</span><span class="o">);</span>
+        <span class="n">Topology</span> <span class="n">top</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="na">newTopology</span><span class="o">(</span><span class="s">"ParallelRecipe"</span><span class="o">);</span>
 
-        <span class="c1">// Generate a polled temperature sensor stream and set its alias</span>
-        <span class="n">SimulatedTemperatureSensor</span> <span class="n">tempSensor</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SimulatedTemperatureSensor</span><span class="o">();</span>
-        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">engineTemp</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">poll</span><span class="o">(</span><span class="n">tempSensor</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">)</span>
-                                      <span class="o">.</span><span class="na">alias</span><span class="o">(</span><span class="s">"engineTemp"</span><span class="o">)</span>
-                                      <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"engineTemp"</span><span class="o">);</span>
+        <span class="c1">// The number of parallel processing channels to generate</span>
+        <span class="kt">int</span> <span class="n">width</span> <span class="o">=</span> <span class="mi">5</span><span class="o">;</span>
 
-        <span class="c1">// Report the time each temperature reading arrives and the value</span>
-        <span class="n">engineTemp</span><span class="o">.</span><span class="na">peek</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="k">new</span> <span class="n">Date</span><span class="o">()</span> <span class="o">+</span> <span class="s">" temp="</span> <span class="o">+</span> <span class="n">tuple</span><span class="o">));</span>
+        <span class="c1">// Define the splitter</span>
+        <span class="n">ToIntFunction</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">splitter</span> <span class="o">=</span> <span class="n">PlumbingStreams</span><span class="o">.</span><span class="na">roundRobinSplitter</span><span class="o">(</span><span class="n">width</span><span class="o">);</span>
 
-        <span class="c1">// Generate a simulated "set poll period" command stream</span>
-        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">JsonObject</span><span class="o">&gt;</span> <span class="n">cmds</span> <span class="o">=</span> <span class="n">simulatedSetPollPeriodCmds</span><span class="o">(</span><span class="n">top</span><span class="o">);</span>
+        <span class="c1">// Generate a polled simulated sensor stream</span>
+        <span class="n">SimpleSimulatedSensor</span> <span class="n">sensor</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SimpleSimulatedSensor</span><span class="o">();</span>
+        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">readings</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">poll</span><span class="o">(</span><span class="n">sensor</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">)</span>
+                                      <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"readings"</span><span class="o">);</span>
 
-        <span class="c1">// Process the commands to change the poll period</span>
-        <span class="n">cmds</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">json</span> <span class="o">-&gt;</span> <span class="n">setPollPeriod</span><span class="o">(</span><span class="n">engineTemp</span><span class="o">,</span>
-            <span class="n">json</span><span class="o">.</span><span class="na">getAsJsonPrimitive</span><span class="o">(</span><span class="s">"period"</span><span class="o">).</span><span class="na">getAsLong</span><span class="o">(),</span>
-            <span class="n">TimeUnit</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">json</span><span class="o">.</span><span class="na">getAsJsonPrimitive</span><span class="o">(</span><span class="s">"unit"</span><span class="o">).</span><span class="na">getAsString</span><span class="o">())));</span>
+        <span class="c1">// Build the parallel analytic pipelines flow</span>
+        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">results</span> <span class="o">=</span> 
+            <span class="n">PlumbingStreams</span><span class="o">.</span><span class="na">parallel</span><span class="o">(</span><span class="n">readings</span><span class="o">,</span> <span class="n">width</span><span class="o">,</span> <span class="n">splitter</span><span class="o">,</span> <span class="n">pipeline</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"results"</span><span class="o">);</span>
 
+        <span class="c1">// Print out the results.</span>
+        <span class="n">results</span><span class="o">.</span><span class="na">sink</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="k">new</span> <span class="n">Date</span><span class="o">().</span><span class="na">toString</span><span class="o">()</span> <span class="o">+</span> <span class="s">"   "</span> <span class="o">+</span> <span class="n">tuple</span><span class="o">));</span>
+
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Notice that "</span><span class="o">+</span><span class="n">width</span><span class="o">+</span><span class="s">" results are generated every second - one from each parallel channel."</span>
+            <span class="o">+</span> <span class="s">"\nOnly one result would be generated each second if performed serially."</span><span class="o">);</span>
         <span class="n">dp</span><span class="o">.</span><span class="na">submit</span><span class="o">(</span><span class="n">top</span><span class="o">);</span>
     <span class="o">}</span>
 
-    <span class="kd">static</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="kt">void</span> <span class="n">setPollPeriod</span><span class="o">(</span><span class="n">TStream</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">pollStream</span><span class="o">,</span> <span class="kt">long</span> <span class="n">period</span><span class="o">,</span> <span class="n">TimeUnit</span> <span class="n">unit</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">// get the topology's runtime ControlService service</span>
-        <span class="n">ControlService</span> <span class="n">cs</span> <span class="o">=</span> <span class="n">pollStream</span><span class="o">.</span><span class="na">topology</span><span class="o">().</span><span class="na">getRuntimeServiceSupplier</span><span class="o">()</span>
-                                    <span class="o">.</span><span class="na">get</span><span class="o">().</span><span class="na">getService</span><span class="o">(</span><span class="n">ControlService</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-
-        <span class="c1">// using the the stream's alias, get its PeriodMXBean control</span>
-        <span class="n">PeriodMXBean</span> <span class="n">control</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="na">getControl</span><span class="o">(</span><span class="n">TStream</span><span class="o">.</span><span class="na">TYPE</span><span class="o">,</span> <span class="n">pollStream</span><span class="o">.</span><span class="na">getAlias</span><span class="o">(),</span> <span class="n">PeriodMXBean</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-
-        <span class="c1">// change the poll period using the control</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Setting period="</span><span class="o">+</span><span class="n">period</span><span class="o">+</span><span class="s">" "</span><span class="o">+</span><span class="n">unit</span><span class="o">+</span><span class="s">" stream="</span><span class="o">+</span><span class="n">pollStream</span><span class="o">);</span>
-        <span class="n">control</span><span class="o">.</span><span class="na">setPeriod</span><span class="o">(</span><span class="n">period</span><span class="o">,</span> <span class="n">unit</span><span class="o">);</span>
+    <span class="cm">/** Function to create analytic pipeline and add it to a stream */</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="n">BiFunction</span><span class="o">&lt;</span><span class="n">TStream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;,</span><span class="n">Integer</span><span class="o">,</span><span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="n">pipeline</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// a simple 3 stage pipeline simulating some amount of work by sleeping</span>
+        <span class="k">return</span> <span class="o">(</span><span class="n">stream</span><span class="o">,</span> <span class="n">channel</span><span class="o">)</span> <span class="o">-&gt;</span> 
+          <span class="o">{</span> 
+            <span class="n">String</span> <span class="n">tagPrefix</span> <span class="o">=</span> <span class="s">"pipeline-ch"</span><span class="o">+</span><span class="n">channel</span><span class="o">;</span>
+            <span class="k">return</span> <span class="n">stream</span><span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="o">{</span>
+                <span class="n">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">);</span>
+                <span class="k">return</span> <span class="s">"This is the "</span><span class="o">+</span><span class="n">tagPrefix</span><span class="o">+</span><span class="s">" result for tuple "</span><span class="o">+</span><span class="n">tuple</span><span class="o">;</span>
+              <span class="o">}).</span><span class="na">tag</span><span class="o">(</span><span class="n">tagPrefix</span><span class="o">+</span><span class="s">".stage1"</span><span class="o">)</span>
+              <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">Functions</span><span class="o">.</span><span class="na">identity</span><span class="o">()).</span><span class="na">tag</span><span class="o">(</span><span class="n">tagPrefix</span><span class="o">+</span><span class="s">".stage2"</span><span class="o">)</span>
+              <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">Functions</span><span class="o">.</span><span class="na">identity</span><span class="o">()).</span><span class="na">tag</span><span class="o">(</span><span class="n">tagPrefix</span><span class="o">+</span><span class="s">".stage3"</span><span class="o">);</span>
+          <span class="o">};</span>
     <span class="o">}</span>
 
-    <span class="kd">static</span> <span class="n">TStream</span><span class="o">&lt;</span><span class="n">JsonObject</span><span class="o">&gt;</span> <span class="n">simulatedSetPollPeriodCmds</span><span class="o">(</span><span class="n">Topology</span> <span class="n">top</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">AtomicInteger</span> <span class="n">lastPeriod</span> <span class="o">=</span> <span class="k">new</span> <span class="n">AtomicInteger</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
-        <span class="n">TStream</span><span class="o">&lt;</span><span class="n">JsonObject</span><span class="o">&gt;</span> <span class="n">cmds</span> <span class="o">=</span> <span class="n">top</span><span class="o">.</span><span class="na">poll</span><span class="o">(()</span> <span class="o">-&gt;</span> <span class="o">{</span>
-                <span class="c1">// toggle between 1 and 2 sec period</span>
-                <span class="kt">int</span> <span class="n">newPeriod</span> <span class="o">=</span> <span class="n">lastPeriod</span><span class="o">.</span><span class="na">get</span><span class="o">()</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">?</span> <span class="mi">2</span> <span class="o">:</span> <span class="mi">1</span><span class="o">;</span>
-                <span class="n">lastPeriod</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">newPeriod</span><span class="o">);</span>
-                <span class="n">JsonObject</span> <span class="n">jo</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JsonObject</span><span class="o">();</span>
-                <span class="n">jo</span><span class="o">.</span><span class="na">addProperty</span><span class="o">(</span><span class="s">"period"</span><span class="o">,</span> <span class="n">newPeriod</span><span class="o">);</span>
-                <span class="n">jo</span><span class="o">.</span><span class="na">addProperty</span><span class="o">(</span><span class="s">"unit"</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
-                <span class="k">return</span> <span class="n">jo</span><span class="o">;</span>
-            <span class="o">},</span> <span class="mi">5</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">)</span>
-            <span class="o">.</span><span class="na">tag</span><span class="o">(</span><span class="s">"cmds"</span><span class="o">);</span>
-        <span class="k">return</span> <span class="n">cmds</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">sleep</span><span class="o">(</span><span class="kt">long</span> <span class="n">period</span><span class="o">,</span> <span class="n">TimeUnit</span> <span class="n">unit</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">RuntimeException</span> <span class="o">{</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="n">unit</span><span class="o">.</span><span class="na">toMillis</span><span class="o">(</span><span class="n">period</span><span class="o">));</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="n">RuntimeException</span><span class="o">(</span><span class="s">"Interrupted"</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>
+        <span class="o">}</span>
     <span class="o">}</span>
 
 <span class="o">}</span>

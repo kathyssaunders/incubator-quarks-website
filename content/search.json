@@ -231,6 +231,17 @@
 
 
 {
+"title": "How can I run analytics on several tuples in parallel?",
+"tags": "",
+"keywords": "",
+"url": "../recipes/recipe_parallel_analytics",
+"summary": ""
+},
+
+
+
+
+{
 "title": "Writing a source function",
 "tags": "",
 "keywords": "",

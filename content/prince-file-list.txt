@@ -105,6 +105,11 @@
                         
                      
                          
+                            http://quarks.incubator.apache.org/recipes/recipe_parallel_analytics.html
+                                  
+                        
+                     
+                         
                             http://quarks.incubator.apache.org/recipes/recipe_concurrent_analytics.html
                                   
                         
