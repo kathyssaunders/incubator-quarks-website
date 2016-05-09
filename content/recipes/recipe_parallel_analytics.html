@@ -637,6 +637,8 @@ stream -&gt; split(width,splitter) -&gt; |-&gt; isolate(10) -&gt; pipeline-ch1 -
 
 <span class="n">ToIntFunction</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span> <span class="n">splitter</span> <span class="o">=</span> <span class="n">PlumbingStreams</span><span class="o">.</span><span class="na">roundRobinSplitter</span><span class="o">(</span><span class="n">width</span><span class="o">);</span>
 </code></pre></div>
+<p>Another possibility is to use a &quot;load balanced splitter&quot; configuration.  That is covered below.</p>
+
 <h2 id="define-the-pipeline-to-run-in-parallel">Define the pipeline to run in parallel</h2>
 
 <p>Define a <code>BiFunction&lt;TStream&lt;T&gt;, Integer, TStream&lt;R&gt;&gt;</code> that builds the pipeline. That is, define a function that receives a <code>TStream&lt;T&gt;</code> and an integer <code>channel</code> and creates a pipeline for that channel that returns a <code>TStream&lt;R&gt;</code>.</p>
@@ -663,6 +665,13 @@ stream -&gt; split(width,splitter) -&gt; |-&gt; isolate(10) -&gt; pipeline-ch1 -
 
 <p>Given a width, splitter and pipeline function it just takes a single call:</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">results</span> <span class="o">=</span> <span class="n">PlumbingStreams</span><span class="o">.</span><span class="na">parallel</span><span class="o">(</span><span class="n">readings</span><span class="o">,</span> <span class="n">width</span><span class="o">,</span> <span class="n">splitter</span><span class="o">,</span> <span class="n">pipeline</span><span class="o">());</span>
+</code></pre></div>
+<h2 id="load-balanced-parallel-flow">Load balanced parallel flow</h2>
+
+<p>A load balanced parallel flow allocates an incoming tuple to the first available parallel channel. When tuple processing times are variable, using a load balanced parallel flow can result in greater overall throughput.</p>
+
+<p>To create a load balanced parallel flow simply use the <code>parallelBalanced()</code> method instead of <code>parallel()</code>. Everything is the same except you don&#39;t supply a splitter: </p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">TStream</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">results</span> <span class="o">=</span> <span class="n">PlumbingStreams</span><span class="o">.</span><span class="na">parallelBalanced</span><span class="o">(</span><span class="n">readings</span><span class="o">,</span> <span class="n">width</span><span class="o">,</span> <span class="n">pipeline</span><span class="o">());</span>
 </code></pre></div>
 <h2 id="the-final-application">The final application</h2>
 
