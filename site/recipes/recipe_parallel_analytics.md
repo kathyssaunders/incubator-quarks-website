@@ -52,6 +52,8 @@ int width = 5;  // number of parallel channels
 ToIntFunction<Double> splitter = PlumbingStreams.roundRobinSplitter(width);
 ```
 
+Another possibility is to use a "load balanced splitter" configuration.  That is covered below.
+
 ## Define the pipeline to run in parallel
 
 Define a `BiFunction<TStream<T>, Integer, TStream<R>>` that builds the pipeline. That is, define a function that receives a `TStream<T>` and an integer `channel` and creates a pipeline for that channel that returns a `TStream<R>`.
@@ -83,6 +85,16 @@ Given a width, splitter and pipeline function it just takes a single call:
 
 ```java
 TStream<String> results = PlumbingStreams.parallel(readings, width, splitter, pipeline());
+```
+
+## Load balanced parallel flow
+
+A load balanced parallel flow allocates an incoming tuple to the first available parallel channel. When tuple processing times are variable, using a load balanced parallel flow can result in greater overall throughput.
+
+To create a load balanced parallel flow simply use the `parallelBalanced()` method instead of `parallel()`. Everything is the same except you don't supply a splitter: 
+
+```java
+TStream<String> results = PlumbingStreams.parallelBalanced(readings, width, pipeline());
 ```
 
 ## The final application
