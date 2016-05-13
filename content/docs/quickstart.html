@@ -218,7 +218,7 @@ window.location.href = uri;
                     caretHtml: '',
                     accordion: true,
                     openClass: 'active', // open
-                    save: false, // leave false or nav highlighting doesn't work right
+                    save: true,
                     cookie: {
                         name: 'navgoco',
                         expires: false,
@@ -270,11 +270,13 @@ window.location.href = uri;
                     
                     
                     
+                    
                     <li><a href="../docs/quarks_index.html">Introduction</a></li>
                     
 
                     
 
+                    
                     
                     
                     
@@ -295,11 +297,13 @@ window.location.href = uri;
                     
                     
                     
+                    
                     <li><a href="../docs/quarks-getting-started.html">Getting started guide</a></li>
                     
 
                     
 
+                    
                     
                     
                     
@@ -320,11 +324,13 @@ window.location.href = uri;
                     
                     
                     
+                    
                     <li><a href="../recipes/recipe_hello_quarks.html">Hello Quarks!</a></li>
                     
 
                     
 
+                    
                     
                     
                     
@@ -338,11 +344,13 @@ window.location.href = uri;
                     
                     
                     
+                    
                     <li><a href="../recipes/recipe_value_out_of_range.html">Detecting a sensor value out of expected range</a></li>
                     
 
                     
 
+                    
                     
                     
                     
@@ -356,11 +364,13 @@ window.location.href = uri;
                     
                     
                     
+                    
                     <li><a href="../recipes/recipe_combining_streams_processing_results.html">Splitting a stream to apply different processing and combining the results into a single stream</a></li>
                     
 
                     
 
+                    
                     
                     
                     
@@ -374,7 +384,38 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../recipes/recipe_adaptable_filter_range.html">Adaptable filter behavior</a></li>
+                    
+                    <li><a href="../recipes/recipe_adaptable_filter_range.html">Changing a filter's range</a></li>
+                    
+
+                    
+
+                    
+                    
+                    
+                    
+                    
+                    <li><a href="../recipes/recipe_adaptable_polling_source.html">Changing a polled source stream's period</a></li>
+                    
+
+                    
+
+                    
+                    
+                    
+                    
+                    
+                    <li><a href="../recipes/recipe_adaptable_deadtime_filter.html">Using an adaptable deadtime filter</a></li>
+                    
+
+                    
+
+                    
+                    
+                    
+                    
+                    
+                    <li><a href="../recipes/recipe_dynamic_analytic_control.html">Dynamically enabling analytic flows</a></li>
                     
 
                     
@@ -390,6 +431,7 @@ window.location.href = uri;
                     
                     
                     
+                    
                     <li><a href="../docs/samples.html">Samples</a></li>
                     
 
@@ -399,7 +441,8 @@ window.location.href = uri;
                     
                     
                     
-                    <li><a href="../docs/quickstart.html">Quickstart IBM Watson IoT Platform</a></li>
+                    
+                    <li class="active"><a href="../docs/quickstart.html">Quickstart IBM Watson IoT Platform</a></li>
                     
 
                     
@@ -412,6 +455,7 @@ window.location.href = uri;
             
             <li><a href="#">Using the Console</a>
                 <ul>
+                    
                     
                     
                     
@@ -431,11 +475,13 @@ window.location.href = uri;
                     
                     
                     
+                    
                     <li><a href="../docs/community.html">How to participate</a></li>
                     
 
                     
 
+                    
                     
                     
                     
@@ -542,10 +588,9 @@ Message hubs are used to isolate the back-end system from having to handle conne
 <a href="https://internetofthings.ibmcloud.com/">IBM Watson IoT Platform</a>. This cloud service runs on IBM&#39;s Bluemix cloud platform
 and Quarks provides a <a href="http://quarks-edge.github.io/quarks/docs/javadoc/index.html?quarks/connectors/iotf/IotfDevice.html">connector</a>.</p>
 
-<p>You can test out the service without any registration by using its Quickstart service and the Quarks sample application:
-<a href="http://quarks-edge.github.io/quarks/docs/javadoc/index.html?quarks/samples/connectors/iotf/IotfQuickstart.html">quarks.samples.connectors.iotf.IotfQuickstart</a>.</p>
+<p>You can test out the service without any registration by using its Quickstart service and the Quarks sample application: <a href="https://github.com/apache/incubator-quarks/blob/master/samples/connectors/src/main/java/quarks/samples/connectors/iotf/IotfQuickstart.java">code</a>, <a href="http://quarks-edge.github.io/quarks/docs/javadoc/index.html?quarks/samples/connectors/iotf/IotfQuickstart.html">JavaDocs</a>.</p>
 
-<p>You can execute the class directly from Eclipse, or using the script: <code>quarks/java8/scripts/connectors/iotf/runiotfquickstart.sh</code></p>
+<p>You can execute the class directly from Eclipse, or using the script: <a href="https://github.com/quarks-edge/quarks/blob/master/scripts/connectors/iotf/runiotfquickstart.sh"><code>quarks/java8/scripts/connectors/iotf/runiotfquickstart.sh</code></a></p>
 
 <p>When run it produces output like this, with a URL as the third line.</p>
 
@@ -565,22 +610,22 @@ to the Quickstart Bluemix service.</p>
 <a href="https://github.com/apache/incubator-quarks/blob/master/samples/connectors/src/main/java/quarks/samples/connectors/iotf/IotfQuickstart.java">IotfQuickstart.java</a></p>
 
 <p>The first step to is to create a <code>IotDevice</code> instance that represents the connection to IBM Watson IoT Platform Qucikstart service.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">        <span class="c1">// Declare a connection to IoTF Quickstart service</span>
-        <span class="n">String</span> <span class="n">deviceId</span> <span class="o">=</span> <span class="s">"qs"</span> <span class="o">+</span> <span class="n">Long</span><span class="o">.</span><span class="na">toHexString</span><span class="o">(</span><span class="k">new</span> <span class="n">Random</span><span class="o">().</span><span class="na">nextLong</span><span class="o">());</span>
-        <span class="n">IotDevice</span> <span class="n">device</span> <span class="o">=</span> <span class="n">IotfDevice</span><span class="o">.</span><span class="na">quickstart</span><span class="o">(</span><span class="n">topology</span><span class="o">,</span> <span class="n">deviceId</span><span class="o">);</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// Declare a connection to IoTF Quickstart service</span>
+<span class="n">String</span> <span class="n">deviceId</span> <span class="o">=</span> <span class="s">"qs"</span> <span class="o">+</span> <span class="n">Long</span><span class="o">.</span><span class="na">toHexString</span><span class="o">(</span><span class="k">new</span> <span class="n">Random</span><span class="o">().</span><span class="na">nextLong</span><span class="o">());</span>
+<span class="n">IotDevice</span> <span class="n">device</span> <span class="o">=</span> <span class="n">IotfDevice</span><span class="o">.</span><span class="na">quickstart</span><span class="o">(</span><span class="n">topology</span><span class="o">,</span> <span class="n">deviceId</span><span class="o">);</span>
 </code></pre></div>
 <p>Now any stream can send device events to the Quickstart service by simply calling its <code>events()</code> method.
 Here we map a stream of random numbers into JSON as the payload for a device event is typically JSON.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">          <span class="n">TStream</span><span class="o">&lt;</span><span class="n">JsonObject</span><span class="o">&gt;</span> <span class="n">json</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">v</span> <span class="o">-&gt;</span> <span class="o">{</span>
-            <span class="n">JsonObject</span> <span class="n">j</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JsonObject</span><span class="o">();</span>
-            <span class="n">j</span><span class="o">.</span><span class="na">addProperty</span><span class="o">(</span><span class="s">"temp"</span><span class="o">,</span> <span class="n">v</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
-            <span class="n">j</span><span class="o">.</span><span class="na">addProperty</span><span class="o">(</span><span class="s">"humidity"</span><span class="o">,</span> <span class="n">v</span><span class="o">[</span><span class="mi">1</span><span class="o">]);</span>
-            <span class="n">j</span><span class="o">.</span><span class="na">addProperty</span><span class="o">(</span><span class="s">"objectTemp"</span><span class="o">,</span> <span class="n">v</span><span class="o">[</span><span class="mi">2</span><span class="o">]);</span>
-            <span class="k">return</span> <span class="n">j</span><span class="o">;</span>
-        <span class="o">});</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">TStream</span><span class="o">&lt;</span><span class="n">JsonObject</span><span class="o">&gt;</span> <span class="n">json</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">v</span> <span class="o">-&gt;</span> <span class="o">{</span>
+  <span class="n">JsonObject</span> <span class="n">j</span> <span class="o">=</span> <span class="k">new</span> <span class="n">JsonObject</span><span class="o">();</span>
+  <span class="n">j</span><span class="o">.</span><span class="na">addProperty</span><span class="o">(</span><span class="s">"temp"</span><span class="o">,</span> <span class="n">v</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
+  <span class="n">j</span><span class="o">.</span><span class="na">addProperty</span><span class="o">(</span><span class="s">"humidity"</span><span class="o">,</span> <span class="n">v</span><span class="o">[</span><span class="mi">1</span><span class="o">]);</span>
+  <span class="n">j</span><span class="o">.</span><span class="na">addProperty</span><span class="o">(</span><span class="s">"objectTemp"</span><span class="o">,</span> <span class="n">v</span><span class="o">[</span><span class="mi">2</span><span class="o">]);</span>
+  <span class="k">return</span> <span class="n">j</span><span class="o">;</span>
+<span class="o">});</span>
 </code></pre></div>
 <p>Now we have a stream of simulated sensor reading events as JSON tuples (<code>json</code>) we send them as events with event identifer (type) <code>sensors</code>  using <code>device</code>.</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">      <span class="n">device</span><span class="o">.</span><span class="na">events</span><span class="o">(</span><span class="n">json</span><span class="o">,</span> <span class="s">"sensors"</span><span class="o">,</span> <span class="n">QoS</span><span class="o">.</span><span class="na">FIRE_AND_FORGET</span><span class="o">);</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">device</span><span class="o">.</span><span class="na">events</span><span class="o">(</span><span class="n">json</span><span class="o">,</span> <span class="s">"sensors"</span><span class="o">,</span> <span class="n">QoS</span><span class="o">.</span><span class="na">FIRE_AND_FORGET</span><span class="o">);</span>
 </code></pre></div>
 <p>It&#39;s that simple to send a Quarks stream to IBM Watson IoT Platform as device events.</p>
 
@@ -615,7 +660,7 @@ Here we map a stream of random numbers into JSON as the payload for a device eve
         <div class="col-lg-12 footer">
 
              Site last
-            generated: Apr 13, 2016 <br/>
+            generated: Apr 28, 2016 <br/>
 
         </div>
     </div>

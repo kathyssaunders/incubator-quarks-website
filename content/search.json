@@ -99,7 +99,7 @@
 
 
 {
-"title": "Getting started with Quarks",
+"title": "Getting started with Apache Quarks",
 "tags": "",
 "keywords": "",
 "url": "../docs/quarks-getting-started",
@@ -132,10 +132,32 @@
 
 
 {
-"title": "Adaptable filter behavior",
+"title": "Using an adaptable deadtime filter",
+"tags": "",
+"keywords": "",
+"url": "../recipes/recipe_adaptable_deadtime_filter",
+"summary": ""
+},
+
+
+
+
+{
+"title": "Changing a filter&#39;s range",
 "tags": "",
 "keywords": "",
 "url": "../recipes/recipe_adaptable_filter_range",
+"summary": ""
+},
+
+
+
+
+{
+"title": "Changing a polled source stream&#39;s period",
+"tags": "",
+"keywords": "",
+"url": "../recipes/recipe_adaptable_polling_source",
 "summary": ""
 },
 
@@ -158,6 +180,17 @@
 "tags": "",
 "keywords": "",
 "url": "../recipes/recipe_different_processing_against_stream",
+"summary": ""
+},
+
+
+
+
+{
+"title": "Dynamically Enabling Analytic Flows",
+"tags": "",
+"keywords": "",
+"url": "../recipes/recipe_dynamic_analytic_control",
 "summary": ""
 },
 

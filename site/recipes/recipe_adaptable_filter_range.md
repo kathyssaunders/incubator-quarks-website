@@ -1,54 +1,54 @@
 ---
-title: Adaptable filter behavior
+title: Changing a filter's range
 ---
 
 The [Detecting a sensor value out of range](recipe_value_out_of_range.html) recipe introduced the basics of filtering as well as the use of a [Range](http://quarks-edge.github.io/quarks/docs/javadoc/quarks/analytics/sensors/Range.html).
 
-Oftentimes, a user wants a filter's behavior to be adaptable rather than static.  A filter's range can be made changeable via commands from some external source or just changed as a result of some other local analytics.
+Oftentimes, a user wants a filter's behavior to be adaptable rather than static. A filter's range can be made changeable via commands from some external source or just changed as a result of some other local analytics.
 
-A Quarks IotProvider and IoTDevice with its command streams would be a natural way to control the application.  In this recipe we will just simulate a "set optimal temp range" command stream.
+A Quarks `IotProvider` and `IoTDevice` with its command streams would be a natural way to control the application. In this recipe we will just simulate a "set optimal temp range" command stream.
 
-The string form of a ``Range`` is natural, consise, and easy to use.  As such it's a convenient form to use as external range format. The range string can easily be converted back into a ``Range``.
+The string form of a `Range` is natural, consise, and easy to use. As such it's a convenient form to use as external range format. The range string can easily be converted back into a `Range`.
 
 We're going to assume familiarity with that earlier recipe and those concepts and focus on just the "adaptable range specification" aspect of this recipe.
 
 ## Define the range
 
-A ``java.util.concurrent.atomic.AtomicReference`` is used to provide the necessary thread synchronization.
+A `java.util.concurrent.atomic.AtomicReference` is used to provide the necessary thread synchronization.
 
 ```java
-    static Range<Double> DEFAULT_TEMP_RANGE = Ranges.valueOfDouble("[77.0..91.0]");
-    static AtomicReference<Range<Double>> optimalTempRangeRef =
-            new AtomicReference<>(DEFAULT_TEMP_RANGE);
+static Range<Double> DEFAULT_TEMP_RANGE = Ranges.valueOfDouble("[77.0..91.0]");
+static AtomicReference<Range<Double>> optimalTempRangeRef =
+        new AtomicReference<>(DEFAULT_TEMP_RANGE);
 ```
 
 ## Define a method to change the range
 
 ```java
-    static void setOptimalTempRange(Range<Double> range) {
-        System.out.println("Using optimal temperature range: " + range);
-        optimalTempRangeRef.set(range);
-    }
+static void setOptimalTempRange(Range<Double> range) {
+    System.out.println("Using optimal temperature range: " + range);
+    optimalTempRangeRef.set(range);
+}
 ```
 
-The filter just uses ``optimalTempRangeRef.get()`` to use the current range setting.
+The filter just uses `optimalTempRangeRef.get()` to use the current range setting.
 
 ## Simulate a command stream
 
-A ``TStream<Range<Double>> setRangeCmds`` stream is created and a new range specification tuple is generated every 10 seconds.  A ``sink`` on the stream calls ``setOptimalTempRange()`` to change the range and hence the filter's bahavior.
+A `TStream<Range<Double>> setRangeCmds` stream is created and a new range specification tuple is generated every 10 seconds.  A `sink()` on the stream calls `setOptimalTempRange()` to change the range and hence the filter's bahavior.
 
 ```java
-    // Simulate a command stream to change the optimal range.
-    // Such a stream might be from an IotDevice command.
-    String[] ranges = new String[] {
-        "[70.0..120.0]", "[80.0..130.0]", "[90.0..140.0]",
-    };
-    AtomicInteger count = new AtomicInteger(0);
-    TStream<Range<Double>> setRangeCmds = top.poll(() 
-            -> Ranges.valueOfDouble(ranges[count.incrementAndGet() % ranges.length]),
-            10, TimeUnit.SECONDS);
+// Simulate a command stream to change the optimal range.
+// Such a stream might be from an IotDevice command.
+String[] ranges = new String[] {
+    "[70.0..120.0]", "[80.0..130.0]", "[90.0..140.0]",
+};
+AtomicInteger count = new AtomicInteger(0);
+TStream<Range<Double>> setRangeCmds = top.poll(()
+        -> Ranges.valueOfDouble(ranges[count.incrementAndGet() % ranges.length]),
+        10, TimeUnit.SECONDS);
 
-    setRangeCmds.sink(tuple -> setOptimalTempRange(tuple));
+setRangeCmds.sink(tuple -> setOptimalTempRange(tuple));
 ```
 
 ## The final application
@@ -76,12 +76,12 @@ public class AdaptableFilterRange {
     static Range<Double> DEFAULT_TEMP_RANGE = Ranges.valueOfDouble("[77.0..91.0]");
     static AtomicReference<Range<Double>> optimalTempRangeRef =
             new AtomicReference<>(DEFAULT_TEMP_RANGE);
-    
+
     static void setOptimalTempRange(Range<Double> range) {
         System.out.println("Using optimal temperature range: " + range);
         optimalTempRangeRef.set(range);
     }
-                                                                                                                                           
+
     /**
      * Polls a simulated temperature sensor to periodically obtain
      * temperature readings (in Fahrenheit). Use a simple filter
