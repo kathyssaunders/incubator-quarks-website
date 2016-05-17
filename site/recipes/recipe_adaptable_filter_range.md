@@ -2,7 +2,7 @@
 title: Changing a filter's range
 ---
 
-The [Detecting a sensor value out of range](recipe_value_out_of_range.html) recipe introduced the basics of filtering as well as the use of a [Range](http://quarks-edge.github.io/quarks/docs/javadoc/quarks/analytics/sensors/Range.html).
+The [Detecting a sensor value out of range](recipe_value_out_of_range.html) recipe introduced the basics of filtering as well as the use of a [Range](http://quarks.incubator.apache.org/javadoc/lastest/quarks/analytics/sensors/Range.html).
 
 Oftentimes, a user wants a filter's behavior to be adaptable rather than static. A filter's range can be made changeable via commands from some external source or just changed as a result of some other local analytics.
 
