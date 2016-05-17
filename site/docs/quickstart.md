@@ -7,9 +7,9 @@ title: Quickstart IBM Watson IoT Platform sample
 IoT devices running quarks applications typically connect to back-end analytic systems through a message hub. Message hubs are used to isolate the back-end system from having to handle connections from thousands to millions of devices.
 
 An example of such a message hub designed for the Internet of Things is [IBM Watson IoT Platform](https://internetofthings.ibmcloud.com/). This cloud service runs on IBM's Bluemix cloud platform
-and Quarks provides a [connector](http://quarks-edge.github.io/quarks/docs/javadoc/index.html?quarks/connectors/iotf/IotfDevice.html).
+and Quarks provides a [connector](http://quarks.incubator.apache.org/javadoc/lastest/index.html?quarks/connectors/iotf/IotfDevice.html).
 
-You can test out the service without any registration by using its Quickstart service and the Quarks sample application: [code](https://github.com/apache/incubator-quarks/blob/master/samples/connectors/src/main/java/quarks/samples/connectors/iotf/IotfQuickstart.java), [JavaDocs](http://quarks-edge.github.io/quarks/docs/javadoc/index.html?quarks/samples/connectors/iotf/IotfQuickstart.html).
+You can test out the service without any registration by using its Quickstart service and the Quarks sample application: [code](https://github.com/apache/incubator-quarks/blob/master/samples/connectors/src/main/java/quarks/samples/connectors/iotf/IotfQuickstart.java), [JavaDocs](http://quarks.incubator.apache.org/javadoc/lastest/index.html?quarks/samples/connectors/iotf/IotfQuickstart.html).
 
 You can execute the class directly from Eclipse, or using the script: [`quarks/java8/scripts/connectors/iotf/runiotfquickstart.sh`](https://github.com/quarks-edge/quarks/blob/master/scripts/connectors/iotf/runiotfquickstart.sh)
 
