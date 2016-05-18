@@ -2,7 +2,7 @@
 title: Using an external configuration file for filter ranges
 ---
 
-The [Detecting a sensor value out of range](recipe_value_out_of_range.html) recipe introduced the basics of filtering as well as the use of a [Range](http://quarks.incubator.apache.org/javadoc/lastest/quarks/analytics/sensors/Range.html).
+The [Detecting a sensor value out of range](recipe_value_out_of_range.html) recipe introduced the basics of filtering as well as the use of a [Range]({{ site.docsurl }}/lastest/quarks/analytics/sensors/Range.html).
 
 Oftentimes, a user wants to initialize a range specification from an external configuration file so the application code is more easily configured and reusable.
 

@@ -402,7 +402,7 @@ If you scroll the browser window down, you can see a Metrics section. This secti
 
 ## Counters
 
-In the `ConsoleWaterDetector` application we used a `DevelopmentProvider`. Therefore, counters were added to most streams (edges) with the following exceptions (from the [Javadoc](http://quarks.incubator.apache.org/javadoc/lastest/quarks/metrics/Metrics.html#counter-quarks.topology.TStream-) for `quarks.metrics.Metrics`):
+In the `ConsoleWaterDetector` application we used a `DevelopmentProvider`. Therefore, counters were added to most streams (edges) with the following exceptions (from the [Javadoc]({{ site.docsurl }}/lastest/quarks/metrics/Metrics.html#counter-quarks.topology.TStream-) for `quarks.metrics.Metrics`):
 
 *Oplets are only inserted upstream from a FanOut oplet.*
 
