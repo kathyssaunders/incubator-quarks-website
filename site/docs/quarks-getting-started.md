@@ -109,7 +109,7 @@ To understand how the application processes the stream, let's review each line.
 
 ### Specifying a provider
 
-Your first step when you write a Quarks application is to create a [`DirectProvider`](http://quarks-edge.github.io/quarks/docs/javadoc/index.html?quarks/providers/direct/DirectProvider.html):
+Your first step when you write a Quarks application is to create a [`DirectProvider`]({{ site.docsurl }}/lastest/index.html?quarks/providers/direct/DirectProvider.html):
 
 ```java
 DirectProvider dp = new DirectProvider();
@@ -119,7 +119,7 @@ A `Provider` is an object that contains information on how and where your Quarks
 
 ### Creating a topology
 
-Additionally a Provider is used to create a [`Topology`](http://quarks-edge.github.io/quarks/docs/javadoc/index.html?quarks/topology/Topology.html) instance:
+Additionally a Provider is used to create a [`Topology`]({{ site.docsurl }}/lastest/index.html?quarks/topology/Topology.html) instance:
 
 ```java
 Topology topology = dp.newTopology();

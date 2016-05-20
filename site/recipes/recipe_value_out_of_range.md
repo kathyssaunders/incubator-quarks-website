@@ -56,7 +56,7 @@ TStream<Double> temp = top.poll(tempSensor, 1, TimeUnit.SECONDS);
 
 ## Simple filtering
 
-If the corn grower is interested in determining when the temperature is strictly out of the optimal range of 77°F and 91°F, a simple filter can be used. The `filter` method can be applied to `TStream` objects, where a filter predicate determines which tuples to keep for further processing. For its method declaration, refer to the [Javadoc](http://quarks-edge.github.io/quarks/docs/javadoc/quarks/topology/TStream.html#filter-quarks.function.Predicate-).
+If the corn grower is interested in determining when the temperature is strictly out of the optimal range of 77°F and 91°F, a simple filter can be used. The `filter` method can be applied to `TStream` objects, where a filter predicate determines which tuples to keep for further processing. For its method declaration, refer to the [Javadoc]({{ site.docsurl }}/lastest/quarks/topology/TStream.html#filter-quarks.function.Predicate-).
 
 In this case, we want to keep temperatures below the lower range value *or* above the upper range value. This is expressed in the filter predicate, which follows Java's syntax for [lambda expressions](https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html#syntax). Then, we terminate the stream (using `sink`) by printing out the warning to standard out. Note that `\u00b0` is the Unicode encoding for the degree (°) symbol.
 
@@ -77,7 +77,7 @@ The `deadband` filter is a part of the `quarks.analytics` package focused on han
 deadband(TStream<T> stream, Function<T,V> value, Predicate<V> inBand)
 ```
 
-The first parameter is the stream to the filtered, which is `temp` in our scenario. The second parameter is the value to examine. Here, we use the `identity()` method to return a tuple on the stream. The last parameter is the predicate that defines the optimal range, that is, between 77°F and 91°F. it is important to note that this differs from the `TStream` version of `filter` in which one must explicitly specify the values that are out of range. The code snippet below demonstrates how the method call is pieced together. The `deadbandFiltered` stream contains temperature readings that follow the rules as described in the [Javadoc](http://quarks-edge.github.io/quarks/docs/javadoc/quarks/analytics/sensors/Filters.html#deadband-quarks.topology.TStream-quarks.function.Function-quarks.function.Predicate-):
+The first parameter is the stream to the filtered, which is `temp` in our scenario. The second parameter is the value to examine. Here, we use the `identity()` method to return a tuple on the stream. The last parameter is the predicate that defines the optimal range, that is, between 77°F and 91°F. it is important to note that this differs from the `TStream` version of `filter` in which one must explicitly specify the values that are out of range. The code snippet below demonstrates how the method call is pieced together. The `deadbandFiltered` stream contains temperature readings that follow the rules as described in the [Javadoc]({{ site.docsurl }}/lastest/quarks/analytics/sensors/Filters.html#deadband-quarks.topology.TStream-quarks.function.Function-quarks.function.Predicate-):
 
 * the value is outside of the optimal range (deadband)
 * the first value inside the optimal range after a period being outside it
