@@ -119,6 +119,20 @@
   link: "<a href='../recipes/recipe_dynamic_analytic_control.html'>Dynamically enabling analytic flows</a>"
 
 
+ 
+/recipes/recipe_parallel_analytics:
+  title: "How can I run analytics on several tuples in parallel?"
+  url: "../recipes/recipe_parallel_analytics.html"
+  link: "<a href='../recipes/recipe_parallel_analytics.html'>How can I run analytics on several tuples in parallel?</a>"
+
+
+ 
+/recipes/recipe_concurrent_analytics:
+  title: "How can I run several analytics on a tuple concurrently?"
+  url: "../recipes/recipe_concurrent_analytics.html"
+  link: "<a href='../recipes/recipe_concurrent_analytics.html'>How can I run several analytics on a tuple concurrently?</a>"
+
+
 
 
  

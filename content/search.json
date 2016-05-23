@@ -176,6 +176,17 @@
 
 
 {
+"title": "How can I run several analytics on a tuple concurrently?",
+"tags": "",
+"keywords": "",
+"url": "../recipes/recipe_concurrent_analytics",
+"summary": ""
+},
+
+
+
+
+{
 "title": "Applying different processing against a single stream",
 "tags": "",
 "keywords": "",
@@ -213,6 +224,17 @@
 "tags": "",
 "keywords": "",
 "url": "../recipes/recipe_hello_quarks",
+"summary": ""
+},
+
+
+
+
+{
+"title": "How can I run analytics on several tuples in parallel?",
+"tags": "",
+"keywords": "",
+"url": "../recipes/recipe_parallel_analytics",
 "summary": ""
 },
 
