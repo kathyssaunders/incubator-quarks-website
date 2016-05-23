@@ -4,7 +4,7 @@ title: Committers
 
 ## Commit activity
 
-To see commit activity for Quarks, click [here](https://github.com/apache/incubator-quarks/pulse).
+To see commit activity for Apache Quarks, click [here](https://github.com/apache/incubator-quarks/pulse).
 
 ## How to become a committer
 
