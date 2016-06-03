@@ -1,0 +1,240 @@
+# This is your sidebar TOC. The sidebar code loops through sections here and provides the appropriate formatting.
+
+# Sidebar
+entries:
+- title: Sidebar
+  subcategories:
+  - title:
+    audience: writers, designers
+    platform: all
+    product: all
+    version: all
+    output: pdf
+    type: frontmatter
+    items:
+    - title:
+      url: /titlepage.html
+      audience: writers, designers
+      platform: all
+      product: all
+      version: all
+      output: pdf
+      type: frontmatter
+    - title:
+      url: /tocpage.html
+      audience: writers, designers
+      platform: all
+      product: all
+      version: all
+      output: pdf
+      type: frontmatter
+
+  - title: Overview
+    audience: writers, designers
+    platform: all
+    product: all
+    version: all
+    output: web, pdf
+    items:
+    - title: Introduction
+      url: /docs/quarks_index.html
+      audience: writers, designers
+      platform: all
+      product: all
+      version: all
+      output: web, pdf
+    - title: FAQ
+      url: /docs/faq.html
+      audience: writers, designers
+      platform: all
+      product: all
+      version: all
+      output: web, pdf
+
+  - title: Get Started
+    audience: writers, designers
+    platform: all
+    product: all
+    version: all
+    output: web, pdf
+    items:
+    - title: Getting started guide
+      url: /docs/quarks-getting-started.html
+      audience: writers, designers
+      platform: all
+      product: all
+      version: all
+      output: web, pdf
+
+    - title: Common operations
+      url: /docs/common-quarks-operations.html
+      audience: writers, designers
+      platform: all
+      product: all
+      version: all
+      output: web, pdf
+
+  - title: Quarks Cookbook
+    audience: writers, designers
+    platform: all
+    product: all
+    version: all
+    output: web, pdf
+    items:
+    - title: Hello Quarks!
+      url: /recipes/recipe_hello_quarks.html
+      audience: writers, designers
+      platform: all
+      product: all
+      version: all
+      output: web, pdf
+
+    - title: Writing a source function
+      url: /recipes/recipe_source_function.html
+      audience: writers, designers
+      platform: all
+      product: all
+      version: all
+      output: web, pdf
+
+    - title: Detecting a sensor value out of expected range
+      url: /recipes/recipe_value_out_of_range.html
+      audience: writers, designers
+      platform: all
+      product: all
+      version: all
+      output: web, pdf
+
+    - title: Applying different processing against a single stream
+      url: /recipes/recipe_different_processing_against_stream.html
+      audience: writers, designers
+      platform: all
+      product: all
+      version: all
+      output: web, pdf
+
+    - title: Splitting a stream to apply different processing
+             and combining the results into a single stream
+      url: /recipes/recipe_combining_streams_processing_results.html
+      audience: writers, designers
+      platform: all
+      product: all
+      version: all
+      output: web, pdf
+
+    - title: Using an external configuration file for filter ranges
+      url: /recipes/recipe_external_filter_range.html
+      audience: writers, designers
+      platform: all
+      product: all
+      version: all
+      output: web, pdf
+
+    - title: Changing a filter's range
+      url: /recipes/recipe_adaptable_filter_range.html
+      audience: writers, designers
+      platform: all
+      product: all
+      version: all
+      output: web, pdf
+
+    - title: Changing a polled source stream's period
+      url: /recipes/recipe_adaptable_polling_source.html
+      audience: writers, designers
+      platform: all
+      product: all
+      version: all
+      output: web, pdf
+
+    - title: Using an adaptable deadtime filter
+      url: /recipes/recipe_adaptable_deadtime_filter.html
+      audience: writers, designers
+      platform: all
+      product: all
+      version: all
+      output: web, pdf
+
+    - title: Dynamically enabling analytic flows
+      url: /recipes/recipe_dynamic_analytic_control.html
+      audience: writers, designers
+      platform: all
+      product: all
+      version: all
+      output: web, pdf
+
+    - title: How can I run analytics on several tuples in parallel?
+      url: /recipes/recipe_parallel_analytics.html
+      audience: writers, designers
+      platform: all
+      product: all
+      version: all
+      output: web, pdf
+
+    - title: How can I run several analytics on a tuple concurrently?
+      url: /recipes/recipe_concurrent_analytics.html
+      audience: writers, designers
+      platform: all
+      product: all
+      version: all
+      output: web, pdf
+
+  - title: Sample Programs
+    audience: writers, designers
+    platform: all
+    product: all
+    version: all
+    output: web, pdf
+    items:
+    - title: Samples
+      url: /docs/samples.html
+      audience: writers, designers
+      platform: all
+      product: all
+      version: all
+      output: web, pdf
+
+    - title: Quickstart IBM Watson IoT Platform
+      url: /docs/quickstart.html
+      audience: writers, designers
+      platform: all
+      product: all
+      version: all
+      output: web, pdf
+
+  - title: Using the Console
+    audience: writers, designers
+    platform: all
+    product: all
+    version: all
+    output: web, pdf
+    items:
+    - title: Using the console
+      url: /docs/console.html
+      audience: writers, designers
+      platform: all
+      product: all
+      version: all
+      output: web, pdf
+
+  - title: Get Involved
+    audience: writers, designers
+    platform: all
+    product: all
+    version: all
+    output: web, pdf
+    items:
+    - title: How to participate
+      url: /docs/community.html
+      audience: writers, designers
+      platform: all
+      product: all
+      version: all
+      output: web, pdf
+
+    - title: Committers
+      url: /docs/committers.html
+      audience: writers, designers
+      platform: all
+      product: all
+      version: all
+      output: web, pdf
