@@ -8,7 +8,7 @@ To see commit activity for Apache Quarks, click [here](https://github.com/apache
 
 ## How to become a committer
 
-You can become a committer by contributing to Quarks. Qualifications for a new committer include:
+You can become a committer by contributing to Apache Quarks. Qualifications for a new committer include:
 
 * **Sustained Contributions**: Potential committers should have a history of contributions to Quarks. They will create pull requests over a period of time.
 
