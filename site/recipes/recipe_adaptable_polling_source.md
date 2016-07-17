@@ -6,13 +6,13 @@ The [Writing a source function](recipe_source_function.html) recipe introduced t
 
 Oftentimes, a user wants the poll frequency to be adaptable rather than static. For example, an event such as a sudden rise in a temperature sensor may motivate more frequent polling of the sensor and analysis of the data until the condition subsides. A change in the poll frequency may be driven by locally performed analytics or via a command from an external source.
 
-A Quarks `IotProvider` and `IoTDevice` with its command streams would be a natural way to control the application. In this recipe we will just simulate a "set poll period" command stream.
+An Edgent `IotProvider` and `IoTDevice` with its command streams would be a natural way to control the application. In this recipe we will just simulate a "set poll period" command stream.
 
-The `Topology.poll()` [documentation]({{ site.docsurl }}/lastest/quarks/topology/Topology.html#poll-quarks.function.Supplier-long-java.util.concurrent.TimeUnit-) describes how the poll period may be changed at runtime.
+The `Topology.poll()` [documentation]({{ site.docsurl }}/latest/{{ site.data.project.unix_name }}/topology/Topology.html#poll-{{ site.data.project.unix_name }}.function.Supplier-long-java.util.concurrent.TimeUnit-) describes how the poll period may be changed at runtime.
 
-The mechanism is based on a more general Quarks runtime `quarks.execution.services.ControlService` service. The runtime registers "control beans" for entities that are controllable. These controls can be retrieved at runtime via the service.
+The mechanism is based on a more general Edgent runtime `edgent.execution.services.ControlService` service. The runtime registers "control beans" for entities that are controllable. These controls can be retrieved at runtime via the service.
 
-At runtime, `Topology.poll()` registers a `quarks.execution.mbeans.PeriodMXBean` control. __Retrieving the control at runtime requires setting an alias on the poll generated stream using `TStream.alias()`.__
+At runtime, `Topology.poll()` registers a `edgent.execution.mbeans.PeriodMXBean` control. __Retrieving the control at runtime requires setting an alias on the poll generated stream using `TStream.alias()`.__
 
 ## Create the polled stream and set its alias
 
@@ -24,7 +24,7 @@ TStream<Double> engineTemp = top.poll(tempSensor, 1, TimeUnit.SECONDS)
                               .tag("engineTemp");
 ```
 
-It's also a good practice to add tags to streams to improve the usability of the development mode Quarks console.
+It's also a good practice to add tags to streams to improve the usability of the development mode Edgent console.
 
 ## Define a "set poll period" method
 
@@ -62,13 +62,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.google.gson.JsonObject;
 
-import quarks.execution.mbeans.PeriodMXBean;
-import quarks.execution.services.ControlService;
-import quarks.providers.development.DevelopmentProvider;
-import quarks.providers.direct.DirectProvider;
-import quarks.samples.utils.sensor.SimulatedTemperatureSensor;
-import quarks.topology.TStream;
-import quarks.topology.Topology;
+import org.apache.edgent.execution.mbeans.PeriodMXBean;
+import org.apache.edgent.execution.services.ControlService;
+import org.apache.edgent.providers.development.DevelopmentProvider;
+import org.apache.edgent.providers.direct.DirectProvider;
+import org.apache.edgent.samples.utils.sensor.SimulatedTemperatureSensor;
+import org.apache.edgent.topology.TStream;
+import org.apache.edgent.topology.Topology;
 
 /**
  * A recipe for a polled source stream with an adaptable poll period.

@@ -26,17 +26,17 @@ platform: all
 version: all
 output: web
 destination: ../_site
-topnav_title: Apache Quarks Documentation
-homepage_title: Apache Quarks Documentation
-site_title: Apache Quarks Documentation
+topnav_title: Apache Edgent Documentation
+homepage_title: Apache Edgent Documentation
+site_title: Apache Edgent Documentation
 project_folder: docs
-company_name: Apache Quarks
+company_name: Apache Edgent
 footer_image_location: ../../common_images/company_logo.png
 github_editme_path: apache/incubator-quarks-website/blob/master/site
 disqus_shortname: idrbwjekyll
 # variables
 
-sidebar_tagline: Quarks
+sidebar_tagline: Edgent
 sidebar_version: Version 0.3.0
 theme_file: theme-blue.css
 
@@ -91,8 +91,8 @@ defaults:
 
 url: http://quarks.incubator.apache.org
 baseurl:
-title: Apache Quarks
-description: Quarks is an open source community for accelerating analytics at the edge.
+title: Apache Edgent
+description: Edgent is an open source community for accelerating analytics at the edge.
 
 # ----------------------- #
 #    Jekyll & Plugins     #
@@ -116,7 +116,7 @@ social:
   - title: github
     url: https://github.com/quarks-edge/quarks/
   - title: stack-overflow
-    url: http://stackoverflow.com/questions/ask?tags=quarks
+    url: http://stackoverflow.com/questions/ask?tags=edgent
 
 detach:  false
 port:    4000

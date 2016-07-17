@@ -1,5 +1,5 @@
 ---
-title: Apache Quarks community
+title: Apache Edgent community
 ---
 <!--
 {% comment %}
@@ -43,11 +43,11 @@ Get help using {{ site.data.project.short_name }} or contribute to the project o
 
 ## Issue tracker
 
-We use Jira here: [https://issues.apache.org/jira/browse/{{ site.data.project.jira }}](https://issues.apache.org/jira/browse/{{ site.data.project.jira }})
+We use JIRA here: [https://issues.apache.org/jira/browse/{{ site.data.project.jira }}](https://issues.apache.org/jira/browse/{{ site.data.project.jira }})
 
 ### Bug reports
 
-Found bug? Create an issue in [Jira](https://issues.apache.org/jira/browse/{{ site.data.project.jira }}).
+Found a bug? Create an issue in [JIRA](https://issues.apache.org/jira/browse/{{ site.data.project.jira }}).
 
 Before submitting an issue, please:
 
@@ -57,24 +57,24 @@ Before submitting an issue, please:
 
 ### Feature requests
 
-Enhancement requests for new features are also welcome. The more concrete the request is and the better rationale you provide, the greater the chance it will incorporated into future releases. To make a request, create an issue in [Jira](https://issues.apache.org/jira/browse/{{ site.data.project.jira }}).
+Enhancement requests for new features are also welcome. The more concrete the request is and the better rationale you provide, the greater the chance it will incorporated into future releases. To make a request, create an issue in [JIRA](https://issues.apache.org/jira/browse/{{ site.data.project.jira }}).
 
 ## Source code
 
 The project sources are accessible via the [source code repository]({{ site.data.project.source_repository }}) which is also mirrored in [GitHub]({{ site.data.project.source_repository_mirror }}).
 
-When you are considering a code contribution, make sure there is an [Jira issue](https://issues.apache.org/jira/browse/{{ site.data.project.jira }}) that describes your work or the bug you are fixing. For significant contributions, please discuss your proposed changes in the issue so that others can comment on your plans. Someone else may be working on the same functionality, so it's good to communicate early and often. A committer is more likely to accept your change if there is clear information in the issue.
+When you are considering a code contribution, make sure there is a [JIRA issue](https://issues.apache.org/jira/browse/{{ site.data.project.jira }}) that describes your work or the bug you are fixing. For significant contributions, please discuss your proposed changes in the issue so that others can comment on your plans. Someone else may be working on the same functionality, so it's good to communicate early and often. A committer is more likely to accept your change if there is clear information in the issue.
 
-To contribute, [fork](https://help.github.com/articles/fork-a-repo/) the [mirror]({{ site.data.project.source_repository_mirror }}) and issue a [pull request](https://help.github.com/articles/using-pull-requests/). Put the Jira issue number, e.g. {{ site.data.project.jira }}-100 in the pull request title. The tag [WIP] can also be used in the title of pull requests to indicate that you are not ready to merge but want feedback. Remove [WIP] when you are ready for merge. Make sure you document your code and contribute tests along with the code.
+To contribute, [fork](https://help.github.com/articles/fork-a-repo/) the [mirror]({{ site.data.project.source_repository_mirror }}) and issue a [pull request](https://help.github.com/articles/using-pull-requests/). Put the JIRA issue number, e.g. {{ site.data.project.jira }}-100 in the pull request title. The tag [WIP] can also be used in the title of pull requests to indicate that you are not ready to merge but want feedback. Remove [WIP] when you are ready for merge. Make sure you document your code and contribute tests along with the code.
 
-Read [DEVELOPMENT.md](https://github.com/apache/incubator-quarks/blob/master/DEVELOPMENT.md) at the top of the code tree for details on setting up your development environment.
+Read [DEVELOPMENT.md]({{ site.data.project.source_repository_mirror }}/blob/master/DEVELOPMENT.md) at the top of the code tree for details on setting up your development environment.
 
-## Web site and documentation source code
+## Website and documentation source code
 
-The project website and documentation sources are accessible via the [website source code repository]({{ site.data.project.website_repository }}) which is also mirrored in [GitHub]({{ site.data.project.website_repository_mirror }}). Contributing changes to the web site and documentation is similar to contributing code. Follow the instructions in the *Source Code* section above, but fork and issue a pull request against the [web site mirror]({{ site.data.project.website_repository_mirror }}). Follow the instructions in the top-level [README.md]({{ site.data.project.website_repository_mirror }}/blob/master/README.md) for details on contributing to the web site and documentation.
+The project website and documentation sources are accessible via the [website source code repository]({{ site.data.project.website_repository }}) which is also mirrored in [GitHub]({{ site.data.project.website_repository_mirror }}). Contributing changes to the website and documentation is similar to contributing code. Follow the instructions in the *Source Code* section above, but fork and issue a pull request against the [website mirror]({{ site.data.project.website_repository_mirror }}). Follow the instructions in the top-level [README.md]({{ site.data.project.website_repository_mirror }}/blob/master/README.md) for details on contributing to the website and documentation.
 
 You will need to use [Markdown](https://daringfireball.net/projects/markdown/) and [Jekyll](http://jekyllrb.com) to develop pages. See:
 
 * [Markdown Cheat Sheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
-* [Jekyll on linux and Mac](https://jekyllrb.com/)
+* [Jekyll on Linux and Mac](https://jekyllrb.com/)
 * [Jekyll on Windows](https://jekyllrb.com/docs/windows/) is not officially supported but people have gotten it to work

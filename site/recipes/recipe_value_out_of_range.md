@@ -10,20 +10,20 @@ In this instance, we can use a filter to detect out-of-range temperature values.
 
 ## Setting up the application
 
-We assume that the environment has been set up following the steps outlined in the [Getting started guide](../docs/quarks-getting-started). Let's begin by creating a `DirectProvider` and `Topology`. We also define the optimal temperature range.
+We assume that the environment has been set up following the steps outlined in the [Getting started guide](../docs/edgent-getting-started). Let's begin by creating a `DirectProvider` and `Topology`. We also define the optimal temperature range.
 
 ```java
-import static quarks.function.Functions.identity;
+import static edgent.function.Functions.identity;
 
 import java.util.concurrent.TimeUnit;
 
-import quarks.analytics.sensors.Filters;
-import quarks.analytics.sensors.Range;
-import quarks.analytics.sensors.Ranges;
-import quarks.providers.direct.DirectProvider;
-import quarks.samples.utils.sensor.SimulatedTemperatureSensor;
-import quarks.topology.TStream;
-import quarks.topology.Topology;
+import org.apache.edgent.analytics.sensors.Filters;
+import org.apache.edgent.analytics.sensors.Range;
+import org.apache.edgent.analytics.sensors.Ranges;
+import org.apache.edgent.providers.direct.DirectProvider;
+import org.apache.edgent.samples.utils.sensor.SimulatedTemperatureSensor;
+import org.apache.edgent.topology.TStream;
+import org.apache.edgent.topology.Topology;
 
 public class DetectValueOutOfRange {
     /**
@@ -46,7 +46,7 @@ public class DetectValueOutOfRange {
 
 ## Generating temperature sensor readings
 
-The next step is to simulate a stream of temperature readings using [`SimulatedTemperatureSensor`](https://github.com/apache/incubator-quarks/blob/master/samples/utils/src/main/java/quarks/samples/utils/sensor/SimulatedTemperatureSensor.java). By default, the sensor sets the initial temperature to 80°F and ensures that new readings are between 28°F and 112°F. In our `main()`, we use the `poll()` method to generate a flow of tuples, where a new tuple (temperature reading) arrives every second.
+The next step is to simulate a stream of temperature readings using [`SimulatedTemperatureSensor`]({{ site.data.project.source_repository_mirror }}/blob/master/samples/utils/src/main/java/{{ site.data.project.unix_name }}/samples/utils/sensor/SimulatedTemperatureSensor.java). By default, the sensor sets the initial temperature to 80°F and ensures that new readings are between 28°F and 112°F. In our `main()`, we use the `poll()` method to generate a flow of tuples, where a new tuple (temperature reading) arrives every second.
 
 ```java
 // Generate a stream of temperature sensor readings
@@ -56,7 +56,7 @@ TStream<Double> temp = top.poll(tempSensor, 1, TimeUnit.SECONDS);
 
 ## Simple filtering
 
-If the corn grower is interested in determining when the temperature is strictly out of the optimal range of 77°F and 91°F, a simple filter can be used. The `filter` method can be applied to `TStream` objects, where a filter predicate determines which tuples to keep for further processing. For its method declaration, refer to the [Javadoc]({{ site.docsurl }}/lastest/quarks/topology/TStream.html#filter-quarks.function.Predicate-).
+If the corn grower is interested in determining when the temperature is strictly out of the optimal range of 77°F and 91°F, a simple filter can be used. The `filter` method can be applied to `TStream` objects, where a filter predicate determines which tuples to keep for further processing. For its method declaration, refer to the [Javadoc]({{ site.docsurl }}/latest/{{ site.data.project.unix_name }}/topology/TStream.html#filter-{{ site.data.project.unix_name }}.function.Predicate-).
 
 In this case, we want to keep temperatures below the lower range value *or* above the upper range value. This is expressed in the filter predicate, which follows Java's syntax for [lambda expressions](https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html#syntax). Then, we terminate the stream (using `sink`) by printing out the warning to standard out. Note that `\u00b0` is the Unicode encoding for the degree (°) symbol.
 
@@ -71,13 +71,13 @@ simpleFiltered.sink(tuple -> System.out.println("Temperature is out of range! "
 
 Alternatively, a deadband filter can be used to glean more information about temperature changes, such as extracting the in-range temperature immediately after a reported out-of-range temperature. For example, large temperature fluctuations could be investigated more thoroughly.
 
-The `deadband` filter is a part of the `quarks.analytics` package focused on handling sensor data. Let's look more closely at the method declaration below.
+The `deadband` filter is a part of the `edgent.analytics` package focused on handling sensor data. Let's look more closely at the method declaration below.
 
 ```java
 deadband(TStream<T> stream, Function<T,V> value, Predicate<V> inBand)
 ```
 
-The first parameter is the stream to the filtered, which is `temp` in our scenario. The second parameter is the value to examine. Here, we use the `identity()` method to return a tuple on the stream. The last parameter is the predicate that defines the optimal range, that is, between 77°F and 91°F. it is important to note that this differs from the `TStream` version of `filter` in which one must explicitly specify the values that are out of range. The code snippet below demonstrates how the method call is pieced together. The `deadbandFiltered` stream contains temperature readings that follow the rules as described in the [Javadoc]({{ site.docsurl }}/lastest/quarks/analytics/sensors/Filters.html#deadband-quarks.topology.TStream-quarks.function.Function-quarks.function.Predicate-):
+The first parameter is the stream to the filtered, which is `temp` in our scenario. The second parameter is the value to examine. Here, we use the `identity()` method to return a tuple on the stream. The last parameter is the predicate that defines the optimal range, that is, between 77°F and 91°F. it is important to note that this differs from the `TStream` version of `filter` in which one must explicitly specify the values that are out of range. The code snippet below demonstrates how the method call is pieced together. The `deadbandFiltered` stream contains temperature readings that follow the rules as described in the [Javadoc]({{ site.docsurl }}/latest/{{ site.data.project.unix_name }}/analytics/sensors/Filters.html#deadband-{{ site.data.project.unix_name }}.topology.TStream-{{ site.data.project.unix_name }}.function.Function-{{ site.data.project.unix_name }}.function.Predicate-):
 
 * the value is outside of the optimal range (deadband)
 * the first value inside the optimal range after a period being outside it
@@ -126,7 +126,7 @@ Note that the deadband filter outputs a warning message for the very first tempe
 
 ## Range values
 
-Filtering against a range of values is such a common analytic activity that the `quarks.analytics.sensors.Range` class is provided to assist with that.
+Filtering against a range of values is such a common analytic activity that the `edgent.analytics.sensors.Range` class is provided to assist with that.
 
 Using a `Range` can simplify and clarify your application code and lessen mistakes that may occur when writing expressions to deal with ranges. Though not covered in this recipe, `Range`s offer additional conveniences for creating applications with external range specifications and adaptable filters.
 
@@ -155,17 +155,17 @@ TStream<Double> deadbandFiltered = Filters.deadband(temp,
 ## The final application
 
 ```java
-import static quarks.function.Functions.identity;
+import static edgent.function.Functions.identity;
 
 import java.util.concurrent.TimeUnit;
 
-import quarks.analytics.sensors.Filters;
-import quarks.analytics.sensors.Range;
-import quarks.analytics.sensors.Ranges;
-import quarks.providers.direct.DirectProvider;
-import quarks.samples.utils.sensor.SimulatedTemperatureSensor;
-import quarks.topology.TStream;
-import quarks.topology.Topology;
+import org.apache.edgent.analytics.sensors.Filters;
+import org.apache.edgent.analytics.sensors.Range;
+import org.apache.edgent.analytics.sensors.Ranges;
+import org.apache.edgent.providers.direct.DirectProvider;
+import org.apache.edgent.samples.utils.sensor.SimulatedTemperatureSensor;
+import org.apache.edgent.topology.TStream;
+import org.apache.edgent.topology.Topology;
 
 /**
  * Detect a sensor value out of expected range.

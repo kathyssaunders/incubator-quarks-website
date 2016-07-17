@@ -4,21 +4,21 @@ title: Application console
 
 ## Visualizing and monitoring your application
 
-The Quarks application console is a web application that enables you to visualize your application topology and monitor the tuples flowing through your application. The kind of oplets used in the topology, as well as the stream tags included in the topology, are also visible in the console.
+The Edgent application console is a web application that enables you to visualize your application topology and monitor the tuples flowing through your application. The kind of oplets used in the topology, as well as the stream tags included in the topology, are also visible in the console.
 
 ## Adding the console web app to your application
 
-To use the console, you must use the Quarks classes that provide the service to access the console web application or directly call the `HttpServer` class itself, start the server and then obtain the console URL.
+To use the console, you must use the Edgent classes that provide the service to access the console web application or directly call the `HttpServer` class itself, start the server and then obtain the console URL.
 
 The easiest way to include the console in your application is to use the the `DevelopmentProvider` class. `DevelopmentProvider` is a subclass of `DirectProvider` and adds services such as access to the console web application and counter oplets used to determine tuple counts. You can get the URL for the console from the `DevelopmentProvider` using the `getService` method as shown in a hypothetical application shown below:
 
 ```java
 import java.util.concurrent.TimeUnit;
 
-import quarks.console.server.HttpServer;
-import quarks.providers.development.DevelopmentProvider;
-import quarks.topology.TStream;
-import quarks.topology.Topology;
+import org.apache.edgent.console.server.HttpServer;
+import org.apache.edgent.providers.development.DevelopmentProvider;
+import org.apache.edgent.topology.TStream;
+import org.apache.edgent.topology.Topology;
 
 public class TempSensorApplication {
     public static void main(String[] args) throws Exception {
@@ -50,7 +50,7 @@ try {
 dp.submit(topology);
 ```
 
-The other way to embed the console in your application is shown in the `HttpServerSample.java` example (on [GitHub](https://github.com/apache/incubator-quarks/blob/master/samples/console/src/main/java/quarks/samples/console/HttpServerSample.java)). It gets the `HttpServer` instance, starts it, and prints out the console URL. Note that it does not submit a job, so when the console is displayed in the browser, there are no running jobs and therefore no topology graph. The example is meant to show how to get the `HttpServer` instance, start the console web app and get the URL of the console.
+The other way to embed the console in your application is shown in the `HttpServerSample.java` example (on [GitHub]({{ site.data.project.source_repository_mirror }}/blob/master/samples/console/src/main/java/{{ site.data.project.unix_name }}/samples/console/HttpServerSample.java)). It gets the `HttpServer` instance, starts it, and prints out the console URL. Note that it does not submit a job, so when the console is displayed in the browser, there are no running jobs and therefore no topology graph. The example is meant to show how to get the `HttpServer` instance, start the console web app and get the URL of the console.
 
 ## Accessing the console
 
@@ -64,17 +64,17 @@ If you cannot access the console at this URL, ensure there is a `console.war` fi
 
 ## ConsoleWaterDetector sample
 
-To see the features of the console in action and as a way to demonstrate how to monitor a topology in the console, let's look at the `ConsoleWaterDetector` sample (on [GitHub](https://github.com/apache/incubator-quarks/blob/master/samples/console/src/main/java/quarks/samples/console/ConsoleWaterDetector.java)).
+To see the features of the console in action and as a way to demonstrate how to monitor a topology in the console, let's look at the `ConsoleWaterDetector` sample (on [GitHub]({{ site.data.project.source_repository_mirror }}/blob/master/samples/console/src/main/java/{{ site.data.project.unix_name }}/samples/console/ConsoleWaterDetector.java)).
 
-Prior to running any console applications, the `console.war` file must be built as mentioned above. If you are building quarks from a Git repository, go to the top level Quarks directory and run `ant`.
+Prior to running any console applications, the `console.war` file must be built as mentioned above. If you are building Edgent from a Git repository, go to the top level Edgent directory and run `ant`.
 
 Here is an example in my environment:
 
 ```
-Susans-MacBook-Pro-247:quarks susancline$ pwd
-/Users/susancline/git/quarks
-Susans-MacBook-Pro-247:quarks susancline$ ant
-Buildfile: /Users/susancline/git/quarks/build.xml
+Susans-MacBook-Pro-247:edgent susancline$ pwd
+/Users/susancline/git/edgent
+Susans-MacBook-Pro-247:edgent susancline$ ant
+Buildfile: /Users/susancline/git/edgent/build.xml
 
 setcommitversion:
 
@@ -91,10 +91,10 @@ compile:
 [javadoc] Constructing Javadoc information...
 [javadoc] Standard Doclet version 1.8.0_71
 [javadoc] Building tree for all the packages and classes...
-[javadoc] Generating /Users/susancline/git/quarks/target/docs/javadoc/quarks/analytics/sensors/package-summary.html...
-[javadoc] Copying file /Users/susancline/git/quarks/analytics/sensors/src/main/java/quarks/analytics/sensors/doc-files/deadband.png to directory /Users/susancline/git/quarks/target/docs/javadoc/quarks/analytics/sensors/doc-files...
-[javadoc] Generating /Users/susancline/git/quarks/target/docs/javadoc/quarks/topology/package-summary.html...
-[javadoc] Copying file /Users/susancline/git/quarks/api/topology/src/main/java/quarks/topology/doc-files/sources.html to directory /Users/susancline/git/quarks/target/docs/javadoc/quarks/topology/doc-files...
+[javadoc] Generating /Users/susancline/git/edgent/target/docs/javadoc/edgent/analytics/sensors/package-summary.html...
+[javadoc] Copying file /Users/susancline/git/edgent/analytics/sensors/src/main/java/edgent/analytics/sensors/doc-files/deadband.png to directory /Users/susancline/git/edgent/target/docs/javadoc/edgent/analytics/sensors/doc-files...
+[javadoc] Generating /Users/susancline/git/edgent/target/docs/javadoc/edgent/topology/package-summary.html...
+[javadoc] Copying file /Users/susancline/git/edgent/api/topology/src/main/java/edgent/topology/doc-files/sources.html to directory /Users/susancline/git/edgent/target/docs/javadoc/edgent/topology/doc-files...
 [javadoc] Building index for all the packages and classes...
 [javadoc] Building index for all classes...
 
@@ -107,22 +107,22 @@ Total time: 3 seconds
 This command will let you know that `console.war` was built and is in the correct place, under the `webapps` directory.
 
 ```
-Susans-MacBook-Pro-247:quarks susancline$ find . -name console.war -print
+Susans-MacBook-Pro-247:edgent susancline$ find . -name console.war -print
 ./target/java8/console/webapps/console.war
 ```
 
 Now we know we have built `console.war`, so we're good to go. To run this sample from the command line:
 
 ```
-Susans-MacBook-Pro-247:quarks susancline$ pwd
-/Users/susancline/git/quarks
-Susans-MacBook-Pro-247:quarks susancline$ java -cp target/java8/samples/lib/quarks.samples.console.jar:. quarks.samples.console.ConsoleWaterDetector
+Susans-MacBook-Pro-247:edgent susancline$ pwd
+/Users/susancline/git/edgent
+Susans-MacBook-Pro-247:edgent susancline$ java -cp target/java8/samples/lib/edgent.samples.console.jar:. edgent.samples.console.ConsoleWaterDetector
 ```
 
 If everything is successful, you'll start seeing output. You may have to scroll back up to get the URL of the console:
 
 ```
-Susans-MacBook-Pro-247:quarks susancline$ java -cp target/java8/samples/lib/quarks.samples.console.jar:. quarks.samples.console.ConsoleWaterDetector
+Susans-MacBook-Pro-247:edgent susancline$ java -cp target/java8/samples/lib/edgent.samples.console.jar:. edgent.samples.console.ConsoleWaterDetector
 Mar 07, 2016 12:04:52 PM org.eclipse.jetty.util.log.Log initialized
 INFO: Logging initialized @176ms
 Mar 07, 2016 12:04:53 PM org.eclipse.jetty.server.Server doStart
@@ -277,15 +277,15 @@ while (true) {
 What this does is get all the counters in the `MetricRegistry` class and print out the name of the counter oplet they are monitoring along with the tuple count if it is zero. Here is some sample output:
 
 ```
-Counter Op:TupleCounter.quarks.oplet.JOB_0.OP_44 has a tuple count of zero!
-Counter Op:TupleCounter.quarks.oplet.JOB_0.OP_45 has a tuple count of zero!
-Counter Op:TupleCounter.quarks.oplet.JOB_0.OP_46 has a tuple count of zero!
-Counter Op:TupleCounter.quarks.oplet.JOB_0.OP_47 has a tuple count of zero!
-Counter Op:TupleCounter.quarks.oplet.JOB_0.OP_89 has a tuple count of zero!
-Counter Op:TupleCounter.quarks.oplet.JOB_0.OP_95 has a tuple count of zero!
-Counter Op:TupleCounter.quarks.oplet.JOB_0.OP_96 has a tuple count of zero!
-Counter Op:TupleCounter.quarks.oplet.JOB_0.OP_97 has a tuple count of zero!
-Counter Op:TupleCounter.quarks.oplet.JOB_0.OP_98 has a tuple count of zero!
+Counter Op:TupleCounter.edgent.oplet.JOB_0.OP_44 has a tuple count of zero!
+Counter Op:TupleCounter.edgent.oplet.JOB_0.OP_45 has a tuple count of zero!
+Counter Op:TupleCounter.edgent.oplet.JOB_0.OP_46 has a tuple count of zero!
+Counter Op:TupleCounter.edgent.oplet.JOB_0.OP_47 has a tuple count of zero!
+Counter Op:TupleCounter.edgent.oplet.JOB_0.OP_89 has a tuple count of zero!
+Counter Op:TupleCounter.edgent.oplet.JOB_0.OP_95 has a tuple count of zero!
+Counter Op:TupleCounter.edgent.oplet.JOB_0.OP_96 has a tuple count of zero!
+Counter Op:TupleCounter.edgent.oplet.JOB_0.OP_97 has a tuple count of zero!
+Counter Op:TupleCounter.edgent.oplet.JOB_0.OP_98 has a tuple count of zero!
 ```
 
 To summarize what the application is doing:
@@ -327,7 +327,7 @@ The screen shot below shows the output from clicking on the 'View all oplet prop
 
 <img src='images/console_oplet_properties.jpg' alt='Displays a table showing the relationship between the oplets and vertices' width='100%'/>
 
-Looking at the sixth line in the table, where the Name is 'OP_5', we can see that the Oplet kind is a `Map`, a `quarks.oplet.functional.Map`, the Tuple count is 0 (this is because the view is in Static flow mode - the graph does not show the number of tuples flowing in it), the source oplet is 'OP_55', the target oplet is 'OP_60', and there are no stream tags coming from the source or target streams. Relationships for all oplets can be viewed in this manner.
+Looking at the sixth line in the table, where the Name is 'OP_5', we can see that the Oplet kind is a `Map`, a `edgent.oplet.functional.Map`, the Tuple count is 0 (this is because the view is in Static flow mode - the graph does not show the number of tuples flowing in it), the source oplet is 'OP_55', the target oplet is 'OP_60', and there are no stream tags coming from the source or target streams. Relationships for all oplets can be viewed in this manner.
 
 Now, looking at the graph, if we want to see the relationships for a single oplet, we can hover over it. The image below shows the hover when we are over 'OP_5'.
 
@@ -398,11 +398,11 @@ The topology graph oplets can sometimes sit on top of each other. If this is the
 If you scroll the browser window down, you can see a Metrics section. This section appears when the application contains the following:
 
 * A `DevelopmentProvider` is used; this automatically inserts counters on the streams of the topology
-* A `quarks.metrics.Metric.Counter` or `quarks.metrics.Metric.RateMeter` is added to an individual stream
+* A `edgent.metrics.Metric.Counter` or `edgent.metrics.Metric.RateMeter` is added to an individual stream
 
 ## Counters
 
-In the `ConsoleWaterDetector` application we used a `DevelopmentProvider`. Therefore, counters were added to most streams (edges) with the following exceptions (from the [Javadoc]({{ site.docsurl }}/lastest/quarks/metrics/Metrics.html#counter-quarks.topology.TStream-) for `quarks.metrics.Metrics`):
+In the `ConsoleWaterDetector` application we used a `DevelopmentProvider`. Therefore, counters were added to most streams (edges) with the following exceptions (from the [Javadoc]({{ site.docsurl }}/latest/{{ site.data.project.unix_name }}/metrics/Metrics.html#counter-{{ site.data.project.unix_name }}.topology.TStream-) for `edgent.metrics.Metrics`):
 
 *Oplets are only inserted upstream from a FanOut oplet.*
 
@@ -480,7 +480,7 @@ If a single rate meter is placed on a stream, in addition to plotting a bar char
 
 The intent of the information on this page is to help you understand the following:
 
-* How to add the console application to a Quarks application
+* How to add the console application to an Edgent application
 * How to run the `ConsoleWaterDetector` sample
 * The design/architecture in the `ConsoleWaterDetector` application
 * The controls for the Topology graph are and what they do, including the different views of the graph
@@ -490,6 +490,6 @@ The intent of the information on this page is to help you understand the followi
 * How to use the metrics section to understand tuple counters and rate meters
 * How to correlate values from the metrics section with the topology graph
 
-The Quarks console will continue to evolve and improve. Please open an issue if you see a problem with the existing console, but more importantly add an issue if you have an idea of how to make the console better.
+The Edgent console will continue to evolve and improve. Please open an issue if you see a problem with the existing console, but more importantly add an issue if you have an idea of how to make the console better.
 
-The more folks write Quarks applications and view them in the console, the more information we can gather from the community about what is needed in the console. Please consider making a contribution if there is a feature in the console that would really help you and others!
+The more folks write Edgent applications and view them in the console, the more information we can gather from the community about what is needed in the console. Please consider making a contribution if there is a feature in the console that would really help you and others!

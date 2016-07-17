@@ -10,7 +10,7 @@ In this instance, we can take the stream of gas mileage sensor readings and appl
 
 ## Setting up the application
 
-We assume that the environment has been set up following the steps outlined in the [Getting started guide](../docs/quarks-getting-started). Let's begin by creating a `DirectProvider` and `Topology`. We choose a `DevelopmentProvider` so that we can view the topology graph using the console URL (refer to the [Application console](../docs/console) page for a more detailed explanation of this provider). The gas mileage bounds, initial gas mileage value, and the number of miles in a typical delivery route have also been defined.
+We assume that the environment has been set up following the steps outlined in the [Getting started guide](../docs/edgent-getting-started). Let's begin by creating a `DirectProvider` and `Topology`. We choose a `DevelopmentProvider` so that we can view the topology graph using the console URL (refer to the [Application console](../docs/console) page for a more detailed explanation of this provider). The gas mileage bounds, initial gas mileage value, and the number of miles in a typical delivery route have also been defined.
 
 ```java
 import java.text.DecimalFormat;
@@ -18,13 +18,13 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.gson.JsonObject;
 
-import quarks.analytics.sensors.Ranges;
-import quarks.console.server.HttpServer;
-import quarks.providers.development.DevelopmentProvider;
-import quarks.providers.direct.DirectProvider;
-import quarks.samples.utils.sensor.SimpleSimulatedSensor;
-import quarks.topology.TStream;
-import quarks.topology.Topology;
+import org.apache.edgent.analytics.sensors.Ranges;
+import org.apache.edgent.console.server.HttpServer;
+import org.apache.edgent.providers.development.DevelopmentProvider;
+import org.apache.edgent.providers.direct.DirectProvider;
+import org.apache.edgent.samples.utils.sensor.SimpleSimulatedSensor;
+import org.apache.edgent.topology.TStream;
+import org.apache.edgent.topology.Topology;
 
 public class ApplyDifferentProcessingAgainstStream {
     /**
@@ -56,7 +56,7 @@ public class ApplyDifferentProcessingAgainstStream {
 
 ## Generating gas mileage sensor readings
 
-The next step is to simulate a stream of gas mileage readings using [`SimpleSimulatedSensor`](https://github.com/apache/incubator-quarks/blob/master/samples/utils/src/main/java/quarks/samples/utils/sensor/SimpleSimulatedSensor.java). We set the initial gas mileage and delta factor in the first two arguments. The last argument ensures that the sensor reading falls in an acceptable range (between 7.0 mpg and 14.0 mpg). In our `main()`, we use the `poll()` method to generate a flow of tuples (readings), where each tuple arrives every second.
+The next step is to simulate a stream of gas mileage readings using [`SimpleSimulatedSensor`]({{ site.data.project.source_repository_mirror }}/blob/master/samples/utils/src/main/java/{{ site.data.project.unix_name }}/samples/utils/sensor/SimpleSimulatedSensor.java). We set the initial gas mileage and delta factor in the first two arguments. The last argument ensures that the sensor reading falls in an acceptable range (between 7.0 mpg and 14.0 mpg). In our `main()`, we use the `poll()` method to generate a flow of tuples (readings), where each tuple arrives every second.
 
 ```java
 // Generate a stream of gas mileage sensor readings
@@ -145,13 +145,13 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.gson.JsonObject;
 
-import quarks.analytics.sensors.Ranges;
-import quarks.console.server.HttpServer;
-import quarks.providers.development.DevelopmentProvider;
-import quarks.providers.direct.DirectProvider;
-import quarks.samples.utils.sensor.SimpleSimulatedSensor;
-import quarks.topology.TStream;
-import quarks.topology.Topology;
+import org.apache.edgent.analytics.sensors.Ranges;
+import org.apache.edgent.console.server.HttpServer;
+import org.apache.edgent.providers.development.DevelopmentProvider;
+import org.apache.edgent.providers.direct.DirectProvider;
+import org.apache.edgent.samples.utils.sensor.SimpleSimulatedSensor;
+import org.apache.edgent.topology.TStream;
+import org.apache.edgent.topology.Topology;
 
  /**
  * Fan out stream and perform different analytics on the resulting streams.

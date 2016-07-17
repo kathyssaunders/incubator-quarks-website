@@ -102,20 +102,20 @@ TStream<String> results = PlumbingStreams.parallelBalanced(readings, width, pipe
 When the application is run it prints out 5 (width) tuples every second. Without the parallel channels, it would only print one tuple each second.
 
 ```java
-package quarks.samples.topology;
+package edgent.samples.topology;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import quarks.console.server.HttpServer;
-import quarks.function.BiFunction;
-import quarks.function.Functions;
-import quarks.providers.development.DevelopmentProvider;
-import quarks.providers.direct.DirectProvider;
-import quarks.samples.utils.sensor.SimpleSimulatedSensor;
-import quarks.topology.TStream;
-import quarks.topology.Topology;
-import quarks.topology.plumbing.PlumbingStreams;
+import org.apache.edgent.console.server.HttpServer;
+import org.apache.edgent.function.BiFunction;
+import org.apache.edgent.function.Functions;
+import org.apache.edgent.providers.development.DevelopmentProvider;
+import org.apache.edgent.providers.direct.DirectProvider;
+import org.apache.edgent.samples.utils.sensor.SimpleSimulatedSensor;
+import org.apache.edgent.topology.TStream;
+import org.apache.edgent.topology.Topology;
+import org.apache.edgent.topology.plumbing.PlumbingStreams;
 
 /**
  * A recipe for parallel analytics.

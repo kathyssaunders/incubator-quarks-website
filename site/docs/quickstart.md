@@ -2,16 +2,16 @@
 title: Quickstart IBM Watson IoT Platform sample
 ---
 
-## Quarks to Quickstart quickly!
+## Edgent to Quickstart quickly!
 
-IoT devices running quarks applications typically connect to back-end analytic systems through a message hub. Message hubs are used to isolate the back-end system from having to handle connections from thousands to millions of devices.
+IoT devices running Edgent applications typically connect to back-end analytic systems through a message hub. Message hubs are used to isolate the back-end system from having to handle connections from thousands to millions of devices.
 
 An example of such a message hub designed for the Internet of Things is [IBM Watson IoT Platform](https://internetofthings.ibmcloud.com/). This cloud service runs on IBM's Bluemix cloud platform
-and Quarks provides a [connector]({{ site.docsurl }}/lastest/index.html?quarks/connectors/iotf/IotfDevice.html).
+and Edgent provides a [connector]({{ site.docsurl }}/latest/index.html?{{ site.data.project.unix_name }}/connectors/iotf/IotfDevice.html).
 
-You can test out the service without any registration by using its Quickstart service and the Quarks sample application: [code](https://github.com/apache/incubator-quarks/blob/master/samples/connectors/src/main/java/quarks/samples/connectors/iotf/IotfQuickstart.java), [JavaDocs]({{ site.docsurl }}/lastest/index.html?quarks/samples/connectors/iotf/IotfQuickstart.html).
+You can test out the service without any registration by using its Quickstart service and the Edgent sample application: [code]({{ site.data.project.source_repository_mirror }}/blob/master/samples/connectors/src/main/java/{{ site.data.project.unix_name }}/samples/connectors/iotf/IotfQuickstart.java), [Javadoc]({{ site.docsurl }}/latest/index.html?{{ site.data.project.unix_name }}/samples/connectors/iotf/IotfQuickstart.html).
 
-You can execute the class directly from Eclipse, or using the script: [`quarks/java8/scripts/connectors/iotf/runiotfquickstart.sh`](https://github.com/quarks-edge/quarks/blob/master/scripts/connectors/iotf/runiotfquickstart.sh)
+You can execute the class directly from Eclipse, or using the script: [`edgent/java8/scripts/connectors/iotf/runiotfquickstart.sh`]({{ site.data.project.source_repository_mirror }}/blob/master/scripts/connectors/iotf/runiotfquickstart.sh)
 
 When run it produces output like this, with a URL as the third line.
 
@@ -23,9 +23,9 @@ Here's an example view:
 
 <img border="0" alt="Quickstart service output" src="images/Quickstart.png">
 
-## Quarks code
+## Edgent code
 
-The full source is at: [IotfQuickstart.java](https://github.com/apache/incubator-quarks/blob/master/samples/connectors/src/main/java/quarks/samples/connectors/iotf/IotfQuickstart.java).
+The full source is at: [IotfQuickstart.java]({{ site.data.project.source_repository_mirror }}/blob/master/samples/connectors/src/main/java/{{ site.data.project.unix_name }}/samples/connectors/iotf/IotfQuickstart.java).
 
 The first step to is to create a `IotDevice` instance that represents the connection to IBM Watson IoT Platform Quickstart service.
 
@@ -53,4 +53,4 @@ Now we have a stream of simulated sensor reading events as JSON tuples (`json`) 
 device.events(json, "sensors", QoS.FIRE_AND_FORGET);
 ```
 
-It's that simple to send tuples on a Quarks stream to IBM Watson IoT Platform as device events.
+It's that simple to send tuples on an Edgent stream to IBM Watson IoT Platform as device events.

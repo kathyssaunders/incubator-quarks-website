@@ -2,11 +2,11 @@
 title: Changing a filter's range
 ---
 
-The [Detecting a sensor value out of range](recipe_value_out_of_range.html) recipe introduced the basics of filtering as well as the use of a [Range]({{ site.docsurl }}/lastest//lastest/quarks/analytics/sensors/Range.html).
+The [Detecting a sensor value out of range](recipe_value_out_of_range.html) recipe introduced the basics of filtering as well as the use of a [Range]({{ site.docsurl }}/latest/{{ site.data.project.unix_name }}/analytics/sensors/Range.html).
 
 Oftentimes, a user wants a filter's behavior to be adaptable rather than static. A filter's range can be made changeable via commands from some external source or just changed as a result of some other local analytics.
 
-A Quarks `IotProvider` and `IoTDevice` with its command streams would be a natural way to control the application. In this recipe we will just simulate a "set optimal temp range" command stream.
+An Edgent `IotProvider` and `IoTDevice` with its command streams would be a natural way to control the application. In this recipe we will just simulate a "set optimal temp range" command stream.
 
 The string form of a `Range` is natural, consise, and easy to use. As such it's a convenient form to use as external range format. The range string can easily be converted back into a `Range`.
 
@@ -58,12 +58,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-import quarks.analytics.sensors.Range;
-import quarks.analytics.sensors.Ranges;
-import quarks.providers.direct.DirectProvider;
-import quarks.samples.utils.sensor.SimulatedTemperatureSensor;
-import quarks.topology.TStream;
-import quarks.topology.Topology;
+import org.apache.edgent.analytics.sensors.Range;
+import org.apache.edgent.analytics.sensors.Ranges;
+import org.apache.edgent.providers.direct.DirectProvider;
+import org.apache.edgent.samples.utils.sensor.SimulatedTemperatureSensor;
+import org.apache.edgent.topology.TStream;
+import org.apache.edgent.topology.Topology;
 
 /**
  * Detect a sensor value out of expected range.

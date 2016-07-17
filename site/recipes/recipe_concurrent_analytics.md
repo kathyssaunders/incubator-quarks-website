@@ -88,22 +88,22 @@ static Function<TStream<Double>,TStream<String>> a3pipeline() {
 When the application is run it prints out an aggregate result (a list of one tuple from each pipeline) every second. If the three pipelines were run serially, it would take on the order of 2.4 seconds to generate each aggregate result.
 
 ```java
-package quarks.samples.topology;
+package edgent.samples.topology;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import quarks.console.server.HttpServer;
-import quarks.function.Function;
-import quarks.function.Functions;
-import quarks.providers.development.DevelopmentProvider;
-import quarks.providers.direct.DirectProvider;
-import quarks.samples.utils.sensor.SimpleSimulatedSensor;
-import quarks.topology.TStream;
-import quarks.topology.Topology;
-import quarks.topology.plumbing.PlumbingStreams;
+import org.apache.edgent.console.server.HttpServer;
+import org.apache.edgent.function.Function;
+import org.apache.edgent.function.Functions;
+import org.apache.edgent.providers.development.DevelopmentProvider;
+import org.apache.edgent.providers.direct.DirectProvider;
+import org.apache.edgent.samples.utils.sensor.SimpleSimulatedSensor;
+import org.apache.edgent.topology.TStream;
+import org.apache.edgent.topology.Topology;
+import org.apache.edgent.topology.plumbing.PlumbingStreams;
 
 /**
  * A recipe for concurrent analytics.

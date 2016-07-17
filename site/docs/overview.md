@@ -2,22 +2,22 @@
 title: Overview
 ---
 
-# Apache Quarks Overview
+# Apache Edgent Overview
 Devices and sensors are everywhere, and more are coming online every day. You need a way to analyze all of the data coming from your devices, but it can be expensive to transmit all of the data from a sensor to your central analytics engine.
 
-Apache Quarks is an open source programming model and runtime for edge devices that enables you to analyze data and events at the device. When you analyze on the edge, you can:
+Apache Edgent is an open source programming model and runtime for edge devices that enables you to analyze data and events at the device. When you analyze on the edge, you can:
 
 * Reduce the amount of data that you transmit to your analytics server
 
 * Reduce the amount of data that you store
 
-A Quarks application uses analytics to determine when data needs to be sent to a back-end system for further analysis, action, or storage. For example, you can use Quarks to determine whether a system is running outside of normal parameters, such as an engine that is running too hot.
+An Edgent application uses analytics to determine when data needs to be sent to a back-end system for further analysis, action, or storage. For example, you can use Edgent to determine whether a system is running outside of normal parameters, such as an engine that is running too hot.
 
-If the system is running normally, you don’t need to send this data to your back-end system; it’s an added cost and an additional load on your system to process and store. However, if Quarks detects an issue, you can transmit that data to your back-end system to determine why the issue is occurring and how to resolve the issue.   
+If the system is running normally, you don’t need to send this data to your back-end system; it’s an added cost and an additional load on your system to process and store. However, if Edgent detects an issue, you can transmit that data to your back-end system to determine why the issue is occurring and how to resolve the issue.   
 
-Quarks enables you to shift from sending a continuous flow of trivial data to the server to sending only essential and meaningful data as it occurs. This is especially important when the cost of communication is high, such as when using a cellular network to transmit data, or when bandwidth is limited.
+Edgent enables you to shift from sending a continuous flow of trivial data to the server to sending only essential and meaningful data as it occurs. This is especially important when the cost of communication is high, such as when using a cellular network to transmit data, or when bandwidth is limited.
 
-The following use cases describe the primary situations in which you would use Quarks:
+The following use cases describe the primary situations in which you would use Edgent:
 
 * *Internet of Things (IoT):* Analyze data on distributed edge devices and mobile devices to:
   * Reduce the cost of transmitting data
@@ -33,7 +33,7 @@ The following environments have been tested for deployment on edge devices:
 * Android
 
 ## Edge devices and back-end systems
-You can send data from a Quarks application to your back-end system when you need to perform analysis that cannot be performed on the edge device, such as:
+You can send data from an Edgent application to your back-end system when you need to perform analysis that cannot be performed on the edge device, such as:
 
 * Running a complex analytic algorithm that requires more resources, such as CPU or memory, than are available on the edge device.
 * Maintaining large amounts of state information about a device, such as several hours worth of state information for a patient’s
@@ -44,7 +44,7 @@ medical device.
   * Data of record, such as a patient’s medical history or trucking manifests
   * Data from other devices
 
-Quarks communicates with your back-end systems through the following message hubs:
+Edgent communicates with your back-end systems through the following message hubs:
 
 * MQTT – The messaging standard for IoT
 * IBM Watson IoT Platform – A cloud-based service that provides a device model on top of MQTT

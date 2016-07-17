@@ -10,7 +10,7 @@ In this instance, we can use `split` to separate blood pressure readings by cate
 
 ## Setting up the application
 
-We assume that the environment has been set up following the steps outlined in the [Getting started guide](../docs/quarks-getting-started).
+We assume that the environment has been set up following the steps outlined in the [Getting started guide](../docs/edgent-getting-started).
 
 First, we need to define a class for a heart monitor. We generate random blood pressure readings, each consisting of the systolic pressure (the top number) and the diastolic pressure (the bottom number). For example, with a blood pressure of 115/75 (read as "115 over 75"), the systolic pressure is 115 and the diastolic pressure is 75. These two pressures are stored in a `map`, and each call to `get()` returns new values.
 
@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import quarks.function.Supplier;
+import org.apache.edgent.function.Supplier;
 
 public class HeartMonitorSensor implements Supplier<Map<String,Integer>> {
     private static final long serialVersionUID = 1L;
@@ -62,13 +62,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import quarks.console.server.HttpServer;
-import quarks.function.ToIntFunction;
-import quarks.providers.development.DevelopmentProvider;
-import quarks.providers.direct.DirectProvider;
-import quarks.samples.utils.sensor.HeartMonitorSensor;
-import quarks.topology.TStream;
-import quarks.topology.Topology;
+import org.apache.edgent.console.server.HttpServer;
+import org.apache.edgent.function.ToIntFunction;
+import org.apache.edgent.providers.development.DevelopmentProvider;
+import org.apache.edgent.providers.direct.DirectProvider;
+import org.apache.edgent.samples.utils.sensor.HeartMonitorSensor;
+import org.apache.edgent.topology.TStream;
+import org.apache.edgent.topology.Topology;
 
 public class CombiningStreamsProcessingResults {
     public static void main(String[] args) {
@@ -99,7 +99,7 @@ TStream<Map<String, Integer>> readings = top
 
 ## Splitting the readings
 
-We are now ready to split the `readings` stream by the blood pressure category. Let's look more closely at the method declaration of `split` below. For more details about `split`, refer to the [Javadoc]({{ site.docsurl }}/lastest/quarks/topology/TStream.html#split-int-quarks.function.ToIntFunction-).
+We are now ready to split the `readings` stream by the blood pressure category. Let's look more closely at the method declaration of `split` below. For more details about `split`, refer to the [Javadoc]({{ site.docsurl }}/latest/{{ site.data.project.unix_name }}/topology/TStream.html#split-int-{{ site.data.project.unix_name }}.function.ToIntFunction-).
 
 ```java
 java.util.List<TStream<T>> split(int n, ToIntFunction<T> splitter)
@@ -208,7 +208,7 @@ TStream<String> hypertensiveAlerts = hypertensive
 
 ## Combining the alert streams
 
-At this point, we have five streams of alerts. Suppose the doctors are interested in seeing a combination of the *Normal* alerts and *Prehypertension* alerts. Or, suppose that they would like to see all of the alerts from all categories together. Here, `union` comes in handy. For more details about `union`, refer to the [Javadoc]({{ site.docsurl }}/lastest/quarks/topology/TStream.html#union-quarks.topology.TStream-).
+At this point, we have five streams of alerts. Suppose the doctors are interested in seeing a combination of the *Normal* alerts and *Prehypertension* alerts. Or, suppose that they would like to see all of the alerts from all categories together. Here, `union` comes in handy. For more details about `union`, refer to the [Javadoc]({{ site.docsurl }}/latest/{{ site.data.project.unix_name }}/topology/TStream.html#union-{{ site.data.project.unix_name }}.topology.TStream-).
 
 There are two ways to define a union. You can either union a `TStream` with another `TStream`, or with a set of streams (`Set<TStream<T>>`). In both cases, a single `TStream` is returned containing the tuples that flow on the input stream(s).
 
@@ -251,7 +251,7 @@ Finally, we can terminate the stream and print out all alerts.
 allAlerts.sink(tuple -> System.out.println(tuple));
 ```
 
-We end our application by submitting the `Topology`. Note that this application is available as a [sample](https://github.com/apache/incubator-quarks/blob/master/samples/topology/src/main/java/quarks/samples/topology/CombiningStreamsProcessingResults.java).
+We end our application by submitting the `Topology`. Note that this application is available as a [sample]({{ site.data.project.source_repository_mirror }}/blob/master/samples/topology/src/main/java/{{ site.data.project.unix_name }}/samples/topology/CombiningStreamsProcessingResults.java).
 
 ## Observing the output
 

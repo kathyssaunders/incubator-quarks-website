@@ -13,14 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# Quarks Project configurations
+# Edgent Project configurations
 #
-name: Apache Quarks
-short_name: Quarks
+name: Apache Edgent
+short_name: Edgent
 unix_name: quarks
 incubator_name: incubator-quarks
 incubator_slash_name: incubator/quarks
-description: Quarks is a community for accelerating analytics in edge devices. 
+description: Edgent is a community for accelerating analytics in edge devices. 
 
 download: https://github.com/apache/incubator-quarks
 

@@ -8,7 +8,7 @@ Imagine a topology that has a variety of analytics that it can perform. Each ana
 
 ## Valve
 
-A `quarks.topology.plumbing.Valve` is a simple construct that can be inserted in stream flows to dynamically enable or disable downstream processing. A valve is either open or closed. When used as a `Predicate` to `TStream.filter()`, `filter` passes tuples only when the valve is open. Hence downstream processing is enabled when the valve is open and effectively disabled when the valve is closed.
+A `edgent.topology.plumbing.Valve` is a simple construct that can be inserted in stream flows to dynamically enable or disable downstream processing. A valve is either open or closed. When used as a `Predicate` to `TStream.filter()`, `filter` passes tuples only when the valve is open. Hence downstream processing is enabled when the valve is open and effectively disabled when the valve is closed.
 
 For example, consider a a topology consisting of 3 analytic processing flows that want to be dynamically enabled or disabled:
 
@@ -38,14 +38,14 @@ cmds.sink(json -> {
 });
 ```
 
-## Loosely coupled Quarks applications
+## Loosely coupled Edgent applications
 
 Another approach for achieving dynamic control over what analytics flows are running is to utilize loosely coupled applications.
 
 In this approach, the overall application is partitioned into multiple applications (topologies). In the above example there could be four applications: one that publishes the sensor `readings` stream, and one for each of the analytic flows.
 
-The separate applications can connect to each other's streams using the `quarks.connectors.pubsub.PublishSubscribe` connector.
+The separate applications can connect to each other's streams using the `edgent.connectors.pubsub.PublishSubscribe` connector.
 
-Rather than having all of the analytic applications running all of the time, applications can be registered with a `quarks.topology.services.ApplicationService`. Registered applications can then be started and stopped dynamically.
+Rather than having all of the analytic applications running all of the time, applications can be registered with a `edgent.topology.services.ApplicationService`. Registered applications can then be started and stopped dynamically.
 
-The `quarks.providers.iot.IotProvider` is designed to facilitate this style of use.
+The `edgent.providers.iot.IotProvider` is designed to facilitate this style of use.

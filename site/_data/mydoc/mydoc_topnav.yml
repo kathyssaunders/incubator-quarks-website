@@ -39,7 +39,7 @@ topnav:
 - title: Topnav
   subcategories:
     - title: Javadoc
-      external_url: http://quarks.incubator.apache.org/javadoc/lastest/index.html
+      external_url: http://quarks.incubator.apache.org/javadoc/latest/index.html
       audience: writers, designers
       platform: all
       product: all
@@ -50,7 +50,7 @@ topnav:
 topnav_dropdowns:
 - title: Topnav dropdowns
   subcategories:
-    - title: Quarks Resources
+    - title: Edgent Resources
       audience: writers, designers
       platform: all
       product: all

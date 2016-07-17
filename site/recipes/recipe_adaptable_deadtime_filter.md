@@ -10,13 +10,13 @@ Such a condition may be locally detected, such as detecting a sudden rise in the
 
 Note this is a different case than simply changing the polling frequency for the sensor as doing that would disable local continuous monitoring and analysis of the engine temperature.
 
-This case needs a *deadtime filter* and Quarks provides one for your use! In contrast to a *deadband filter*, which skips tuples based on a deadband value range, a deadtime filter skips tuples based on a *deadtime period* following a tuple that is allowed to pass through. For example, if the deadtime period is 30 minutes, after allowing a tuple to pass, the filter skips any tuples received for the next 30 minutes. The next tuple received after that is allowed to pass through, and a new deadtime period is begun.
+This case needs a *deadtime filter* and Edgent provides one for your use! In contrast to a *deadband filter*, which skips tuples based on a deadband value range, a deadtime filter skips tuples based on a *deadtime period* following a tuple that is allowed to pass through. For example, if the deadtime period is 30 minutes, after allowing a tuple to pass, the filter skips any tuples received for the next 30 minutes. The next tuple received after that is allowed to pass through, and a new deadtime period is begun.
 
-See `quarks.analytics.sensors.Filters.deadtime()` (on [GitHub](https://github.com/apache/incubator-quarks/blob/master/analytics/sensors/src/main/java/quarks/analytics/sensors/Filters.java)) and `quarks.analytics.sensors.Deadtime` (on [GitHub](https://github.com/apache/incubator-quarks/blob/master/analytics/sensors/src/main/java/quarks/analytics/sensors/Deadtime.java)).
+See `edgent.analytics.sensors.Filters.deadtime()` (on [GitHub]({{ site.data.project.source_repository_mirror }}/blob/master/analytics/sensors/src/main/java/{{ site.data.project.unix_name }}/analytics/sensors/Filters.java)) and `edgent.analytics.sensors.Deadtime` (on [GitHub]({{ site.data.project.source_repository_mirror }}/blob/master/analytics/sensors/src/main/java/{{ site.data.project.unix_name }}/analytics/sensors/Deadtime.java)).
 
 This recipe demonstrates how to use an adaptable deadtime filter.
 
-A Quarks `IotProvider` ad `IoTDevice` with its command streams would be a natural way to control the application. In this recipe we will just simulate a "set deadtime period" command stream.
+An Edgent `IotProvider` ad `IoTDevice` with its command streams would be a natural way to control the application. In this recipe we will just simulate a "set deadtime period" command stream.
 
 ## Create a polled sensor readings stream
 
@@ -27,7 +27,7 @@ TStream<Double> engineTemp = top.poll(tempSensor, 1, TimeUnit.SECONDS)
                               .tag("engineTemp");
 ```
 
-It's also a good practice to add tags to streams to improve the usability of the development mode Quarks console.
+It's also a good practice to add tags to streams to improve the usability of the development mode Edgent console.
 
 ## Create a deadtime filtered stream&mdash;initially no deadtime
 
@@ -69,13 +69,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.google.gson.JsonObject;
 
-import quarks.analytics.sensors.Deadtime;
-import quarks.console.server.HttpServer;
-import quarks.providers.development.DevelopmentProvider;
-import quarks.providers.direct.DirectProvider;
-import quarks.samples.utils.sensor.SimulatedTemperatureSensor;
-import quarks.topology.TStream;
-import quarks.topology.Topology;
+import org.apache.edgent.analytics.sensors.Deadtime;
+import org.apache.edgent.console.server.HttpServer;
+import org.apache.edgent.providers.development.DevelopmentProvider;
+import org.apache.edgent.providers.direct.DirectProvider;
+import org.apache.edgent.samples.utils.sensor.SimulatedTemperatureSensor;
+import org.apache.edgent.topology.TStream;
+import org.apache.edgent.topology.Topology;
 
 /**
  * A recipe for using an Adaptable Deadtime Filter.

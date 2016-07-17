@@ -2,11 +2,11 @@
 title: Writing a source function
 ---
 
-In the previous [Hello Quarks!](recipe_hello_quarks) example, we create a data source which generates two Java `String`s and prints them to output. Yet Quarks sources support the ability generate any data type as a source, not just Java types such as `String`s and `Double`s. Moreover, because the user supplies the code which generates the data, the user has complete flexibility for *how* the data is generated. This recipe demonstrates how a user could write such a custom data source.
+In the previous [Hello Edgent!](recipe_hello_edgent) example, we create a data source which generates two Java `String`s and prints them to output. Yet Edgent sources support the ability generate any data type as a source, not just Java types such as `String`s and `Double`s. Moreover, because the user supplies the code which generates the data, the user has complete flexibility for *how* the data is generated. This recipe demonstrates how a user could write such a custom data source.
 
 ## Custom source: reading the lines of a web page
 
-{{site.data.alerts.note}} Quarks' API provides convenience methods for performing HTTP requests. For the sake of example we are writing a HTTP data source manually, but in principle there are easier methods. {{site.data.alerts.end}}
+{{site.data.alerts.note}} Edgent's API provides convenience methods for performing HTTP requests. For the sake of example we are writing a HTTP data source manually, but in principle there are easier methods. {{site.data.alerts.end}}
 
 One example of a custom data source could be retrieving the contents of a web page and printing each line to output. For example, the user could be querying the Yahoo Finance website for the most recent stock price data of Bank of America, Cabot Oil & Gas, and Freeport-McMoRan Inc.:
 
@@ -54,7 +54,7 @@ public static void main(String[] args) throws Exception {
 }
 ```
 
-Source methods such as `Topology.source()` and `Topology.strings()` return a `TStream`. If we print the `linesOfWebsite` stream to standard output and run the application, we can see that it correctly generates the data and feeds it into the Quarks runtime:
+Source methods such as `Topology.source()` and `Topology.strings()` return a `TStream`. If we print the `linesOfWebsite` stream to standard output and run the application, we can see that it correctly generates the data and feeds it into the Edgent runtime:
 
 **Output**:
 
