@@ -17,7 +17,7 @@ limitations under the License.
 {% endcomment %}
 -->
 
-# Edgent website
+# Apache Edgent website
 
 ## Location
 
@@ -45,7 +45,7 @@ If you would like to make a change to the site:
 If you are a committer, do the following:
 
 1. Update the master branch with your (or a Pull Request's) change
-2. Push updated master to the [ASF remote master](https://git-wip-us.apache.org/repos/asf/incubator-edgent-site.git)
+2. Push updated master to the [ASF remote master](https://git-wip-us.apache.org/repos/asf/incubator-edgent-website.git)
 3. Run `build.sh` from the master branch directory (requires Jekyll). This checks out and updates the `asf-site` branch with a new commit of the build from the current branch.
 4. At this point, you should be on the `asf-site` branch. Simply push this branch to the asf remote with `git push origin asf-site` and the site will automatically be updated within seconds.
 
