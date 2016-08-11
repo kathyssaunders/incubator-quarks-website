@@ -21,7 +21,7 @@ limitations under the License.
 
 ## Location
 
-http://quarks.incubator.apache.org/
+http://edgent.incubator.apache.org/
 
 ## How it works
 
@@ -35,7 +35,7 @@ Through a [gitpubsub](http://www.apache.org/dev/gitpubsub.html) mechanism on the
 
 If you would like to make a change to the site:
 
-1. Fork the [GitHub mirror](https://github.com/apache/incubator-quarks-website)
+1. Fork the [GitHub mirror](https://github.com/apache/incubator-edgent-website)
 2. Create a new branch from `master`
 3. Add commit(s) to your branch
 4. Test your changes locally (see the *Developing* section)
@@ -45,7 +45,7 @@ If you would like to make a change to the site:
 If you are a committer, do the following:
 
 1. Update the master branch with your (or a Pull Request's) change
-2. Push updated master to the [ASF remote master](https://git-wip-us.apache.org/repos/asf/incubator-quarks-site.git)
+2. Push updated master to the [ASF remote master](https://git-wip-us.apache.org/repos/asf/incubator-edgent-site.git)
 3. Run `build.sh` from the master branch directory (requires Jekyll). This checks out and updates the `asf-site` branch with a new commit of the build from the current branch.
 4. At this point, you should be on the `asf-site` branch. Simply push this branch to the asf remote with `git push origin asf-site` and the site will automatically be updated within seconds.
 
