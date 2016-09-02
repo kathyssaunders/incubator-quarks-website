@@ -194,4 +194,5 @@ This example demonstrates a small piece of Edgent's functionality. Edgent suppor
 For more complex examples, see:
 
 * [Edgent sample programs](samples)
+* [Stream processing concepts](streaming-concepts)
 * [Common Edgent operations](common-edgent-operations)
