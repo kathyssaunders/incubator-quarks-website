@@ -40,4 +40,4 @@ In addition to the sample application in the [Getting started guide](edgent-gett
   - Samples that demonstrate how to use IBM Watson IoT Platform as the IoT scale message hub between Edgent and back-end analytic systems:
       * [Sample using the no-registration Quickstart service](quickstart)
 
-Additional samples are documented in the [Edgent Overview]({{ site.docsurl }}/latest/overview-summary.html#overview.description) section of the Javadoc.
+Additional samples are documented in the [Edgent Overview]({{ site.docsurl }}/overview-summary.html#overview.description) section of the Javadoc.

@@ -2,7 +2,7 @@
 title: Using an external configuration file for filter ranges
 ---
 
-The [Detecting a sensor value out of range](recipe_value_out_of_range.html) recipe introduced the basics of filtering as well as the use of a [Range]({{ site.docsurl }}/latest/{{ site.data.project.unix_name }}/analytics/sensors/Range.html).
+The [Detecting a sensor value out of range](recipe_value_out_of_range.html) recipe introduced the basics of filtering as well as the use of a [Range]({{ site.docsurl }}/index.html?org/apache/{{ site.data.project.unix_name }}/analytics/sensors/Range.html).
 
 Oftentimes, a user wants to initialize a range specification from an external configuration file so the application code is more easily configured and reusable.
 
@@ -12,7 +12,7 @@ We're going to assume familiarity with that earlier recipe and those concepts an
 
 ## Create a configuration file
 
-The file's syntax is that for a `java.util.Properties` object. See the `Range` [documentation]({{ site.data.project.source_repository_mirror }}/blob/master/analytics/sensors/src/main/java/{{ site.data.project.unix_name }}/analytics/sensors/Range.java) for its string syntax.
+The file's syntax is that for a `java.util.Properties` object. See the `Range` [documentation]({{ site.data.project.source_repository_mirror }}/blob/master/analytics/sensors/src/main/java/org/apache/{{ site.data.project.unix_name }}/analytics/sensors/Range.java) for its string syntax.
 
 Put this into a file:
 

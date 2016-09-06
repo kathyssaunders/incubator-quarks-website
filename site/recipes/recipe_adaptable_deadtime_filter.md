@@ -12,7 +12,7 @@ Note this is a different case than simply changing the polling frequency for the
 
 This case needs a *deadtime filter* and Edgent provides one for your use! In contrast to a *deadband filter*, which skips tuples based on a deadband value range, a deadtime filter skips tuples based on a *deadtime period* following a tuple that is allowed to pass through. For example, if the deadtime period is 30 minutes, after allowing a tuple to pass, the filter skips any tuples received for the next 30 minutes. The next tuple received after that is allowed to pass through, and a new deadtime period is begun.
 
-See `edgent.analytics.sensors.Filters.deadtime()` (on [GitHub]({{ site.data.project.source_repository_mirror }}/blob/master/analytics/sensors/src/main/java/{{ site.data.project.unix_name }}/analytics/sensors/Filters.java)) and `edgent.analytics.sensors.Deadtime` (on [GitHub]({{ site.data.project.source_repository_mirror }}/blob/master/analytics/sensors/src/main/java/{{ site.data.project.unix_name }}/analytics/sensors/Deadtime.java)).
+See `edgent.analytics.sensors.Filters.deadtime()` (on [GitHub]({{ site.data.project.source_repository_mirror }}/blob/master/analytics/sensors/src/main/java/org/apache/{{ site.data.project.unix_name }}/analytics/sensors/Filters.java)) and `edgent.analytics.sensors.Deadtime` (on [GitHub]({{ site.data.project.source_repository_mirror }}/blob/master/analytics/sensors/src/main/java/org/apache/{{ site.data.project.unix_name }}/analytics/sensors/Deadtime.java)).
 
 This recipe demonstrates how to use an adaptable deadtime filter.
 

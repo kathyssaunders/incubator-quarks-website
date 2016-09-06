@@ -7,11 +7,11 @@ title: Quickstart IBM Watson IoT Platform sample
 IoT devices running Edgent applications typically connect to back-end analytic systems through a message hub. Message hubs are used to isolate the back-end system from having to handle connections from thousands to millions of devices.
 
 An example of such a message hub designed for the Internet of Things is [IBM Watson IoT Platform](https://internetofthings.ibmcloud.com/). This cloud service runs on IBM's Bluemix cloud platform
-and Edgent provides a [connector]({{ site.docsurl }}/latest/index.html?{{ site.data.project.unix_name }}/connectors/iotf/IotfDevice.html).
+and Edgent provides a [connector]({{ site.docsurl }}/index.html?org/apache/{{ site.data.project.unix_name }}/connectors/iotp/IotpDevice.html).
 
-You can test out the service without any registration by using its Quickstart service and the Edgent sample application: [code]({{ site.data.project.source_repository_mirror }}/blob/master/samples/connectors/src/main/java/{{ site.data.project.unix_name }}/samples/connectors/iotf/IotfQuickstart.java), [Javadoc]({{ site.docsurl }}/latest/index.html?{{ site.data.project.unix_name }}/samples/connectors/iotf/IotfQuickstart.html).
+You can test out the service without any registration by using its Quickstart service and the Edgent sample application: [code]({{ site.data.project.source_repository_mirror }}/blob/master/samples/connectors/src/main/java/org/apache/{{ site.data.project.unix_name }}/samples/connectors/iotp/IotpQuickstart.java), [Javadoc]({{ site.docsurl }}/index.html?org/apache/{{ site.data.project.unix_name }}/samples/connectors/iotp/IotpQuickstart.html).
 
-You can execute the class directly from Eclipse, or using the script: [`edgent/java8/scripts/connectors/iotf/runiotfquickstart.sh`]({{ site.data.project.source_repository_mirror }}/blob/master/scripts/connectors/iotf/runiotfquickstart.sh)
+You can execute the class directly from Eclipse, or using the script: [`edgent/java8/scripts/connectors/iotp/runiotpquickstart.sh`]({{ site.data.project.source_repository_mirror }}/blob/master/scripts/connectors/iotp/runiotpquickstart.sh)
 
 When run it produces output like this, with a URL as the third line.
 
@@ -25,14 +25,14 @@ Here's an example view:
 
 ## Edgent code
 
-The full source is at: [IotfQuickstart.java]({{ site.data.project.source_repository_mirror }}/blob/master/samples/connectors/src/main/java/{{ site.data.project.unix_name }}/samples/connectors/iotf/IotfQuickstart.java).
+The full source is at: [IotpQuickstart.java]({{ site.data.project.source_repository_mirror }}/blob/master/samples/connectors/src/main/java/org/apache/{{ site.data.project.unix_name }}/samples/connectors/iotp/IotpQuickstart.java).
 
 The first step to is to create a `IotDevice` instance that represents the connection to IBM Watson IoT Platform Quickstart service.
 
 ```java
-// Declare a connection to IoTF Quickstart service
+// Declare a connection to IoTP Quickstart service
 String deviceId = "qs" + Long.toHexString(new Random().nextLong());
-IotDevice device = IotfDevice.quickstart(topology, deviceId);
+IotDevice device = IotpDevice.quickstart(topology, deviceId);
 ```
 
 Now any stream can send device events to the Quickstart service by simply calling its `events()` method. Here we map a stream of random numbers into JSON as the payload for a device event is typically JSON.

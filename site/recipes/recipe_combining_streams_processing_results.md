@@ -99,7 +99,7 @@ TStream<Map<String, Integer>> readings = top
 
 ## Splitting the readings
 
-We are now ready to split the `readings` stream by the blood pressure category. Let's look more closely at the method declaration of `split` below. For more details about `split`, refer to the [Javadoc]({{ site.docsurl }}/latest/{{ site.data.project.unix_name }}/topology/TStream.html#split-int-{{ site.data.project.unix_name }}.function.ToIntFunction-).
+We are now ready to split the `readings` stream by the blood pressure category. Let's look more closely at the method declaration of `split` below. For more details about `split`, refer to the [Javadoc]({{ site.docsurl }}/org/apache/{{ site.data.project.unix_name }}/topology/TStream.html#split-int-org.apache.{{ site.data.project.unix_name }}.function.ToIntFunction-).
 
 ```java
 java.util.List<TStream<T>> split(int n, ToIntFunction<T> splitter)
@@ -208,7 +208,7 @@ TStream<String> hypertensiveAlerts = hypertensive
 
 ## Combining the alert streams
 
-At this point, we have five streams of alerts. Suppose the doctors are interested in seeing a combination of the *Normal* alerts and *Prehypertension* alerts. Or, suppose that they would like to see all of the alerts from all categories together. Here, `union` comes in handy. For more details about `union`, refer to the [Javadoc]({{ site.docsurl }}/latest/{{ site.data.project.unix_name }}/topology/TStream.html#union-{{ site.data.project.unix_name }}.topology.TStream-).
+At this point, we have five streams of alerts. Suppose the doctors are interested in seeing a combination of the *Normal* alerts and *Prehypertension* alerts. Or, suppose that they would like to see all of the alerts from all categories together. Here, `union` comes in handy. For more details about `union`, refer to the [Javadoc]({{ site.docsurl }}/org/apache/{{ site.data.project.unix_name }}/topology/TStream.html#union-org.apache.{{ site.data.project.unix_name }}.topology.TStream-).
 
 There are two ways to define a union. You can either union a `TStream` with another `TStream`, or with a set of streams (`Set<TStream<T>>`). In both cases, a single `TStream` is returned containing the tuples that flow on the input stream(s).
 
@@ -251,7 +251,7 @@ Finally, we can terminate the stream and print out all alerts.
 allAlerts.sink(tuple -> System.out.println(tuple));
 ```
 
-We end our application by submitting the `Topology`. Note that this application is available as a [sample]({{ site.data.project.source_repository_mirror }}/blob/master/samples/topology/src/main/java/{{ site.data.project.unix_name }}/samples/topology/CombiningStreamsProcessingResults.java).
+We end our application by submitting the `Topology`. Note that this application is available as a [sample]({{ site.data.project.source_repository_mirror }}/blob/master/samples/topology/src/main/java/org/apache/{{ site.data.project.unix_name }}/samples/topology/CombiningStreamsProcessingResults.java).
 
 ## Observing the output
 

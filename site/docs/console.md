@@ -50,7 +50,7 @@ try {
 dp.submit(topology);
 ```
 
-The other way to embed the console in your application is shown in the `HttpServerSample.java` example (on [GitHub]({{ site.data.project.source_repository_mirror }}/blob/master/samples/console/src/main/java/{{ site.data.project.unix_name }}/samples/console/HttpServerSample.java)). It gets the `HttpServer` instance, starts it, and prints out the console URL. Note that it does not submit a job, so when the console is displayed in the browser, there are no running jobs and therefore no topology graph. The example is meant to show how to get the `HttpServer` instance, start the console web app and get the URL of the console.
+The other way to embed the console in your application is shown in the `HttpServerSample.java` example (on [GitHub]({{ site.data.project.source_repository_mirror }}/blob/master/samples/console/src/main/java/org/apache/{{ site.data.project.unix_name }}/samples/console/HttpServerSample.java)). It gets the `HttpServer` instance, starts it, and prints out the console URL. Note that it does not submit a job, so when the console is displayed in the browser, there are no running jobs and therefore no topology graph. The example is meant to show how to get the `HttpServer` instance, start the console web app and get the URL of the console.
 
 ## Accessing the console
 
@@ -64,7 +64,7 @@ If you cannot access the console at this URL, ensure there is a `console.war` fi
 
 ## ConsoleWaterDetector sample
 
-To see the features of the console in action and as a way to demonstrate how to monitor a topology in the console, let's look at the `ConsoleWaterDetector` sample (on [GitHub]({{ site.data.project.source_repository_mirror }}/blob/master/samples/console/src/main/java/{{ site.data.project.unix_name }}/samples/console/ConsoleWaterDetector.java)).
+To see the features of the console in action and as a way to demonstrate how to monitor a topology in the console, let's look at the `ConsoleWaterDetector` sample (on [GitHub]({{ site.data.project.source_repository_mirror }}/blob/master/samples/console/src/main/java/org/apache/{{ site.data.project.unix_name }}/samples/console/ConsoleWaterDetector.java)).
 
 Prior to running any console applications, the `console.war` file must be built as mentioned above. If you are building Edgent from a Git repository, go to the top level Edgent directory and run `ant`.
 
@@ -402,7 +402,7 @@ If you scroll the browser window down, you can see a Metrics section. This secti
 
 ## Counters
 
-In the `ConsoleWaterDetector` application we used a `DevelopmentProvider`. Therefore, counters were added to most streams (edges) with the following exceptions (from the [Javadoc]({{ site.docsurl }}/latest/{{ site.data.project.unix_name }}/metrics/Metrics.html#counter-{{ site.data.project.unix_name }}.topology.TStream-) for `edgent.metrics.Metrics`):
+In the `ConsoleWaterDetector` application we used a `DevelopmentProvider`. Therefore, counters were added to most streams (edges) with the following exceptions (from the [Javadoc]({{ site.docsurl }}/org/apache/{{ site.data.project.unix_name }}/metrics/Metrics.html#counter-org.apache.{{ site.data.project.unix_name }}.topology.TStream-) for `edgent.metrics.Metrics`):
 
 *Oplets are only inserted upstream from a FanOut oplet.*
 

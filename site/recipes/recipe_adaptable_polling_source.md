@@ -8,7 +8,7 @@ Oftentimes, a user wants the poll frequency to be adaptable rather than static. 
 
 An Edgent `IotProvider` and `IoTDevice` with its command streams would be a natural way to control the application. In this recipe we will just simulate a "set poll period" command stream.
 
-The `Topology.poll()` [documentation]({{ site.docsurl }}/latest/{{ site.data.project.unix_name }}/topology/Topology.html#poll-{{ site.data.project.unix_name }}.function.Supplier-long-java.util.concurrent.TimeUnit-) describes how the poll period may be changed at runtime.
+The `Topology.poll()` [documentation]({{ site.docsurl }}/org/apache/{{ site.data.project.unix_name }}/topology/Topology.html#poll-org.apache.{{ site.data.project.unix_name }}.function.Supplier-long-java.util.concurrent.TimeUnit-) describes how the poll period may be changed at runtime.
 
 The mechanism is based on a more general Edgent runtime `edgent.execution.services.ControlService` service. The runtime registers "control beans" for entities that are controllable. These controls can be retrieved at runtime via the service.
 

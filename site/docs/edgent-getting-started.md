@@ -109,7 +109,7 @@ To understand how the application processes the stream, let's review each line.
 
 ### Specifying a provider
 
-Your first step when you write an Edgent application is to create a [`DirectProvider`]({{ site.docsurl }}/latest/index.html?edgent/providers/direct/DirectProvider.html):
+Your first step when you write an Edgent application is to create a [`DirectProvider`]({{ site.docsurl }}/index.html?org/apache/{{ site.data.project.unix_name }}/providers/direct/DirectProvider.html):
 
 ```java
 DirectProvider dp = new DirectProvider();
@@ -119,7 +119,7 @@ A `Provider` is an object that contains information on how and where your Edgent
 
 ### Creating a topology
 
-Additionally a Provider is used to create a [`Topology`]({{ site.docsurl }}/latest/index.html?edgent/topology/Topology.html) instance:
+Additionally a Provider is used to create a [`Topology`]({{ site.docsurl }}/index.html?org/apache/{{ site.data.project.unix_name }}/topology/Topology.html) instance:
 
 ```java
 Topology topology = dp.newTopology();

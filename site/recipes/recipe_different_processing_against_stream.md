@@ -56,7 +56,7 @@ public class ApplyDifferentProcessingAgainstStream {
 
 ## Generating gas mileage sensor readings
 
-The next step is to simulate a stream of gas mileage readings using [`SimpleSimulatedSensor`]({{ site.data.project.source_repository_mirror }}/blob/master/samples/utils/src/main/java/{{ site.data.project.unix_name }}/samples/utils/sensor/SimpleSimulatedSensor.java). We set the initial gas mileage and delta factor in the first two arguments. The last argument ensures that the sensor reading falls in an acceptable range (between 7.0 mpg and 14.0 mpg). In our `main()`, we use the `poll()` method to generate a flow of tuples (readings), where each tuple arrives every second.
+The next step is to simulate a stream of gas mileage readings using [`SimpleSimulatedSensor`]({{ site.data.project.source_repository_mirror }}/blob/master/samples/utils/src/main/java/org/apache/{{ site.data.project.unix_name }}/samples/utils/sensor/SimpleSimulatedSensor.java). We set the initial gas mileage and delta factor in the first two arguments. The last argument ensures that the sensor reading falls in an acceptable range (between 7.0 mpg and 14.0 mpg). In our `main()`, we use the `poll()` method to generate a flow of tuples (readings), where each tuple arrives every second.
 
 ```java
 // Generate a stream of gas mileage sensor readings
