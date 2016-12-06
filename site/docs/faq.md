@@ -44,7 +44,7 @@ Edgent is a tool for edge analytics that allows you to be more productive. Edgen
 
 ## Where can I download Apache Edgent to try it out?
 
-Edgent is migrating from GitHub quarks-edge to Apache. You can download the source from Apache and build it yourself [here]({{ site.data.project.source_repository_mirror }}). You can also find already built pre-Apache releases of Edgent for download [here](https://github.com/quarks-edge/quarks/releases/latest). These releases are not associated with Apache.
+You can download the source from Apache and build it yourself [here]({{ site.data.project.source_repository_mirror }}). You can also find already pre-built Apache releases of Edgent for download [here]({{ site.data.project.apache_release_location }}) (But this location is temporarily unavailable until we get the first release out).
 
 ## How do I get started?
 
