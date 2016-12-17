@@ -49,6 +49,7 @@ jira: EDGENT
 
 source_repository: https://git-wip-us.apache.org/repos/asf/incubator-edgent.git
 source_repository_mirror: https://github.com/apache/incubator-edgent
+apache_release_location: https://www.apache.org/dist/release/incubator/edgent
 
 website_repository: https://git-wip-us.apache.org/repos/asf/incubator-edgent-website.git
 website_repository_mirror: https://github.com/apache/incubator-edgent-website
