@@ -23,7 +23,7 @@ incubator_name: incubator-edgent
 incubator_slash_name: incubator/edgent
 description: Edgent is a community for accelerating analytics in edge devices. 
 
-download: https://github.com/apache/incubator-edgent
+download: http://edgent.incubator.apache.org/docs/downloads
 
 dev_list: dev@edgent.incubator.apache.org
 dev_list_subscribe: dev-subscribe@edgent.incubator.apache.org

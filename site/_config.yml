@@ -123,6 +123,6 @@ port:    4000
 host:    127.0.0.1
 
 #Base URLs
-sourceurl: https://github.com/apache/incubator-edgent
+sourceurl: http://edgent.incubator.apache.org/docs/downloads.html
 projurl: http://edgent.incubator.apache.org
 docsurl: http://edgent.incubator.apache.org/javadoc/latest
