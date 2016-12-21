@@ -44,7 +44,7 @@ Edgent is a tool for edge analytics that allows you to be more productive. Edgen
 
 ## Where can I download Apache Edgent to try it out?
 
-You can download the source from Apache and build it yourself [here]({{ site.data.project.download }}). You can also find already pre-built Apache releases of Edgent for download [here]({{ site.data.project.apache_release_location }}) (But this location is temporarily unavailable until we get the first release out).
+You can download Apache Edgent from [here]({{ site.data.project.download }}).
 
 ## How do I get started?
 

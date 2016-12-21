@@ -25,9 +25,9 @@ Edgent's primary API is functional where streams are sourced, transformed, analy
 
 ### Downloading Apache Edgent
 
-To download Edgent, please refer to [here]({{ site.data.project.download }}). And you can read more about building Edgent [here]({{ site.data.project.source_repository_mirror }}/blob/master/DEVELOPMENT.md).
+To use Edgent you need the Edgent jars. You can either download the Edgent source and build it or you can download a pre-built version of Edgent. See the [download page]({{ site.data.project.download }}).
 
-After you build the Edgent package, you can set up your environment.
+After you have the Edgent jars, you can set up your environment.
 
 ### Setting up your environment
 
