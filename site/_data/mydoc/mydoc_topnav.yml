@@ -96,7 +96,7 @@ topnav_dropdowns:
       output: web
       items:
         - title: Download
-          external_url: https://github.com/apache/incubator-edgent/releases
+          url: downloads
           audience: writers, designers
           platform: all
           product: all

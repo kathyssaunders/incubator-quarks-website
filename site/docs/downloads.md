@@ -2,8 +2,6 @@
 title: Downloads
 ---
 
-## Download now.
-
 Official Apache Edgent releases are available for download from the ASF distribution site. A release consists of a source code bundle and a convenience binary bundle. The Edgent ASF distribution site is [here]({{ site.data.downloads.edgent_dist_main_location }}). Information about verifying the integrity of the release bundles can also be found there.
 
 The Edgent source is also available from the Edgent ASF [git repository]({{ site.data.project.source_repository }}).
@@ -12,7 +10,7 @@ If you just want to use Edgent, it is easiest to download and unpack a binary bu
 
 A source bundle contains a README describing how to build the sources.
 
-If you want access the latest unreleased Edgent source or to contribute to Edgent runtime development, using the [GitHub]({{  site.data.project.source_repository_mirror }}) repository is recommended. You can also select a particular release version by release tag (e.g., 1.0.0-incubating). See README.md and DEVELOPMENT.md in the repository for more information.
+If you want access the latest unreleased Edgent source or to contribute to Edgent runtime development, using the [GitHub repository]({{  site.data.project.source_repository_mirror }}) is recommended. You can also select a particular release version by release tag (e.g., 1.0.0-incubating). See README.md and DEVELOPMENT.md in the repository for more information.
 
 See [here](community.html) for more information about contributing to Edgent development.
 
