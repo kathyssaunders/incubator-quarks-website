@@ -42,9 +42,9 @@ Edgent is designed for the edge, rather than a more centralized system. It has a
 
 Edgent is a tool for edge analytics that allows you to be more productive. Edgent provides a consistent data model (streams and windows) and provides useful functionality, such as aggregations, joins, etc. Using Edgent lets you to take advantage of this functionality, allowing you to focus on your application needs.
 
-## Where can I download Apache Edgent to try it out?
+## Where can I download Apache Edgent?
 
-You can download Apache Edgent from [here]({{ site.data.project.download }}).
+Releases include source code and convenience binary bundles.  The source code is also available on GitHub.  The [downloads]({{ site.data.project.download }}) page has all of the details.
 
 ## How do I get started?
 
@@ -61,10 +61,6 @@ Just submit a [pull request]({{ site.data.project.source_repository_mirror }}/pu
 ## Can I become a committer?
 
 Read about Edgent committers and how to become a committer [here](committers).
-
-## Where can I get the code?
-
-The source code is available [here]({{ site.data.project.source_repository_mirror }}).
 
 ## Can I take a copy of the code and fork it for my own use?
 
@@ -88,4 +84,4 @@ With the growth of the Internet of Things there is a need to execute analytics a
 
 ## I see references to "Quarks." How does it relate to Apache Edgent?
 
-Up until July 2016, Edgent was known as Quarks. Quarks was renamed due to the name not being unique enough. The suitable name search for Edgent is currently in progress at The Apache Software Foundation.
+Up until July 2016, Edgent was known as Quarks. Quarks was renamed due to the name not being unique enough.

@@ -51,6 +51,8 @@ public static void main(String[] args) throws Exception {
     final URL url = new URL("http://finance.yahoo.com/d/quotes.csv?s=BAC+COG+FCX&f=snabl");
 
     TStream<String> linesOfWebsite = top.source(queryWebsite(url));
+
+    dp.submit(top);
 }
 ```
 
