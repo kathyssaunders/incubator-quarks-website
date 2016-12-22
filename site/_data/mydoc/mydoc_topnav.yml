@@ -120,7 +120,7 @@ topnav_dropdowns:
           output: web
 
         - title: edgent.apache.org
-          external_url: https://edgent.incubator.apache.org/
+          url: /
           audience: writers, designers
           platform: all
           product: all
