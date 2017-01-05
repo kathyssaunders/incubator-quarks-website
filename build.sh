@@ -1,6 +1,7 @@
 set -e
 cd site
 jekyll build -d ../content_tmp
+sed -i "" "/^@import/d; s/'DejaVu Sans',//g; s/'DejaVu Sans Mono',//g; s/'DejaVu Serif',//g" ../content_tmp/javadoc/*/stylesheet.css
 COMMIT_HASH=`git rev-parse HEAD`
 cd ..
 git checkout asf-site
