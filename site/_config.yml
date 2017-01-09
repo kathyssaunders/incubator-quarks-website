@@ -127,8 +127,3 @@ sourcerepourl: https://github.com/apache/incubator-edgent
 downloadsurl: /docs/downloads
 projurl: /
 docsurl: /javadoc/latest
-# above yields things like the following when running on a "jekyll serve" test server
-# [2016-12-22 15:23:31] ERROR `/favicon.ico' not found.
-# [2016-12-22 15:33:17] ERROR `/javadoc/latest/resources/fonts/dejavu.css' not found.
-# the following is undesirable as it doesn't link to the "jekyll serve" test server
-# docsurl: https://edgent.incubator.apache.org/javadoc/latest
