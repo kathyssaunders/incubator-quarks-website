@@ -1,6 +1,7 @@
 set -e
 cd site
 jekyll build -d ../content_tmp
+# Remove dangling references to the DejaVu fonts in the Javadoc stylesheets
 sed -i "" "/^@import/d; s/'DejaVu Sans',//g; s/'DejaVu Sans Mono',//g; s/'DejaVu Serif',//g" ../content_tmp/javadoc/*/stylesheet.css
 COMMIT_HASH=`git rev-parse HEAD`
 cd ..
