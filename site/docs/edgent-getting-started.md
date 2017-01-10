@@ -25,24 +25,35 @@ Edgent's primary API is functional where streams are sourced, transformed, analy
 
 ### Downloading Apache Edgent
 
-To use Edgent you need the Edgent jars. You can either download the Edgent source and build it or you can download a pre-built version of Edgent. See the [download page]({{ site.data.project.download }}).
+To use Edgent, you need the Edgent JAR files, which you may obtain by completing the following steps.
 
-After you have the Edgent jars, you can set up your environment.
+1. Locate the Edgent release you would like to use on the [downloads page]({{ site.data.project.download }})
+2. In the Bundles column for the desired release:
+    * Click on the _Binary_ link if you simply want to use Edgent. This is the easiest method is to get up and running as it contains a pre-built version of Edgent.
+    * Click on the _Source_ link if you would like access to the Edgent source files. If you choose this method, you must manually build Edgent yourself.
+3. Download the .tgz file from one of the mirror sites
+4. Unpack the downloaded file: `tar zxvf apache-edgent-X.X.X-incubating-XXX.tgz`
+5. Obtain the JARs
+    * If you are using a binary bundle, then the Java 8 JARs are located in `edgent-X.X.X/java8`
+    * If you are using a source bundle, build the source code:
+        1. Install [Gradle](https://gradle.org/) if it is not yet installed
+        2. Navigate to the unpacked directory: `cd edgent-X.X.X-src`
+        3. Run `gradle` to initialize the Gradle wrapper
+        4. Build the code and Javadoc: `./gradlew assemble`
+        5. The Java 8 JARs are located in `edgent-X.X.X-src/build/distributions/java8`
 
 ### Setting up your environment
 
-Ensure that you are running a supported environment. For more information, see the [Edgent overview](home). This guide assumes you're running Java 8.
-
-The Edgent Java 8 JAR files are located in the `edgent/java8/lib` directory.
+Ensure that you are running a supported environment. For more information, see the [Edgent overview](home). This guide assumes you're running Java 8. The Edgent Java 8 JAR files are located in either the `edgent-X.X.X/java8` or `edgent-X.X.X-src/build/distributions/java8` directory, depending on whether you downloaded a binary or source bundle.
 
 1. Create a new Java project in Eclipse, and specify Java 8 as the execution environment JRE:
 
-    <img src="images/New_Java_Project.JPG" style="width:448px;height:589px;">
+    <img src="images/New_Java_Project.jpg">
 
 
-2. Modify the Java build path to include all of the JAR files in the `edgent\java8\lib` directory:
+2. Add all of the JAR files in the `java8\lib` directory to the project's build path:
 
-    <img src="images/Build_Path_Jars.JPG" style="width:660px;height:469px;">
+    <img src="images/Build_Path_JARs.jpg">
 
 Your environment is set up! You can start writing your first Edgent application.
 
@@ -50,7 +61,7 @@ Your environment is set up! You can start writing your first Edgent application.
 
 If you're new to Edgent or to writing streaming applications, the best way to get started is to write a simple program.
 
-Edgent is a framework that pushes data analytics and machine learning to *edge devices*. (Edge devices include things like routers, gateways, machines, equipment, sensors, appliances, or vehicles that are connected to a network.) Edgent enables you to process data locally&mdash;such as, in a car engine, on an Android phone, or Raspberry Pi&mdash;before you send data over a network.
+Edgent is a framework that pushes data analytics and machine learning to *edge devices*. (Edge devices include things like routers, gateways, machines, equipment, sensors, appliances, or vehicles that are connected to a network.) Edgent enables you to process data locally&mdash;such as, in a car engine, on an Android phone, or on a Raspberry Pi&mdash;before you send data over a network.
 
 For example, if your device takes temperature readings from a sensor 1,000 times per second, it is more efficient to process the data locally and send only interesting or unexpected results over the network. To simulate this, let's define a (simulated) TempSensor class:
 
@@ -115,11 +126,11 @@ Your first step when you write an Edgent application is to create a [`DirectProv
 DirectProvider dp = new DirectProvider();
 ```
 
-A `Provider` is an object that contains information on how and where your Edgent application will run. A `DirectProvider` is a type of Provider that runs your application directly within the current virtual machine when its `submit()` method is called.
+A `Provider` is an object that contains information on how and where your Edgent application will run. A `DirectProvider` is a type of Provider that runs your application directly within the current virtual machine when its [`submit()`]({{ site.docsurl }}/org/apache/{{ site.data.project.unix_name }}/providers/direct/DirectProvider.html#submit-org.apache.{{ site.data.project.unix_name }}.topology.Topology-) method is called.
 
 ### Creating a topology
 
-Additionally a Provider is used to create a [`Topology`]({{ site.docsurl }}/index.html?org/apache/{{ site.data.project.unix_name }}/topology/Topology.html) instance:
+Additionally, a Provider is used to create a [`Topology`]({{ site.docsurl }}/index.html?org/apache/{{ site.data.project.unix_name }}/topology/Topology.html) instance:
 
 ```java
 Topology topology = dp.newTopology();
@@ -130,7 +141,7 @@ In Edgent, `Topology` is a container that describes the structure of your applic
 * Where the streams in the application come from
 * How the data in the stream is modified
 
-In the TempSensor application above, we have exactly one data source: the `TempSensor` object. We define the source stream by calling `topology.poll()`, which takes both a `Supplier` function and a time parameter to indicate how frequently readings should be taken. In our case, we read from the sensor every millisecond:
+In the TempSensorApplication class above, we have exactly one data source: the `TempSensor` object. We define the source stream by calling [`topology.poll()`]({{ site.docsurl }}/org/apache/{{ site.data.project.unix_name }}/topology/Topology.html#poll-org.apache.{{ site.data.project.unix_name }}.function.Supplier-long-java.util.concurrent.TimeUnit-), which takes both a [`Supplier`]({{ site.docsurl }}/index.html?org/apache/{{ site.data.project.unix_name }}/function/Supplier.html) function and a time parameter to indicate how frequently readings should be taken. In our case, we read from the sensor every millisecond:
 
 ```java
 TStream<Double> tempReadings = topology.poll(sensor, 1, TimeUnit.MILLISECONDS);
@@ -140,11 +151,11 @@ TStream<Double> tempReadings = topology.poll(sensor, 1, TimeUnit.MILLISECONDS);
 
 Calling `topology.poll()` to define a source stream creates a `TStream<Double>` instance, which represents the series of readings taken from the temperature sensor.
 
-A streaming application can run indefinitely, so the `TStream` might see an arbitrarily large number of readings pass through it. Because a `TStream` represents the flow of your data, it supports a number of operations which allow you to modify your data.
+A streaming application can run indefinitely, so the [`TStream`]({{ site.docsurl }}/index.html?org/apache/{{ site.data.project.unix_name }}/topology/TStream.html) might see an arbitrarily large number of readings pass through it. Because a `TStream` represents the flow of your data, it supports a number of operations which allow you to modify your data.
 
 ### Filtering a `TStream`
 
-In our example, we want to filter the stream of temperature readings, and remove any "uninteresting" or expected readings&mdash;specifically readings which are above 50 degrees and below 80 degrees. To do this, we call the `TStream`'s `filter` method and pass in a function that returns *true* if the data is interesting and *false* if the data is uninteresting:
+In our example, we want to filter the stream of temperature readings, and remove any "uninteresting" or expected readings&mdash;specifically readings which are above 50 degrees and below 80 degrees. To do this, we call the `TStream`'s [`filter`]({{ site.docsurl }}/org/apache/{{ site.data.project.unix_name }}/topology/TStream.html#filter-org.apache.{{ site.data.project.unix_name }}.function.Predicate-) method and pass in a function that returns *true* if the data is interesting and *false* if the data is uninteresting:
 
 ```java
 TStream<Double> filteredReadings = tempReadings.filter(reading -> reading < 50 || reading > 80);
@@ -154,7 +165,7 @@ As you can see, the function that is passed to `filter` operates on each tuple i
 
 ### Printing to output
 
-When our application detects interesting data (data outside of the expected parameters), we want to print results. You can do this by calling the `TStream.print()` method, which prints using  `.toString()` on each tuple that passes through the stream:
+When our application detects interesting data (data outside of the expected parameters), we want to print results. You can do this by calling the [`TStream.print()`]({{ site.docsurl }}/org/apache/{{ site.data.project.unix_name }}/topology/TStream.html#print--) method, which prints using  `.toString()` on each tuple that passes through the stream:
 
 ```java
 filteredReadings.print();
@@ -162,7 +173,7 @@ filteredReadings.print();
 
 Unlike `TStream.filter()`, `TStream.print()` does not produce another `TStream`. This is because `TStream.print()` is a **sink**, which represents the terminus of a stream.
 
-In addition to `TStream.print()` there are other sink operations that send tuples to an MQTT server, JDBC connection, file, or Kafka cluster. Additionally, you can define your own sink by invoking `TStream.sink()` and passing in your own function.
+In addition to `TStream.print()` there are other sink operations that send tuples to an MQTT server, JDBC connection, file, or Kafka cluster. Additionally, you can define your own sink by invoking [`TStream.sink()`]({{ site.docsurl }}/org/apache/{{ site.data.project.unix_name }}/topology/TStream.html#sink-org.apache.{{ site.data.project.unix_name }}.function.Consumer-) and passing in your own function.
 
 ### Submitting your application
 
