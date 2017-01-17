@@ -51,7 +51,16 @@ Ensure that you are running a supported environment. For more information, see t
     <img src="images/New_Java_Project.jpg">
 
 
-2. Add all of the JAR files in the `java8\lib` directory to the project's build path:
+2. Include one or more Edgent JARs in your project's build path depending on what features your application uses:
+    1. Include one or more of the topology providers:
+        * `java8/lib/edgent.providers.development.jar` (if using the [DevelopmentProvider]({{ site.docsurl }}/org/apache/{{ site.data.project.unix_name }}/providers/development/DevelopmentProvider.html))
+        * `java8/lib/edgent.providers.direct.jar`(if using the [DirectProvider]({{ site.docsurl }}/org/apache/{{ site.data.project.unix_name }}/providers/direct/DirectProvider.html))
+        * `java8/lib/edgent.providers.iot.jar` (if using the [IotProvider]({{ site.docsurl }}/org/apache/{{ site.data.project.unix_name }}/providers/iot/IotProvider.html))
+    2. Include the JARs for any Edgent connectors or analytic features you use in `java8/connectors` and `java8/analytics`, respectively
+    3. Include the JARs for any Edgent utility features you use:
+        * `java8/utils/metrics/lib/edgent.utils.metrics.jar` (for the [org.apache.edgent.metrics]({{ site.docsurl }}/org/apache/{{ site.data.project.unix_name }}/metrics/package-summary.html) package)
+        * `java8/utils/streamscope/lib/edgent.utils.streamscope.jar` (for the [org.apache.edgent.streamscope]({{ site.docsurl }}/org/apache/{{ site.data.project.unix_name }}/streamscope/package-summary.html) package)
+    4. Include the JAR for the [java.util.logging](https://docs.oracle.com/javase/8/docs/api/java/util/logging/package-summary.html) framework for [SLF4J](https://www.slf4j.org/): `java8/ext/slf4j-jdk14-X.X.X.jar`
 
     <img src="images/Build_Path_JARs.jpg">
 
